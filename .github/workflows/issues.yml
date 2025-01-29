@@ -1,0 +1,27 @@
+name: Add default label to issues
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  add-default-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if issue has labels
+        id: check-labels
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue = context.payload.issue;
+            if (issue.labels.length === 0) {
+              console.log('No labels found, adding default label "Task"');
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['Task']
+              });
+            } else {
+              console.log('Issue already has labels, no action taken');
+            }
