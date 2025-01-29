@@ -1,14 +1,12 @@
-import { CssBaseline, Typography } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "./components/theme-provider/ThemeProvider";
-import { useGetPingQuery } from "./features/apiSlice";
+import { RidesSection } from "./components/rides/RidesSection";
 
 export const App = () => {
-  const { data } = useGetPingQuery();
-
   return (
     <ThemeProvider>
       <CssBaseline />
-      {data && <Typography variant="h3">{data.message}</Typography>}
+      <RidesSection />
     </ThemeProvider>
   );
 };
