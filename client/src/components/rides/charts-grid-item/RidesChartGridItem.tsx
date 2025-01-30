@@ -17,16 +17,24 @@ interface RidesChartGridItem {
 
 export const RidesChartGridItem = ({ title, chart }: RidesChartGridItem) => {
   const theme = useTheme();
-  const isLarge = useMediaQuery(theme.breakpoints.up("xl"));
-  const isMedium = useMediaQuery(theme.breakpoints.up("md"));
-  const gridItemSize = isLarge ? 4 : isMedium ? 6 : 12;
+  const isAtLeastLarge = useMediaQuery(theme.breakpoints.up("lg"));
+  const isMedium = useMediaQuery(theme.breakpoints.only("md"));
+  const isSmall = useMediaQuery(theme.breakpoints.only("sm"));
+
+  const getGridItemSize = () => {
+    if (isAtLeastLarge) return 4;
+    if (isMedium) return 4;
+    if (isSmall) return 6;
+    return 12;
+  };
+
+  const gridItemSize = getGridItemSize();
 
   return (
     <Grid2 size={gridItemSize}>
       <Paper>
         <Stack>
           <Typography
-            variant="h5"
             sx={{
               px: 2,
               py: 2,
@@ -39,6 +47,7 @@ export const RidesChartGridItem = ({ title, chart }: RidesChartGridItem) => {
           <Box
             sx={{
               pt: 2,
+              aspectRatio: 1 / 0.8,
             }}
           >
             {chart}

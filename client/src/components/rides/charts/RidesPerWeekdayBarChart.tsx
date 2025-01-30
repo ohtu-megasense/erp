@@ -27,10 +27,10 @@ export const RidesPerWeekdayBarChart = () => {
         },
       ]}
       slotProps={{ legend: { hidden: false } }}
-      height={500}
       layout="horizontal"
       margin={{
         left: 100,
+        top: 0,
       }}
     />
   );
