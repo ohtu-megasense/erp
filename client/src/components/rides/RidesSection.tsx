@@ -4,7 +4,12 @@ import { RidesChartGridItem } from "./charts-grid-item/RidesChartGridItem";
 
 export const RidesSection = () => {
   return (
-    <Container maxWidth={false}>
+    <Container
+      maxWidth={false}
+      sx={{
+        my: 2,
+      }}
+    >
       <Grid2 container spacing={2}>
         <RidesChartGridItem
           title="Rides per day of week"
