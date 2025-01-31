@@ -1,3 +1,5 @@
+import { getLocaleCurrencyString, getLocaleString } from "../utils/utils";
+
 export interface RideData {
   rideId: number;
   requestTime: number;
@@ -18,6 +20,178 @@ export interface RideData {
   publicHoliday: string;
   userRating: number;
 }
+
+export interface DistributionData {
+  id: string | number;
+  key: string;
+  value: number;
+  label: string;
+}
+
+export const groupAndSumByProperty = ({
+  data,
+  groupByKey,
+  sumByKey,
+}: {
+  data: any[];
+  groupByKey: string;
+  sumByKey: string;
+}) => {
+  const result: Record<string, number> = {};
+
+  for (const item of data) {
+    if (!(item[groupByKey] in result)) {
+      result[item[groupByKey]] = 0;
+    }
+
+    result[item[groupByKey]] += item[sumByKey];
+  }
+
+  return Object.entries(result).map(([key, value]) => ({
+    key,
+    value,
+  }));
+};
+
+export const countOccurrencesByKey = ({
+  data,
+  key,
+}: {
+  data: any[];
+  key: string;
+}): DistributionData[] => {
+  const result: Record<string, number> = {};
+
+  for (const item of data) {
+    if (!(item[key] in result)) {
+      result[item[key]] = 0;
+    }
+
+    result[item[key]] += 1;
+  }
+
+  return Object.entries(result).map(([key, value]) => ({
+    id: key,
+    key,
+    value,
+    label: key,
+  }));
+};
+
+export const getDatasetForRidesPerWeekday = () => {
+  const result: Record<string, RideData[]> = {};
+  const data = getRideData();
+
+  for (const item of data) {
+    if (!(item.dayOfWeek in result)) {
+      result[item.dayOfWeek] = [];
+    }
+
+    result[item.dayOfWeek].push(item);
+  }
+
+  return Object.entries(result).map(([key, rides]) => {
+    const totalRides = rides.length;
+    let ridesOnWeekend = 0;
+    let ridesOnPublicHoliday = 0;
+    let ridesOnNonPublicHoliday = 0;
+    let ridesOnWeekday = 0;
+
+    for (const ride of rides) {
+      if (ride.dayOfWeek === "Saturday" || ride.dayOfWeek === "Sunday") {
+        ridesOnWeekend += 1;
+      } else {
+        ridesOnWeekday += 1;
+      }
+
+      if (ride.publicHoliday === "Yes") {
+        ridesOnPublicHoliday += 1;
+      }
+
+      if (ride.publicHoliday === "No") {
+        ridesOnNonPublicHoliday += 1;
+      }
+    }
+
+    return {
+      dayOfWeek: key,
+      totalRides,
+      ridesOnWeekend,
+      ridesOnWeekday,
+      ridesOnPublicHoliday,
+      ridesOnNonPublicHoliday,
+    };
+  });
+};
+
+export const sortByDayOfWeek = (
+  data: Array<Record<string, any>>,
+  weekdayKey: string
+) => {
+  const sorter: Record<string, number> = {
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+    sunday: 7,
+  };
+
+  data.sort(function sortByDay(a, b) {
+    const aWeekDayLowercase = a[weekdayKey].toLowerCase();
+    const bWeekDayLowercase = b[weekdayKey].toLowerCase();
+    if (sorter[aWeekDayLowercase] < sorter[bWeekDayLowercase]) return -1;
+    if (sorter[aWeekDayLowercase] > sorter[bWeekDayLowercase]) return 1;
+    return 0;
+  });
+};
+
+export const getKPIData = (): Array<{ label: string; value: string }> => {
+  const rideData = getRideData();
+  const totalRides = rideData.length;
+  const totalFare = rideData.reduce((acc, curr) => acc + curr.fareAmount, 0);
+  const totalDistanceMiles = rideData.reduce(
+    (acc, curr) => acc + curr.rideDistance,
+    0
+  );
+  const averageRating =
+    rideData.reduce((acc, curr) => acc + curr.userRating, 0) / totalRides;
+  const averageFarePerMile = totalFare / totalDistanceMiles;
+  const averageFarePerRide = totalFare / totalRides;
+  const averageDistancePerRide = totalDistanceMiles / totalRides;
+
+  return [
+    {
+      label: "Total Rides",
+      value: getLocaleString(totalRides),
+    },
+    {
+      label: "Total Fare",
+      value: getLocaleCurrencyString(totalFare),
+    },
+    {
+      label: "Total Distance (miles)",
+      value: `${getLocaleString(totalDistanceMiles)}`,
+    },
+    {
+      label: "Average Ride rating",
+      value: getLocaleString(averageRating),
+    },
+    {
+      label: "Average Fare Per Mile",
+      value: getLocaleCurrencyString(averageFarePerMile),
+    },
+    {
+      label: "Average Fare Per Ride",
+      value: getLocaleCurrencyString(averageFarePerRide),
+    },
+    {
+      label: "Average Distance Per Ride",
+      value: `${getLocaleString(averageDistancePerRide)} miles`,
+    },
+  ];
+};
 
 export const getRideData = (): RideData[] => {
   return data.map((item) => ({
@@ -40,44 +214,6 @@ export const getRideData = (): RideData[] => {
     publicHoliday: item["Public Holiday"],
     userRating: item["User Rating"],
   }));
-};
-
-export const getDatasetForRidesPerWeekday = () => {
-  const result: Record<string, RideData[]> = {};
-  const data = getRideData();
-
-  for (const item of data) {
-    if (!(item.dayOfWeek in result)) {
-      result[item.dayOfWeek] = [];
-    }
-
-    result[item.dayOfWeek].push(item);
-  }
-
-  return Object.entries(result).map(([key, value]) => {
-    return {
-      dayOfWeek: key,
-      totalRides: value.length,
-    };
-  });
-};
-
-export const sortByDayOfWeek = (data: Array<{ dayOfWeek: string }>) => {
-  const sorter: Record<string, number> = {
-    Monday: 1,
-    Tuesday: 2,
-    Wednesday: 3,
-    Thursday: 4,
-    Friday: 5,
-    Saturday: 6,
-    Sunday: 7,
-  };
-
-  data.sort(function sortByDay(a, b) {
-    if (sorter[a.dayOfWeek] < sorter[b.dayOfWeek]) return -1;
-    if (sorter[a.dayOfWeek] > sorter[b.dayOfWeek]) return 1;
-    return 0;
-  });
 };
 
 const data = [
