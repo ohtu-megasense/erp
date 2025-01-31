@@ -1,7 +1,7 @@
-import { Box, Container, Grid2 } from "@mui/material";
+import { Container, Grid2 } from "@mui/material";
 import { RidesChartGridItem } from "../charts-grid-item/RidesChartGridItem";
 import { PaymentMethodDistributionChart } from "../charts/PaymentMethodDistributionChart";
-import { RidesPerWeekdayBarChart } from "../charts/RidesWeekdayDistributionChart";
+import { RidesPerWeekdayBarChart } from "../charts/RidesPerWeekdayBarChart";
 import { VehicleTypeDistributionChart } from "../charts/VehicleTypeDistributionChart";
 import { FarePerDayOfWeekChart } from "../charts/FarePerDayOfWeekChart";
 
