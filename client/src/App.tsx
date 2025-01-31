@@ -1,12 +1,12 @@
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "./components/theme-provider/ThemeProvider";
-import { RidesSection } from "./components/rides/RidesSection";
+import { DashboardPage } from "./components/pages/DashboardPage";
 
 export const App = () => {
   return (
     <ThemeProvider>
       <CssBaseline />
-      <RidesSection />
+      <DashboardPage />
     </ThemeProvider>
   );
 };

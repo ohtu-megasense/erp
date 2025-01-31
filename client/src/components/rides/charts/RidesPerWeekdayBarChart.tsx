@@ -6,32 +6,20 @@ import {
 
 export const RidesPerWeekdayBarChart = () => {
   const dataset = getDatasetForRidesPerWeekday();
-  sortByDayOfWeek(dataset);
+  sortByDayOfWeek(dataset, "dayOfWeek");
 
   return (
     <BarChart
-      dataset={dataset as any[]}
-      series={[{ dataKey: "totalRides", stack: "rides" }]}
-      yAxis={[
+      dataset={dataset}
+      xAxis={[{ scaleType: "band", dataKey: "dayOfWeek" }]}
+      series={[
+        { dataKey: "ridesOnNonPublicHoliday", label: "Normal", stack: "day" },
         {
-          scaleType: "band",
-          dataKey: "dayOfWeek",
-          disableLine: true,
-          disableTicks: true,
+          dataKey: "ridesOnPublicHoliday",
+          label: "Public holiday",
+          stack: "day",
         },
       ]}
-      xAxis={[
-        {
-          disableLine: true,
-          disableTicks: true,
-        },
-      ]}
-      slotProps={{ legend: { hidden: false } }}
-      height={500}
-      layout="horizontal"
-      margin={{
-        left: 100,
-      }}
     />
   );
 };
