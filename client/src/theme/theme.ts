@@ -7,8 +7,17 @@ import {
 import { PaletteMode } from "@mui/material";
 
 declare module "@mui/material/styles/createPalette" {
-  interface Palette {}
-  interface PaletteOptions {}
+  interface Palette {
+    vars: {
+      "mui-drawer-width": number;
+    };
+  }
+
+  interface PaletteOptions {
+    vars?: {
+      "mui-drawer-width": number;
+    };
+  }
 }
 
 const lightPalette: PaletteOptions = {};
@@ -43,16 +52,29 @@ export const getTheme = (mode: PaletteMode): Theme => {
   const customPalette = getPalette(mode);
   const defaultPalette = createTheme().palette;
 
-  const palette = {
+  const palette: PaletteOptions = {
     ...defaultPalette,
     ...customPalette,
   };
 
   const themeOptions: ThemeOptions = {
-    palette,
+    palette: {
+      ...palette,
+      vars: {
+        "mui-drawer-width": 260,
+      },
+    },
     typography: {},
-    components: {},
+    components: {
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            boxShadow: "none",
+          },
+        },
+      },
+    },
   };
 
-  return createTheme(themeOptions);
+  return createTheme({ cssVariables: true, ...themeOptions });
 };
