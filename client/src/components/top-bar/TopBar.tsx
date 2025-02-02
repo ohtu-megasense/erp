@@ -6,19 +6,16 @@ import {
   Stack,
   Toolbar,
   Typography,
-  useTheme,
 } from "@mui/material";
 
 export const TopBar = () => {
-  const theme = useTheme();
-
   return (
     <>
       <AppBar
         position="fixed"
         sx={{
+          width: "calc(100% - var(--mui-palette-vars-mui-drawer-width))",
           bgcolor: "background.default",
-          cursor: "default",
         }}
       >
         <Toolbar sx={{ gap: 2, color: "text.primary" }}>
@@ -49,12 +46,9 @@ export const TopBar = () => {
           />
           <Typography variant="caption">Dashboard UI Mockup</Typography>
         </Toolbar>
+        <Divider />
       </AppBar>
-      <Box
-        sx={{
-          mb: theme.mixins.toolbar,
-        }}
-      />
+      <Toolbar />
     </>
   );
 };
