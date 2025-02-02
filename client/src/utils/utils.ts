@@ -11,3 +11,9 @@ export const getLocaleCurrencyString = (value: number) => {
 export const getLocaleString = (value: number) => {
   return value.toLocaleString(locale);
 };
+
+export const getRandomInt = (min: number, max: number) => {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max + 1);
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+};

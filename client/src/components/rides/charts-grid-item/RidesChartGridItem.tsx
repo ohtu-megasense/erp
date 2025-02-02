@@ -19,12 +19,10 @@ export const RidesChartGridItem = ({ title, chart }: RidesChartGridItem) => {
   const theme = useTheme();
   const isAtLeastLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const isMedium = useMediaQuery(theme.breakpoints.only("md"));
-  const isSmall = useMediaQuery(theme.breakpoints.only("sm"));
 
   const getGridItemSize = () => {
-    if (isAtLeastLarge) return 3;
-    if (isMedium) return 4;
-    if (isSmall) return 6;
+    if (isAtLeastLarge) return 4;
+    if (isMedium) return 6;
     return 12;
   };
 
