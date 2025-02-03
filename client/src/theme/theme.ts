@@ -61,7 +61,7 @@ export const getTheme = (mode: PaletteMode): Theme => {
     palette: {
       ...palette,
       vars: {
-        "mui-drawer-width": 260,
+        "mui-drawer-width": 300,
       },
     },
     typography: {},
