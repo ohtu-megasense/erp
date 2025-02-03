@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { NavigationCategory } from "./NavigationCategory";
 import { NavigationAccordion } from "./NavigationAccordion";
-import { CompanyLink } from "../company/CompanyLink";
+import { CompanyLinkFull } from "../company/CompanyLinkFull";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { closedDrawer } from "../../features/drawerSlice";
 
@@ -43,7 +43,7 @@ export const Drawer = () => {
       onClose={onClose}
     >
       <Toolbar sx={{ gap: 2, color: "text.primary" }}>
-        <CompanyLink />
+        <CompanyLinkFull />
         <Divider
           orientation="vertical"
           sx={{
