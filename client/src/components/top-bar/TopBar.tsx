@@ -1,50 +1,46 @@
 import {
   AppBar,
-  Box,
   Divider,
-  Link,
-  Stack,
   Toolbar,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import { OpenDrawerButton } from "../drawer/OpenDrawerButton";
+import { CompanyLinkSmall } from "../company/CompanyLinkSmall";
 
 export const TopBar = () => {
+  const theme = useTheme();
+  const isAtleastLarge = useMediaQuery(theme.breakpoints.up("lg"));
+
   return (
     <>
       <AppBar
         position="fixed"
         sx={{
-          width: "calc(100% - var(--mui-palette-vars-mui-drawer-width))",
+          width: isAtleastLarge
+            ? "calc(100% - var(--mui-palette-vars-mui-drawer-width))"
+            : undefined,
           bgcolor: "background.default",
         }}
       >
         <Toolbar sx={{ gap: 2, color: "text.primary" }}>
-          <Link
-            href="https://www.megasense.com/"
-            target="_blank"
-            sx={{
-              all: "unset",
-              cursor: "pointer",
-            }}
-          >
-            <Stack flexDirection="row" gap={2}>
-              <Box
-                component="img"
-                src="https://www.megasense.com/_astro/go2-logo.788a5759.svg"
+          {!isAtleastLarge && (
+            <>
+              <OpenDrawerButton />
+              <CompanyLinkSmall />
+              <Divider
+                orientation="vertical"
                 sx={{
                   height: 24,
+                  bgcolor: "primary.light",
                 }}
               />
-              <Typography>Megasense</Typography>
-            </Stack>
-          </Link>
-          <Divider
-            orientation="vertical"
-            sx={{
-              height: 24,
-            }}
-          />
-          <Typography variant="caption">Dashboard UI Mockup</Typography>
+              <Typography variant="caption" component="span">
+                UI Mockup
+              </Typography>
+            </>
+          )}
         </Toolbar>
         <Divider />
       </AppBar>

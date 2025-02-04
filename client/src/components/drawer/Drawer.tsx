@@ -6,13 +6,25 @@ import {
   ListItemText,
   Drawer as MuiDrawer,
   Toolbar,
+  Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { NavigationCategory } from "./NavigationCategory";
 import { NavigationAccordion } from "./NavigationAccordion";
+import { CompanyLinkFull } from "../company/CompanyLinkFull";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { closedDrawer } from "../../features/drawerSlice";
 
 export const Drawer = () => {
+  const isOpen = useAppSelector((state) => state.drawer.isOpen);
   const theme = useTheme();
+  const isAtleastLarge = useMediaQuery(theme.breakpoints.up("lg"));
+  const dispatch = useAppDispatch();
+
+  const onClose = () => {
+    dispatch(closedDrawer());
+  };
 
   return (
     <MuiDrawer
@@ -22,37 +34,46 @@ export const Drawer = () => {
         "& .MuiDrawer-paper": {
           width: theme.palette.vars["mui-drawer-width"],
           boxSizing: "border-box",
+          borderRight: 0,
         },
       }}
-      variant="permanent"
+      variant={isAtleastLarge ? "permanent" : "temporary"}
       anchor="left"
+      open={isOpen}
+      onClose={onClose}
     >
-      <Toolbar />
-      <Divider />
-      <Box sx={{ overflow: "auto", px: 2 }}>
+      <Toolbar sx={{ gap: 2, color: "text.primary" }}>
+        <CompanyLinkFull />
+        <Divider
+          orientation="vertical"
+          sx={{
+            height: 24,
+          }}
+        />
+        <Typography variant="caption" component="span">
+          UI Mockup
+        </Typography>
+      </Toolbar>
+      <Box
+        sx={{
+          overflow: "auto",
+          px: 2,
+          borderRight: 1,
+          borderTop: 1,
+          borderColor: "divider",
+        }}
+      >
         <List>
           <ListItemButton>
-            <ListItemText
-              primary={`Home`}
-              slotProps={{
-                primary: {
-                  sx: {},
-                },
-              }}
-            />
+            <ListItemText primary="Home" />
           </ListItemButton>
           <NavigationAccordion title="Recent" />
           <NavigationAccordion title="Pinned" />
         </List>
-        <Divider />
         <NavigationCategory title="My Work" />
-        <Divider />
         <NavigationCategory title="Insights" />
-        <Divider />
         <NavigationCategory title="Providers" />
-        <Divider />
         <NavigationCategory title="Orders" />
-        <Divider />
         <NavigationCategory title="Orchestration" />
       </Box>
     </MuiDrawer>
