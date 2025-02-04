@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { NavigationCategory } from "./NavigationCategory";
+import { NavigationAccordion } from "./NavigationAccordion";
 
 export const Drawer = () => {
   const theme = useTheme();
@@ -40,12 +41,8 @@ export const Drawer = () => {
               }}
             />
           </ListItemButton>
-          <ListItemButton>
-            <ListItemText primary={`Recent`} />
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemText primary={`Pinned`} />
-          </ListItemButton>
+          <NavigationAccordion title="Recent" />
+          <NavigationAccordion title="Pinned" />
         </List>
         <Divider />
         <NavigationCategory title="My Work" />
