@@ -10,10 +10,10 @@ import {
   getLocaleString,
   getLocaleTimeString,
 } from "../../../utils/utils";
-import { TextItem } from "./TextItem";
-import { LinkItem } from "./LinkItem";
 import PlaceIcon from "@mui/icons-material/Place";
 import MapIcon from "@mui/icons-material/Map";
+import { LinkItem } from "./items/LinkItem";
+import { TextItem } from "./items/TextItem";
 
 interface RideDataFullDetailsProps {
   rideData: RideData;
