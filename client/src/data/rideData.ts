@@ -21,6 +21,33 @@ export interface RideData {
   userRating: number;
 }
 
+export const translations = {
+  rideId: "Ride ID",
+  requestTime: "Request Time",
+  pickupLocation: "Pickup Location",
+  latitudePickup: "Latitude Pickup",
+  longitudePickup: "Longitude Pickup",
+  dropoffLocation: "Dropoff Location",
+  latitudeDropoff: "Latitude Dropoff",
+  longitudeDropoff: "Longitude Dropoff",
+  rideDistance: "Ride Distance",
+  fareAmount: "Fare Amount",
+  paymentMethod: "Payment Method",
+  driverId: "Driver ID",
+  vehicleType: "Vehicle Type",
+  trafficCondition: "Traffic Condition",
+  peakHours: "Peak Hours",
+  dayOfWeek: "Day of Week",
+  publicHoliday: "Public Holiday",
+  userRating: "User Rating",
+} as const;
+
+export type RideDataKeyType = keyof typeof translations;
+
+export const isRideDataKeyType = (key: string): key is RideDataKeyType => {
+  return key in translations;
+};
+
 export interface DistributionData {
   id: string | number;
   key: string;
@@ -219,6 +246,26 @@ export const getRideData = (): RideData[] => {
 const data = [
   {
     "Ride ID": 1,
+    "Request Time": 1647611400000,
+    "Pickup Location": "74.758108,-63.363275",
+    "Latitude Pickup": 74.758108,
+    "Longitude Pickup": -63.363275,
+    "Dropoff Location": "10.017576,-25.006466",
+    "Latitude Dropoff": 10.017576,
+    "Longtitude Dropoff": -25.006466,
+    "Ride Distance (in miles)": 9672.8006854529,
+    "Fare Amount (in $)": 987.2800685453,
+    "Payment Method": "Debit Card",
+    "Driver ID": "ZA4113",
+    "Vehicle Type": "Bus",
+    "Traffic Condition": "High",
+    "Peak Hours": "No",
+    "Day of Week": "Thursday",
+    "Public Holiday": "No",
+    "User Rating": 1,
+  },
+  {
+    "Ride ID": 93229,
     "Request Time": 1647611400000,
     "Pickup Location": "74.758108,-63.363275",
     "Latitude Pickup": 74.758108,
