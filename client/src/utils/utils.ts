@@ -21,11 +21,11 @@ export const getRequestTimeString = (value: number) => {
   const timeString = date.toLocaleTimeString(locale);
   const dateString = date.toLocaleDateString(locale);
 
-  const pm = timeString.split(" ")[1];
+  const pm = timeString.split(' ')[1];
   const isPmDefined = pm !== undefined;
-  const splitSymbol = isPmDefined ? ":" : ".";
+  const splitSymbol = isPmDefined ? ':' : '.';
 
-  const hhmm = timeString.split(splitSymbol).slice(0, 2).join(":");
+  const hhmm = timeString.split(splitSymbol).slice(0, 2).join(':');
   const baseText = `Request time on ${dateString} at ${hhmm}`;
 
   if (isPmDefined) {
