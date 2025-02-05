@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { RideData } from "../../../data/rideData";
-import { getPickupDateString } from "../../../utils/utils";
+import { getRequestTimeString } from "../../../utils/utils";
 import { AccordionWrapper } from "./AccordionWrapper";
 import { RideDataFullDetails } from "./RideDataFullDetails";
 
@@ -18,7 +18,7 @@ export const DetailView = ({ rideDataArray }: DetailViewProps) => {
       <Stack gap={2}>
         {rideDataArray.map((rideData) => (
           <AccordionWrapper
-            title={`Ride ${rideData.rideId} - ${getPickupDateString(
+            title={`Ride ${rideData.rideId} - ${getRequestTimeString(
               rideData.requestTime
             )}`}
             key={rideData.rideId}
