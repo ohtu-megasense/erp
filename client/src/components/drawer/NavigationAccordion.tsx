@@ -3,8 +3,9 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { List, ListItemButton, ListItemText } from "@mui/material";
+import { List, ListItemButton } from "@mui/material";
 import { getRandomInt } from "../../utils/utils";
+import { DrawerNavigationLink } from "./DrawerNavigationLink";
 
 interface NavigationAccordionProps {
   title: string;
@@ -37,9 +38,11 @@ export const NavigationAccordion = ({ title }: NavigationAccordionProps) => {
           }}
         >
           {Array.from({ length: getRandomInt(2, 4) }).map((_, index) => (
-            <ListItemButton key={index} sx={{ gap: 2 }}>
-              <ListItemText primary={`Item ${index + 1}`} />
-            </ListItemButton>
+            <DrawerNavigationLink
+              key={index}
+              href={""}
+              text={`Item ${index + 1}`}
+            />
           ))}
         </List>
       </AccordionDetails>
