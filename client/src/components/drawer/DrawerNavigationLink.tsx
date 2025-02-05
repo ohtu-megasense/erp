@@ -10,15 +10,10 @@ export const DrawerNavigationLink = ({
   text,
 }: DrawerNavigationLinkProps) => {
   return (
-    <ListItemButton>
-      <Link
-        href={href}
-        sx={{
-          width: "100%",
-        }}
-      >
+    <Link href={href}>
+      <ListItemButton>
         <ListItemText primary={text} />
-      </Link>
-    </ListItemButton>
+      </ListItemButton>
+    </Link>
   );
 };
