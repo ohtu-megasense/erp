@@ -4,7 +4,8 @@ import {
   Theme,
   ThemeOptions
 } from '@mui/material/styles';
-import { PaletteMode } from '@mui/material';
+import { LinkProps, PaletteMode } from '@mui/material';
+import { LinkBehavior } from './LinkBehavior';
 
 declare module '@mui/material/styles/createPalette' {
   interface Palette {
@@ -72,6 +73,16 @@ export const getTheme = (mode: PaletteMode): Theme => {
             boxShadow: 'none'
           }
         }
+      },
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            all: 'unset'
+          }
+        },
+        defaultProps: {
+          component: LinkBehavior
+        } as LinkProps
       }
     }
   };

@@ -2,8 +2,6 @@ import {
   Box,
   Divider,
   List,
-  ListItemButton,
-  ListItemText,
   Drawer as MuiDrawer,
   Toolbar,
   Typography,
@@ -15,6 +13,7 @@ import { NavigationAccordion } from "./NavigationAccordion";
 import { CompanyLinkFull } from "../company/CompanyLinkFull";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { closedDrawer } from "../../features/drawerSlice";
+import { DrawerNavigationLink } from "./DrawerNavigationLink";
 
 export const Drawer = () => {
   const isOpen = useAppSelector((state) => state.drawer.isOpen);
@@ -64,9 +63,8 @@ export const Drawer = () => {
         }}
       >
         <List>
-          <ListItemButton>
-            <ListItemText primary="Home" />
-          </ListItemButton>
+          <DrawerNavigationLink href="/" text="Home" />
+          <DrawerNavigationLink href="/search" text="Search" />
           <NavigationAccordion title="Recent" />
           <NavigationAccordion title="Pinned" />
         </List>
