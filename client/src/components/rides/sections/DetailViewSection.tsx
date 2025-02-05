@@ -1,9 +1,9 @@
-import { DetailView } from "./DetailView";
+import { DetailView } from "../detail-view/DetailView";
 import { Box, Stack, TextField } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import { getRideData, RideData } from "../../../data/rideData";
-import { SelectSearchOption } from "./SelectSearchOption";
+import { SelectSearchOption } from "../detail-view/SelectSearchOption";
 
 export const DetailViewSection = () => {
   const [id, setId] = useState<string | null>(null);
