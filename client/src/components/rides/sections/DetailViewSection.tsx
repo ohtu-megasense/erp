@@ -3,9 +3,9 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import { getRideData, RideData } from "../../../data/rideData";
 import { SelectSearchOption } from "../detail-view/SelectSearchOption";
-import { AccordionWrapper } from "../detail-view/AccordionWrapper";
 import { getRequestTimeString } from "../../../utils/utils";
 import { RideDataFullDetails } from "../detail-view/RideDataFullDetails";
+import { AccordionWrapper } from "../detail-view/AccordionWrapper";
 
 export const DetailViewSection = () => {
   const [id, setId] = useState<string | null>(null);
