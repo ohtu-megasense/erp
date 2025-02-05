@@ -1,7 +1,6 @@
 import { Box, Container } from "@mui/material";
 import { TopBar } from "../../top-bar/TopBar";
 import { Drawer } from "../../drawer/Drawer";
-import { ReactNode } from "react";
 import { Outlet } from "react-router";
 
 export const DefaultPageLayout = () => {
