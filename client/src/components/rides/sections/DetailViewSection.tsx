@@ -1,9 +1,11 @@
-import { DetailView } from "../detail-view/DetailView";
-import { Box, Stack, TextField } from "@mui/material";
+import { Box, Stack, TextField, Typography } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import { getRideData, RideData } from "../../../data/rideData";
 import { SelectSearchOption } from "../detail-view/SelectSearchOption";
+import { AccordionWrapper } from "../detail-view/AccordionWrapper";
+import { getRequestTimeString } from "../../../utils/utils";
+import { RideDataFullDetails } from "../detail-view/RideDataFullDetails";
 
 export const DetailViewSection = () => {
   const [id, setId] = useState<string | null>(null);
@@ -55,7 +57,25 @@ export const DetailViewSection = () => {
           onChange={({ target }) => setId(target.value)}
         />
       </Box>
-      <DetailView rideDataArray={rideDataArray} />
+      <Box>
+        <Typography sx={{ py: 2 }}>
+          Found {rideDataArray.length}{" "}
+          {rideDataArray.length === 1 ? "ride" : "rides"}
+        </Typography>
+        <Stack gap={2}>
+          {rideDataArray.map((rideData) => (
+            <AccordionWrapper
+              title={`Ride ${rideData.rideId} - ${getRequestTimeString(
+                rideData.requestTime
+              )}`}
+              key={rideData.rideId}
+              defaultExpanded={rideDataArray.length === 1}
+            >
+              <RideDataFullDetails key={rideData.rideId} rideData={rideData} />
+            </AccordionWrapper>
+          ))}
+        </Stack>
+      </Box>
     </Stack>
   );
 };
