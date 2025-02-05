@@ -1,10 +1,10 @@
-const locale = "en-US";
-const currency = "USD";
+const locale = 'en-US';
+const currency = 'USD';
 
 export const getLocaleCurrencyString = (value: number) => {
   return value.toLocaleString(locale, {
-    style: "currency",
-    currency: currency,
+    style: 'currency',
+    currency: currency
   });
 };
 
