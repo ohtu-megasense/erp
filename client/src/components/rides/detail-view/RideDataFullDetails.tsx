@@ -1,4 +1,10 @@
-import { List } from "@mui/material";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+} from "@mui/material";
 import {
   RideDataKeyType,
   isRideDataKeyType,
@@ -12,8 +18,8 @@ import {
 } from "../../../utils/utils";
 import PlaceIcon from "@mui/icons-material/Place";
 import MapIcon from "@mui/icons-material/Map";
-import { LinkItem } from "./items/LinkItem";
-import { TextItem } from "./items/TextItem";
+import { TableRowItem } from "./TableRowItem";
+import { LocationTableRow } from "./LocationTableRow";
 
 interface RideDataFullDetailsProps {
   rideData: RideData;
@@ -40,9 +46,9 @@ const getFormattedValue = (
 };
 
 export const RideDataFullDetails = ({ rideData }: RideDataFullDetailsProps) => {
+  const googleMapsDirectionsHref = `https://www.google.com/maps/dir/${rideData?.latitudePickup},${rideData?.longitudePickup}/${rideData?.latitudeDropoff},${rideData?.longitudeDropoff}/@${rideData?.latitudePickup},${rideData?.longitudePickup},13z`;
   const googleMapsPickupHref = `https://www.google.com/maps/@${rideData?.latitudePickup},${rideData?.longitudePickup},13z`;
   const googleMapsDropoffHref = `https://www.google.com/maps/@${rideData?.latitudeDropoff},${rideData?.longitudeDropoff},13z`;
-  const googleMapsDirectionsHref = `https://www.google.com/maps/dir/${rideData?.latitudePickup},${rideData?.longitudePickup}/${rideData?.latitudeDropoff},${rideData?.longitudeDropoff}/@${rideData?.latitudePickup},${rideData?.longitudePickup},13z`;
 
   const ignoredKeys: RideDataKeyType[] = [
     "pickupLocation",
@@ -56,47 +62,55 @@ export const RideDataFullDetails = ({ rideData }: RideDataFullDetailsProps) => {
   ];
 
   return (
-    <List disablePadding>
-      <LinkItem
-        primary="Pickup Location"
-        secondary={`${rideData.latitudePickup}, ${rideData.longitudePickup}`}
-        href={googleMapsPickupHref}
-        icon={<PlaceIcon />}
-      />
-      <LinkItem
-        primary="Dropoff Location"
-        secondary={`${rideData.latitudeDropoff}, ${rideData.longitudeDropoff}`}
-        href={googleMapsDropoffHref}
-        icon={<PlaceIcon />}
-      />
-      <LinkItem
-        primary="Directions"
-        secondary=""
-        href={googleMapsDirectionsHref}
-        icon={<MapIcon />}
-      />
-      <TextItem primary="Ride ID" secondary={rideData.rideId} />
-      <TextItem primary="Driver ID" secondary={rideData.driverId} />
-      {Object.keys(rideData).map((key) => {
-        if (!isRideDataKeyType(key)) {
-          return null;
-        }
+    <>
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRowItem property="Property" value="Value" />
+          </TableHead>
+          <TableBody>
+            <TableRowItem property="Ride ID" value={rideData.rideId} />
+            <TableRowItem property="Driver ID" value={rideData.driverId} />
+            {Object.keys(rideData).map((key) => {
+              if (!isRideDataKeyType(key)) {
+                return null;
+              }
 
-        if (ignoredKeys.includes(key)) {
-          return null;
-        }
+              if (ignoredKeys.includes(key)) {
+                return null;
+              }
 
-        const translation = translations[key];
-        const value = rideData[key] as RideDataKeyType;
-        const formattedValue = getFormattedValue(key, value);
-        return (
-          <TextItem
-            key={key}
-            primary={translation}
-            secondary={formattedValue}
-          />
-        );
-      })}
-    </List>
+              const translation = translations[key];
+              const value = rideData[key] as RideDataKeyType;
+              const formattedValue = getFormattedValue(key, value);
+              return (
+                <TableRowItem
+                  key={key}
+                  property={translation}
+                  value={formattedValue}
+                />
+              );
+            })}
+            <LocationTableRow
+              href={googleMapsDirectionsHref}
+              label="Directions"
+              Icon={MapIcon}
+            />
+            <LocationTableRow
+              href={googleMapsPickupHref}
+              label="Pickup Location"
+              value={rideData.pickupLocation}
+              Icon={PlaceIcon}
+            />
+            <LocationTableRow
+              href={googleMapsDropoffHref}
+              label="Dropoff Location"
+              value={rideData.dropoffLocation}
+              Icon={PlaceIcon}
+            />
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
