@@ -2,40 +2,49 @@ import {
   createTheme,
   PaletteOptions,
   Theme,
-  ThemeOptions,
-} from "@mui/material/styles";
-import { PaletteMode } from "@mui/material";
+  ThemeOptions
+} from '@mui/material/styles';
+import { PaletteMode } from '@mui/material';
 
-declare module "@mui/material/styles/createPalette" {
-  interface Palette {}
-  interface PaletteOptions {}
+declare module '@mui/material/styles/createPalette' {
+  interface Palette {
+    vars: {
+      'mui-drawer-width': number;
+    };
+  }
+
+  interface PaletteOptions {
+    vars?: {
+      'mui-drawer-width': number;
+    };
+  }
 }
 
 const lightPalette: PaletteOptions = {};
 
 const darkPalette: PaletteOptions = {
   background: {
-    default: "#2a2a2aff",
-    paper: "#393939",
+    default: '#2a2a2aff',
+    paper: '#393939'
   },
   text: {
-    primary: "#fcfcfc",
-    secondary: "#fcfcfc",
+    primary: '#fcfcfc',
+    secondary: '#fcfcfc'
   },
   primary: {
-    main: "#55009bff",
+    main: '#55009bff'
   },
-  divider: "#79797977",
+  divider: '#79797977'
 };
 
 const getPalette = (mode: PaletteMode): PaletteOptions => {
   switch (mode) {
-    case "light":
+    case 'light':
       return lightPalette;
-    case "dark":
+    case 'dark':
       return darkPalette;
     default:
-      throw new Error("Invalid palette mode.");
+      throw new Error('Invalid palette mode.');
   }
 };
 
@@ -43,16 +52,29 @@ export const getTheme = (mode: PaletteMode): Theme => {
   const customPalette = getPalette(mode);
   const defaultPalette = createTheme().palette;
 
-  const palette = {
+  const palette: PaletteOptions = {
     ...defaultPalette,
-    ...customPalette,
+    ...customPalette
   };
 
   const themeOptions: ThemeOptions = {
-    palette,
+    palette: {
+      ...palette,
+      vars: {
+        'mui-drawer-width': 300
+      }
+    },
     typography: {},
-    components: {},
+    components: {
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            boxShadow: 'none'
+          }
+        }
+      }
+    }
   };
 
-  return createTheme(themeOptions);
+  return createTheme({ cssVariables: true, ...themeOptions });
 };

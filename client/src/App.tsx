@@ -1,14 +1,12 @@
-import { CssBaseline, Typography } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "./components/theme-provider/ThemeProvider";
-import { useGetPingQuery } from "./features/apiSlice";
+import { DashboardPage } from "./components/pages/dashboard/DashboardPage";
 
 export const App = () => {
-  const { data } = useGetPingQuery();
-
   return (
     <ThemeProvider>
       <CssBaseline />
-      {data && <Typography variant="h3">{data.message}</Typography>}
+      <DashboardPage />
     </ThemeProvider>
   );
 };
