@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { HeadingSection } from "./HeadingSection";
-import { DetailViewSection } from "../../rides/detail-view/DetailViewSection";
+import { DetailViewSection } from "../../rides/sections/DetailViewSection";
 
 export const DetailViewPage = () => {
   return (
