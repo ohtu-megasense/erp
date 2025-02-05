@@ -1,15 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface DrawerState {
   isOpen: boolean;
 }
 
 const initialState: DrawerState = {
-  isOpen: false,
+  isOpen: false
 };
 
 const slice = createSlice({
-  name: "drawer",
+  name: 'drawer',
   initialState,
   reducers: {
     openedDrawer: (state) => {
@@ -17,8 +17,8 @@ const slice = createSlice({
     },
     closedDrawer: (state) => {
       state.isOpen = false;
-    },
-  },
+    }
+  }
 });
 
 export default slice.reducer;
