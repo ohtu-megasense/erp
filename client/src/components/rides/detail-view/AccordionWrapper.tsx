@@ -30,13 +30,7 @@ export const AccordionWrapper = ({
       }}
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography
-          sx={{
-            fontSize: 18,
-          }}
-        >
-          {title}
-        </Typography>
+        <Typography variant="body2">{title}</Typography>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>{children}</AccordionDetails>
     </Accordion>
