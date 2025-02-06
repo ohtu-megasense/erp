@@ -1,0 +1,7 @@
+services:
+  production:
+    build:
+      context: ./
+    ports:
+    - "3047:3000"
+    
