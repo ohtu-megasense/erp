@@ -21,6 +21,33 @@ export interface RideData {
   userRating: number;
 }
 
+export const translations = {
+  rideId: 'Ride ID',
+  requestTime: 'Request Time',
+  pickupLocation: 'Pickup Location',
+  latitudePickup: 'Latitude Pickup',
+  longitudePickup: 'Longitude Pickup',
+  dropoffLocation: 'Dropoff Location',
+  latitudeDropoff: 'Latitude Dropoff',
+  longitudeDropoff: 'Longitude Dropoff',
+  rideDistance: 'Ride Distance',
+  fareAmount: 'Fare Amount',
+  paymentMethod: 'Payment Method',
+  driverId: 'Driver ID',
+  vehicleType: 'Vehicle Type',
+  trafficCondition: 'Traffic Condition',
+  peakHours: 'Peak Hours',
+  dayOfWeek: 'Day of Week',
+  publicHoliday: 'Public Holiday',
+  userRating: 'User Rating'
+} as const;
+
+export type RideDataKeyType = keyof typeof translations;
+
+export const isRideDataKeyType = (key: string): key is RideDataKeyType => {
+  return key in translations;
+};
+
 export interface DistributionData {
   id: string | number;
   key: string;
