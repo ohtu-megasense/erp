@@ -3,7 +3,9 @@ import { database_URL } from '../config';
 import fs from 'fs';
 import path from 'path';
 
-const caPath = path.join(__dirname, '../../ca.pem');
+
+const caPath = path.join(__dirname, "../../development_certificate.pem");
+
 
 const client = new Client({
   connectionString: database_URL,

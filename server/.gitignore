@@ -3,3 +3,6 @@ node_modules
 ca.pem
 data/
 ca.pem:Zone.Identifier
+production_certificate.pem
+development_certificate.pem
+testenv_certificate.pem
