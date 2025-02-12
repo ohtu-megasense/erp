@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "dev", "test-actions" ]
+    branches: [ "main", "dev", "test-dev-actions-server" ]
   pull_request:
-    branches: [ "main", "dev", "test-actions" ]
+    branches: [ "main", "dev", "test-dev-actions-server" ]
 
 defaults:
   run:
