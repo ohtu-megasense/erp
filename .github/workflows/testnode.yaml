@@ -33,6 +33,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - run: tsx
     - run: npm run build --if-present
-    - run: npm run test-unit
+    - run: npm run cross-env NODE_ENV=test tsx --import tsx --test test/unit/**/*Test.ts
     - run: npm run test-api
