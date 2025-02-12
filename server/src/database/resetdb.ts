@@ -14,16 +14,17 @@ const client = new Client({
   }
 });
 
-const loadSchema = async () => {
+
+const resetDb = async () => {
   try {
     await client.connect();
     console.log('Connected to the database');
 
-    const schemaPath = path.join(__dirname, 'schema.sql');
-    const SQLschema = fs.readFileSync(schemaPath, 'utf-8');
+    const resetdbPath = path.join(__dirname, "resetdb.sql");
+    const SQLresetdb = fs.readFileSync(resetdbPath, "utf-8");
 
-    await client.query(SQLschema);
-    console.log('Schema loaded successfully');
+    await client.query(SQLresetdb);
+    console.log("Dropped all the tables");
   } finally {
     await client.end();
     console.log('Disconnected from the database');
@@ -31,7 +32,10 @@ const loadSchema = async () => {
 };
 
 
-if (require.main == module) {
-  loadSchema();
-}
+//  !!! THIS WILL RESET THE DATABASE !!!
+//  !!! THIS WILL RESET THE DATABASE !!!
+//  !!! THIS WILL RESET THE DATABASE !!!
 
+if (require.main == module) {
+  resetDb();            // UNCOMMENT THIS IF YOU WISH TO RUN IT
+}
