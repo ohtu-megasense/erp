@@ -1,7 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { RidesKPISection } from "../../rides/sections/RidesKPISection";
 import { RidesChartsSection } from "../../rides/sections/RidesChartsSection";
 import { HeadingSection } from "./HeadingSection";
+import { InventoryDataSection } from "../../rides/sections/InventoryDataSection";
+
 
 export const DashboardPage = () => {
   return (
@@ -14,6 +16,9 @@ export const DashboardPage = () => {
       </Box>
       <Box mt={2}>
         <RidesChartsSection />
+      </Box>
+      <Box mt={2}>
+        <InventoryDataSection />
       </Box>
     </>
   );
