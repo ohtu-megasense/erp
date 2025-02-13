@@ -1,7 +1,7 @@
 services:
   production:
     build:
-      context: ./Dockerfile.openshift
+      context: ./Dockerfile
     ports:
     - "3047:3000"
     
