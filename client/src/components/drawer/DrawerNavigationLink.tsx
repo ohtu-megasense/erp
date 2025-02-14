@@ -9,7 +9,7 @@ interface DrawerNavigationLinkProps {
 
 export const DrawerNavigationLink = ({
   href,
-  text
+  text,
 }: DrawerNavigationLinkProps) => {
   const dispatch = useAppDispatch();
 
