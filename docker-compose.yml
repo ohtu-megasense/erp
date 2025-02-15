@@ -4,4 +4,3 @@ services:
       context: ./Dockerfile
     ports:
     - "3047:3000"
-    
