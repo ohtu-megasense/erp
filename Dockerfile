@@ -40,4 +40,8 @@ RUN chmod 755 .
 
 USER 1001
 
+ENV PORT=3000
+
+EXPOSE 3000
+
 CMD ["node", "./src/index.js"]
