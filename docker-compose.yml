@@ -3,6 +3,23 @@ services:
     image: node:22-alpine
     working_dir: /usr/src/app
     volumes:
-      - ./client:.
+      - ./client:/usr/src/app
       - /app/node_modules
-    command: npm run dev
+    command: sh -c "npm ci && npm run dev -- --host"
+    environment:
+      NODE_ENV: dev
+    ports:
+      - 5173:5173
+      - 24678:24678 # Vite Hot Module Replacement
+
+  backend:
+    image: node:22-alpine
+    working_dir: /usr/src/app
+    volumes:
+      - ./server:/usr/src/app
+      - /app/node_modules
+    command: sh -c "npm ci && npm run dev"
+    environment:
+      NODE_ENV: dev
+    ports:
+      - 3000:3000
