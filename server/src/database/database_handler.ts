@@ -19,7 +19,10 @@ const createInventoryItem = async (tableName: string, column1: string, column2: 
         await client.connect();
         console.log('Connected to the database');
 
-        const query = format('CREATE TABLE %I (%I TEXT, %I TEXT);', tableName, column1, column2);
+        const query = format(`CREATE TABLE %I
+                            (%I TEXT, %I TEXT);`,
+                            tableName, column1, column2
+                            );
 
         await client.query(query);
         console.log(`Table "${tableName}" with columns "${column1}" and "${column2}" created successfully!`);
@@ -35,7 +38,40 @@ const createInventoryItem = async (tableName: string, column1: string, column2: 
 };
 
 
+const createInventoryItemList = async (tableName: string, columns: Array<string>)=> {
+  try {
+      await client.connect();
+      console.log('Connected to the database');
+      
+
+      let sql_text: string = 'CREATE TABLE %I ('
+      for (var col of columns) {
+        sql_text = sql_text + "%I TEXT, "
+      }
+      sql_text = sql_text.slice(0, -2);
+      sql_text = sql_text + ");";
+
+      console.log(sql_text);
+      console.log(tableName);
+      console.log(columns);
+
+      const query = format(sql_text, tableName, ...columns);
+
+      await client.query(query);
+      console.log(`Table "${tableName}" with columns ${columns} created successfully!`);
+
+    } catch (error) {
+      console.error('Error creating table:', error);
+      
+    } finally {
+      await client.end();
+      console.log('Disconnected from the database');
+
+  }
+};
+
+
 
 if (require.main == module) {
-    createInventoryItem('users', 'first_name', 'last_name');
+    createInventoryItemList('users', ['first_name', 'last_name']);
   }
