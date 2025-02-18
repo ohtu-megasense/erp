@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 
-const caPath = path.join(__dirname, "../../testenv_certificate.pem");
+const caPath = path.join(__dirname, "../../development_certificate.pem");
 
 
 const client = new Client({

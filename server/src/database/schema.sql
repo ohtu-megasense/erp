@@ -1,20 +1,6 @@
-CREATE TABLE IF NOT EXISTS items(
-    id SERIAL PRIMARY KEY,
-    item_name TEXT
-);
-
-CREATE TABLE IF NOT EXISTS value_types(
-    value_id SERIAL PRIMARY KEY,
-    value_name TEXT,
-    value_type TEXT
-);
-
-CREATE TABLE IF NOT EXISTS values(
-    item_id INT REFERENCES items(id),
-    value_id INT REFERENCES value_types(value_id)
-);
 
 
+/*
 CREATE TABLE IF NOT EXISTS app_metrics (
     id SERIAL PRIMARY KEY,
     app_name VARCHAR(50),
@@ -32,4 +18,11 @@ CREATE TABLE IF NOT EXISTS field_sensors (
     sensor_location VARCHAR(50),
     sensor_status VARCHAR(20),
     last_updated TIMESTAMP DEFAULT NOW()
+)
+*/
+
+
+CREATE TABLE inventory_module (
+    id SERIAL PRIMARY KEY,
+    inventory_item VARCHAR(50)
 )
