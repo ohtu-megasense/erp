@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(requestLogger);
 app.use('/api/ping', pingRouter);
 app.get('/*', (req, res) => {
-  res.status(404).json({ message: 'Unknown endpoint.' });
+  res.status(404).json({ message: 'Unknown endpoint!' });
 });
 
 export default app;
