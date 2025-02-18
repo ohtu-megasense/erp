@@ -51,7 +51,7 @@ const addToInventoryItem = async (tableName: string, values: Array<string>)=> {
       await client.connect();
       console.log('Connected to the database');
 
-      let sql_text: string = 'INSERT INTO "%I" (first_name, last_name) VALUES ('
+      let sql_text: string = 'INSERT INTO "%I" VALUES (DEFAULT, '
       for (var val of values) {
         sql_text = sql_text + "'%s', "
       }
