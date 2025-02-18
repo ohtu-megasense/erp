@@ -1,7 +1,9 @@
 import { Client } from 'pg';
+import format from 'pg-format';
 import { database_URL } from '../config';
 import fs from 'fs';
 import path from 'path';
+
 
 const caPath = path.join(__dirname, '../../development_certificate.pem');
 
@@ -12,26 +14,20 @@ const client = new Client({
   }
 });
 
-const createInventoryItem = async () => {
-    const cols = ["sensors", "col1", "col2"];
+const createInventoryItem = async (tableName: string, column1: string, column2: string)=> {
     try {
         await client.connect();
         console.log('Connected to the database');
 
-        const SQL = `DO
-                    $$
-                    BEGIN
-                    EXECUTE format('CREATE TABLE %I 
-                                  (id SERIAL PRIMARY KEY, %I TEXT, %I TEXT)', 
-                                  'sensors', 'col1', 'col2'
-                                  )
-                    END;
-                    $$ LANGUAGE PLPGSQL;`;
+        const query = format('CREATE TABLE %I (%I TEXT, %I TEXT);', tableName, column1, column2);
 
-        await client.query(SQL, cols);
-        console.log('Changes made');
+        await client.query(query);
+        console.log(`Table "${tableName}" with columns "${column1}" and "${column2}" created successfully!`);
 
-    } finally {
+      } catch (error) {
+        console.error('Error creating table:', error);
+        
+      } finally {
         await client.end();
         console.log('Disconnected from the database');
 
@@ -41,5 +37,5 @@ const createInventoryItem = async () => {
 
 
 if (require.main == module) {
-    createInventoryItem();
+    createInventoryItem('users', 'first_name', 'last_name');
   }
