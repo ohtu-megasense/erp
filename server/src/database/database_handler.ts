@@ -14,41 +14,16 @@ const client = new Client({
   }
 });
 
-const createInventoryItem = async (tableName: string, column1: string, column2: string)=> {
-    try {
-        await client.connect();
-        console.log('Connected to the database');
-
-        const query = format(`CREATE TABLE %I
-                            (%I TEXT, %I TEXT);`,
-                            tableName, column1, column2
-                            );
-
-        await client.query(query);
-        console.log(`Table "${tableName}" with columns "${column1}" and "${column2}" created successfully!`);
-
-      } catch (error) {
-        console.error('Error creating table:', error);
-        
-      } finally {
-        await client.end();
-        console.log('Disconnected from the database');
-
-    }
-};
-
-
-const createInventoryItemList = async (tableName: string, columns: Array<string>)=> {
+const createInventoryItem = async (tableName: string, columns: Array<string>)=> {
   try {
       await client.connect();
       console.log('Connected to the database');
       
-
-      let sql_text: string = 'CREATE TABLE %I ('
+      let sql_text: string = 'CREATE TABLE %I (id SERIAL PRIMARY KEY, '
       for (var col of columns) {
         sql_text = sql_text + "%I TEXT, "
       }
-      sql_text = sql_text.slice(0, -2);
+      sql_text = sql_text.slice(0, -2);      // this removes the extra , and space
       sql_text = sql_text + ");";
 
       console.log(sql_text);
@@ -71,7 +46,41 @@ const createInventoryItemList = async (tableName: string, columns: Array<string>
 };
 
 
+const addToInventoryItem = async (tableName: string, values: Array<string>)=> {
+  try {
+      await client.connect();
+      console.log('Connected to the database');
+
+      let sql_text: string = 'INSERT INTO "%I" (first_name, last_name) VALUES ('
+      for (var val of values) {
+        sql_text = sql_text + "'%s', "
+      }
+      sql_text = sql_text.slice(0, -2);      // this removes the extra , and space
+      sql_text = sql_text + ");";
+
+      console.log(sql_text);
+      console.log(tableName);
+      console.log(values);
+
+      const query = format(sql_text, tableName, ...values);
+
+      await client.query(query);
+      console.log(`Table "${tableName}" added values ${values}!`);
+
+
+    } catch (error) {
+      console.error('Error creating table:', error);
+      
+    } finally {
+      await client.end();
+      console.log('Disconnected from the database');
+
+  }
+};
+
+
 
 if (require.main == module) {
-    createInventoryItemList('users', ['first_name', 'last_name']);
+    //createInventoryItem('users', ['first_name', 'last_name'])
+    addToInventoryItem('users', ['santeri', 'kuusela']);
   }
