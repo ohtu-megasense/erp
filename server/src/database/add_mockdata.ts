@@ -1,8 +1,5 @@
 import { addToInventoryItem, createInventoryItem } from "./database_handler";
-import path from "path";
 import { randomInt } from "crypto";
-
-const caPath = path.join(__dirname, "../../development_certificate.pem");
 
 const generateMockData = async (tableName: string, values: Array<string>) => {
 	try {

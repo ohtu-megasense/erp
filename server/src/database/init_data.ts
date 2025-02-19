@@ -3,13 +3,9 @@ import { database_URL } from '../config';
 import fs from 'fs';
 import path from 'path';
 
-const certificatePath = path.join(__dirname, '../../testenv_certificate.pem');
 
 const client = new Client({
-  connectionString: database_URL,
-  ssl: {
-    ca: fs.readFileSync(certificatePath).toString()
-  }
+  connectionString: database_URL
 });
 
 const loadAnyCommandSchema = async () => {
