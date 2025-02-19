@@ -5,8 +5,8 @@ const database_URL =
     ? 'postgres://postgres:postgres@postgres:5432/postgres'
     : process.env.DATABASE_URL;
 
-if (!database_URL) {
-  throw new Error('DATABASE_URL must be set in production environment');
-}
+// if (!database_URL) {
+//   throw new Error('DATABASE_URL must be set in production environment');
+// }
 
 export { database_URL };
