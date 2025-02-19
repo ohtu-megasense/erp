@@ -3,16 +3,8 @@ import { database_URL } from '../config';
 import fs from 'fs';
 import path from 'path';
 
-
-
-const caPath = path.join(__dirname, '../../development_certificate.pem');
-
-
 const client = new Client({
-  connectionString: database_URL,
-  ssl: {
-    ca: fs.readFileSync(caPath).toString()
-  }
+  connectionString: database_URL
 });
 
 const loadSchema = async () => {
@@ -31,8 +23,6 @@ const loadSchema = async () => {
   }
 };
 
-
 if (require.main == module) {
   loadSchema();
 }
-
