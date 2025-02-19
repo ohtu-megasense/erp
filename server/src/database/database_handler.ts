@@ -67,14 +67,43 @@ const addToInventoryItem = async (tableName: string, values: Array<string>) => {
     await client.query(query);
     console.log(`Table "${tableName}" added values ${values}!`);
   } catch (error) {
-    console.error('Error creating table:', error);
+    console.error('Error adding to table:', error);
   } finally {
     await client.end();
     console.log('Disconnected from the database');
   }
 };
 
+export async function retrieveInventoryTable(tableName: string): Promise<any> {
+    try {
+      await client.connect();
+      console.log('Connected to the database');
+
+      let sql_text: string = 'SELECT * FROM "%I"';
+      console.log(sql_text);
+      console.log(tableName);
+
+      const query = format(sql_text, tableName);
+      console.log(query)
+      const result = await client.query(query);
+      console.log(`Retrieved everything from "${tableName}"!`);
+
+      const results = result.rows;
+      console.log(results)
+      return results
+
+    } catch (error) {
+      console.error('Error retrieving from table:', error);
+    } finally {
+      await client.end();
+      console.log('Disconnected from the database');
+    }
+};
+
+
+
 if (require.main == module) {
-  //createInventoryItem('users', ['first_name', 'last_name'])
-  addToInventoryItem('users', ['santeri', 'kuusela']);
+  //createInventoryItem('app_metrics', ["app_name", "platform", "downloads", "app_rating", "active_subscriptions", "revenue", "last_updated"])
+  //addToInventoryItem('app_metrics', ['GO2-app', 'iOS', "892", "3.9", "108", "1080"]);
+  retrieveInventoryTable("app_metrics")
 }
