@@ -2,16 +2,13 @@ import { Router } from 'express';
 import { retrieveInventoryTable } from "../database/database_handler";
 
 
-interface InventoryModule {
-  message: string;
-}
 
 const router = Router();
 
 router.get('/', (req, res) => {
-    const response = retrieveInventoryTable("app_metrics");
-    //console.log(response);
-    res.json(response);
+    const response = retrieveInventoryTable("sensors")
+    .then(data => res.json(data))
+    .catch(error => console.error('Error retrieving data:', error));
 });
 
 /**

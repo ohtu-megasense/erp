@@ -74,7 +74,7 @@ const addToInventoryItem = async (tableName: string, values: Array<string>) => {
   }
 };
 
-export async function retrieveInventoryTable(tableName: string): Promise<any> {
+export async function retrieveInventoryTable(tableName: string) {
     try {
       await client.connect();
       console.log('Connected to the database');
@@ -89,7 +89,7 @@ export async function retrieveInventoryTable(tableName: string): Promise<any> {
       console.log(`Retrieved everything from "${tableName}"!`);
 
       const results = result.rows;
-      console.log(results)
+      //console.log(results)
       return results
 
     } catch (error) {
