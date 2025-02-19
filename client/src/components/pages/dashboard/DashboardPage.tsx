@@ -12,13 +12,13 @@ export const DashboardPage = () => {
         <HeadingSection />
       </Box>
       <Box mt={2}>
+        <InventoryDataSection />
+      </Box>
+      <Box mt={2}>
         <RidesKPISection />
       </Box>
       <Box mt={2}>
         <RidesChartsSection />
-      </Box>
-      <Box mt={2}>
-        <InventoryDataSection />
       </Box>
     </>
   );
