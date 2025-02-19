@@ -21,6 +21,7 @@
     "@types/pg-format": "^1.0.5",
     "@types/supertest": "^6.0.2",
     "cross-env": "^7.0.3",
+    "esbuild": "^0.25.0",
     "eslint": "^9.19.0",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",

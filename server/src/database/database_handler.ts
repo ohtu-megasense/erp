@@ -78,6 +78,31 @@ export const addToInventoryItem = async (
 	}
 };
 
+export async function retrieveInventoryTable(tableName: string) {
+	const client = await pool.connect();
+	try {
+		console.log("Connected to the database");
+
+		let sql_text: string = 'SELECT * FROM "%I"';
+		console.log(sql_text);
+		console.log(tableName);
+
+		const query = format(sql_text, tableName);
+		console.log(query);
+		const result = await client.query(query);
+		console.log(`Retrieved everything from "${tableName}"!`);
+
+		const results = result.rows;
+		//console.log(results)
+		return results;
+	} catch (error) {
+		console.error("Error retrieving from table:", error);
+	} finally {
+		client.release();
+		console.log("Disconnected from the database");
+	}
+}
+
 if (require.main == module) {
 	createInventoryItem("sensors", [
 		"name",
