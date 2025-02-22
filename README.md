@@ -33,16 +33,27 @@ MegaSense AI ERP is a prototype for an AI based enterprise resource planning sof
 
 ### Use
 
-In the software you can...
+In the software you can:
+
+- Add a modules
+- Add categories for the modules
+- Add and update items for the categories
+- ...to be continued
 
 ### Documentation
 
-Software documentation available in [Wiki]([https://github.com/MuViCo/MuViCo/blob/3fa0f45fdeec4fe03a244c961004a385991dd78b/documentation/userguide.md](https://github.com/ohtu-megasense/erp/wiki))
+Software documentation available in [Wiki](https://github.com/ohtu-megasense/erp/wiki)
 
 ## Development
 
 1. Clone the repo
 2. Navigate to the root folder in your terminal
-3. In one terminal type docker compose up
+3. In one terminal type [docker compose up]
 4. In other terminal type docker compose exec backend npx ts-node src/database/add_mockdata.ts
 5. Add http://localhost:5173/ in your web browser
+
+## Links
+
+- [Backlog](https://github.com/orgs/ohtu-megasense/projects/2/views/1)
+- [Staging](https://megasense-erp-ohtuprojekti-staging.apps.ocp-test-0.k8s.it.helsinki.fi/)
+  - VPN need to be enabled (login credentials to University of Helsinki needed)
