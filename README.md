@@ -62,3 +62,6 @@ docker compose exec backend npx ts-node src/database/add_mockdata.ts
 - [Backlog](https://github.com/orgs/ohtu-megasense/projects/2/views/1)
 - [Staging](https://megasense-erp-ohtuprojekti-staging.apps.ocp-test-0.k8s.it.helsinki.fi/)
   - VPN need to be enabled (login credentials to University of Helsinki needed)
+- ...to be continued e.g. [Production]()
+
+
