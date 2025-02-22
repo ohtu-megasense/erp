@@ -48,9 +48,12 @@ Software documentation available in [Wiki](https://github.com/ohtu-megasense/erp
 
 1. Clone the repo
 2. Navigate to the root folder in your terminal
-3. In one terminal type ```bash docker compose up```
-4. In other terminal type docker compose exec backend npx ts-node src/database/add_mockdata.ts
-5. Add http://localhost:5173/ in your web browser
+3. In one terminal type
+```bash
+docker compose up
+```
+5. In other terminal type docker compose exec backend npx ts-node src/database/add_mockdata.ts
+6. Add http://localhost:5173/ in your web browser
 
 ## Links
 
