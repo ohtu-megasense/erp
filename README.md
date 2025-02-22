@@ -55,7 +55,7 @@ docker compose up
 ```bash
 docker compose exec backend npx ts-node src/database/add_mockdata.ts
 ```
-5. In your web browser go to (http://localhost:5173/).
+5. In your web browser go to http://localhost:5173).
 
 ## Links
 
