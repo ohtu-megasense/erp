@@ -4,7 +4,7 @@ import { AddingCategoryFunction } from "../database/database_handler";
 const router = Router();
 
 router.post('/', (req, res) => {
-    const category_name = req.body.category // extracting category_name for request body
+    const { category_name } = req.body // extracting category_name from request body as string
 
     AddingCategoryFunction(category_name)
         .then(data => res.json(data)) // sending back confirmation message to client/frontend that category has been added
