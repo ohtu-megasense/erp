@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import pingRouter from './routers/pingRouter';
 import inventoryRouter from "./routers/inventoryRouter";
+import categoryRouter from "./routers/categoryRouter";
 import { requestLogger } from './utils/middleware';
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(requestLogger);
 app.use('/api/ping', pingRouter);
 app.use("/api/reports/inventory", inventoryRouter);
+app.use("/api/category", categoryRouter); //router for adding category
 
 /** 
 app.get('/api/reports/inventory', (req, res) => {
