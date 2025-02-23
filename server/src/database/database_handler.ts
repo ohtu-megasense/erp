@@ -125,6 +125,19 @@ export async function temporarySensorKoosteFunction() {
   }
 }
 
+export async function AddingCategoryFunction(category_name: string) {
+  try {
+    //creating new table named category_name with only id column by passing 
+    // an empty array for additional columns to createInventoryItem_function
+    await createInventoryItem(category_name, []);
+    return { message: `Category table '${category_name}' created` }; // returning message to client/frontend
+  } catch (error) {
+    console.error("Error creating category table:", error);
+    throw error; //throwing error so errors can be caught in categoryRouter.ts
+  }
+}
+
+
 if (require.main == module) {
   temporarySensorKoosteFunction();
   /**
