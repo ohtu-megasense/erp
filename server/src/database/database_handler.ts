@@ -125,6 +125,13 @@ export async function temporarySensorKoosteFunction() {
   }
 }
 
+export async function AddingCategoryFunction(category_name: string) {
+  const client = await pool.connect();
+  try {
+    console.log('Connected to the database');
+  }
+}
+
 if (require.main == module) {
   temporarySensorKoosteFunction();
   /**
