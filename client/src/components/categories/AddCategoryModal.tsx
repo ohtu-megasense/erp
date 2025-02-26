@@ -79,6 +79,7 @@ export const AddCategoryModal = () => {
               name="new-category-name"
               label="Enter category name"
               variant="standard"
+              autoComplete="off"
               error={error}
               helperText={errorMessage}
             />
