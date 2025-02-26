@@ -6,6 +6,17 @@ const pool = new Pool({
   connectionString: database_URL
 });
 
+const createSQLquery = async(
+  values: Array<string>,
+  sql_query: string,
+  sql_placeholder: string
+) => {
+  const placeholders = values.map(() => sql_placeholder).join('');
+  sql_query = sql_query.slice(0, -2);
+  sql_query = sql_query + ');';
+  return sql_query
+}
+
 export const createInventoryItem = async (
   tableName: string,
   columns: Array<string>
@@ -14,12 +25,9 @@ export const createInventoryItem = async (
   try {
     console.log('Connected to the database');
 
-    let sql_text: string = 'CREATE TABLE %I (id SERIAL PRIMARY KEY, ';
-    for (var col of columns) {
-      sql_text = sql_text + '%I TEXT, ';
-    }
-    sql_text = sql_text.slice(0, -2); // this removes the extra , and space
-    sql_text = sql_text + ');';
+    let sql_query: string = 'CREATE TABLE IF NOT EXISTS %I (id SERIAL PRIMARY KEY, ';
+    let sql_placeholder: string = '%I TEXT, ';
+    let sql_text = await createSQLquery(columns, sql_query, sql_placeholder);
 
     console.log(sql_text);
     console.log(tableName);
@@ -47,12 +55,9 @@ export const addToInventoryItem = async (
   try {
     console.log('Connected to the database');
 
-    let sql_text: string = 'INSERT INTO "%I" VALUES (DEFAULT, ';
-    for (var val of values) {
-      sql_text = sql_text + "'%s', ";
-    }
-    sql_text = sql_text.slice(0, -2); // this removes the extra , and space
-    sql_text = sql_text + ');';
+    let sql_query: string = 'INSERT INTO "%I" VALUES (DEFAULT, ';
+    let sql_placeholder: string = "'%s', ";
+    let sql_text = await createSQLquery(values, sql_query, sql_placeholder);
 
     console.log(sql_text);
     console.log(tableName);
@@ -139,19 +144,19 @@ export async function AddingCategoryFunction(category_name: string) {
 
 
 if (require.main == module) {
-  temporarySensorKoosteFunction();
-  /**
+  //temporarySensorKoosteFunction();
+
   createInventoryItem("sensors", [
     "name",
     "location",
     "status",
     "last_updated",
   ]);
-  */
 
-  //createInventoryItem('app_metrics', ["app_name", "platform", "downloads", "app_rating", "active_subscriptions", "revenue", "last_updated"])
-  //addToInventoryItem('app_metrics', ['GO2-app', 'iOS', "892", "3.9", "108", "1080"]);
-  //retrieveInventoryTable("app_metrics")
+
+  createInventoryItem('app_metrics', ["app_name", "platform", "downloads", "app_rating", "active_subscriptions", "revenue", "last_updated"])
+  addToInventoryItem('app_metrics', ['GO2-app', 'iOS', "892", "3.9", "108", "1080"]);
+  retrieveInventoryTable("app_metrics")
   //addToInventoryItem("lusers", ["santeri", "kuusela"]);
 }
 
