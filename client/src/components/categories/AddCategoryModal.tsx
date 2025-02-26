@@ -53,13 +53,10 @@ export const AddCategoryModal = () => {
       return;
     }
 
-    console.log('Submitting new category...');
-
     const formData = new FormData(event.currentTarget);
     const input = formData.get('new-category-name') as string;
 
     if (!input) {
-      console.log('Cant submit empty category name.');
       return;
     }
 
