@@ -46,7 +46,7 @@ export const AddCategoryModal = () => {
     return isValid;
   };
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (error) {
@@ -60,8 +60,12 @@ export const AddCategoryModal = () => {
       return;
     }
 
-    postNewCategory({ category_name: input });
-    onClose();
+    try {
+      await postNewCategory({ category_name: input }).unwrap();
+      onClose();
+    } catch (error) {
+      console.log('Error adding new category', error);
+    }
   };
 
   return (
