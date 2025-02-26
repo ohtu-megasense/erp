@@ -21,11 +21,7 @@ jobs:
         cache-dependency-path: ./server/package-lock.json
     - run: npm ci
     - name: Run ESLint
-      uses: sibiraj-s/action-eslint@v3
-      with:
-        eslint-args: '--max-warnings=10'
-        extensions: '.js,.jsx,.ts,.tsx'
-        working-directory: './server'
+      run: npm run lint
     - run: npm run build --if-present
     - run: npm install cross-env
     - run: CI=true npm run test-unit
@@ -47,8 +43,4 @@ jobs:
         cache-dependency-path: ./client/package-lock.json
     - run: npm ci
     - name: Run ESLint
-      uses: sibiraj-s/action-eslint@v3
-      with:
-        eslint-args: '--max-warnings=10'
-        extensions: '.js,.jsx,.ts,.tsx'
-        working-directory: './client'
+      run: npm run lint
