@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '../features/apiSlice';
 import exampleSlice from '../features/exampleSlice';
 import drawerSlice from '../features/drawerSlice';
+import categorySlice from '../features/categorySlice';
 
 export const store = configureStore({
   reducer: {
     example: exampleSlice,
     drawer: drawerSlice,
+    category: categorySlice,
     [apiSlice.reducerPath]: apiSlice.reducer
   },
   middleware: (getDefaultMiddleware) => {

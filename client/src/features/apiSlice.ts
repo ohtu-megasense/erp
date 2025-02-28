@@ -12,13 +12,13 @@ interface InventoryReport {
   monthly_api_usage: number;
 }
 
-interface Category { 
+interface Category {
   category_name: string; //name of the category to be added as a string for the Category object
 }
 
 interface CategoryResponse {
   success: boolean; // true/false if the category was added successfully in backend/server
-  data: Category // added Category object
+  data: Category; // added Category object
 }
 
 export const apiSlice = createApi({
@@ -37,13 +37,14 @@ export const apiSlice = createApi({
     //CategoryResponse = expected response from server/backend
     //Category = category_name to be sent to server/backend
     addCategory: builder.mutation<CategoryResponse, Category>({
-      query: (new_category_name) => ({
+      query: (category) => ({
         url: 'category',
         method: 'POST',
-        body: new_category_name
+        body: category
       })
     })
   })
 });
 
-export const { useGetPingQuery, useGetInventoryQuery, useAddCategoryMutation } = apiSlice;
+export const { useGetPingQuery, useGetInventoryQuery, useAddCategoryMutation } =
+  apiSlice;

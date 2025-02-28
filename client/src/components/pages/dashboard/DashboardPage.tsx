@@ -1,9 +1,8 @@
-import { Box, Typography } from "@mui/material";
-import { RidesKPISection } from "../../rides/sections/RidesKPISection";
-import { RidesChartsSection } from "../../rides/sections/RidesChartsSection";
-import { HeadingSection } from "./HeadingSection";
-import { InventoryDataSection } from "../../rides/sections/InventoryDataSection";
-
+import { Box } from '@mui/material';
+import { RidesKPISection } from '../../rides/sections/RidesKPISection';
+import { RidesChartsSection } from '../../rides/sections/RidesChartsSection';
+import { HeadingSection } from './HeadingSection';
+import { InventoryDataSection } from '../../rides/sections/InventoryDataSection';
 
 export const DashboardPage = () => {
   return (

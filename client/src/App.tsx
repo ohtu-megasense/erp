@@ -5,18 +5,8 @@ import { DetailViewPage } from "./components/pages/detail-view/DetailViewPage";
 import { Route, Routes } from "react-router";
 import { DefaultPageLayout } from "./components/pages/layout/DefaultPageLayout";
 import { Redirect } from "./components/redirect/Redirect";
-import { useGetInventoryQuery } from "./features/apiSlice";
 
 export const App = () => {
-  const {data, isLoading} = useGetInventoryQuery()
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  console.log(data);
-  
-
   return (
     <ThemeProvider>
       <CssBaseline />
