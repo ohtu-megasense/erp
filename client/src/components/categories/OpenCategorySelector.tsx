@@ -1,17 +1,14 @@
 import { ListItemButton, ListItemText } from "@mui/material";
 import { useAppDispatch } from "../../app/hooks";
 import { openedModal } from "../../features/categorySlice";
+import { DrawerNavigationLink } from "../drawer/DrawerNavigationLink";
 
-export const OpenAddCategoryModalButton = () => {
+export const OpenCategorySelector = () => {
 	const dispatch = useAppDispatch();
 
 	const onClick = () => {
 		dispatch(openedModal());
 	};
 
-	return (
-		<ListItemButton onClick={onClick}>
-			<ListItemText primary="Add Category" />
-		</ListItemButton>
-	);
+	return <DrawerNavigationLink href="/categories" text="Categories" />;
 };

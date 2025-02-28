@@ -10,6 +10,7 @@ interface InventoryReport {
 	inactive_sensors: number;
 	total_cloud_resources: number;
 	monthly_api_usage: number;
+	everything: Array<string>;
 }
 
 interface Category {
