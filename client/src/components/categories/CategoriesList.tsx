@@ -152,6 +152,7 @@ export const CategoriesListItem = ({
         onClose={handleCloseModal}
         aria-labelledby="edit-category-modal"
         scroll="paper"
+        closeAfterTransition={true}
       >
         <DialogTitle>Edit Category</DialogTitle>
         <Box component="form" onSubmit={handleSave}>
