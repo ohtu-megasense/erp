@@ -135,12 +135,16 @@ export const CategoriesListItem = ({
           Edit
         </Button>
       </ListItem>
-      <List component="div" disablePadding dense>
+      <List disablePadding dense>
         {category.items.map((item, itemIndex) => (
           <ListItem key={itemIndex} sx={{ pl: 4 }}>
             <ListItemText
               primary={item.item_name}
-              primaryTypographyProps={{ variant: 'body2' }}
+              slotProps={{
+                primary: {
+                  variant: 'body2'
+                }
+              }}
             />
           </ListItem>
         ))}
