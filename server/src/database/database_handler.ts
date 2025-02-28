@@ -125,12 +125,12 @@ export async function temporarySensorKoosteFunction() {
 		const result_all_fields = await client.query(query_3);
 		console.log("Retrieved everything");
 		const results_all_fields = result_all_fields.rows;
-		console.log("here is all data:", results_all_fields);
+		//console.log("here is all data:", results_all_fields);
 		return {
 			total_sensors: results_all[0]["count"],
 			active_sensors: results_active[0]["count"],
 			inactive_sensors: results_all[0]["count"] - results_active[0]["count"],
-			everything: results_all_fields[0],
+			everything: results_all_fields,
 		};
 	} catch (error) {
 		console.error("Error retrieving from table:", error);
