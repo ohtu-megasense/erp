@@ -27,12 +27,10 @@ export const createInventoryItem = async (
 	try {
 		console.log("Connected to the database");
 
-		let sql_text: string = "CREATE TABLE %I (id SERIAL PRIMARY KEY, ";
-		for (let i = 0; i < columns.length; i++) {
-			sql_text = sql_text + "%I TEXT, ";
-		}
-		sql_text = sql_text.slice(0, -2); // this removes the extra , and space
-		sql_text = sql_text + ");";
+		const sql_query: string =
+			"CREATE TABLE IF NOT EXISTS %I (id SERIAL PRIMARY KEY, ";
+		const sql_placeholder: string = "%I TEXT, ";
+		const sql_text = await createSQLquery(columns, sql_query, sql_placeholder);
 
 		console.log(sql_text);
 		console.log(tableName);
@@ -124,7 +122,7 @@ export async function temporarySensorKoosteFunction() {
 		console.log(`Retrieved count from "sensors"!`);
 		const results_all = result_all.rows;
 
-		let asql_text_all_fields: string = "SELECT * FROM sensors";
+		const asql_text_all_fields: string = "SELECT * FROM sensors";
 		const query_3 = format(asql_text_all_fields);
 		const result_all_fields = await client.query(query_3);
 		console.log("Retrieved everything");
