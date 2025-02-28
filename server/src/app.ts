@@ -1,21 +1,23 @@
-import express from 'express';
-import cors from 'cors';
-import pingRouter from './routers/pingRouter';
+import express from "express";
+import cors from "cors";
+import pingRouter from "./routers/pingRouter";
 import inventoryRouter from "./routers/inventoryRouter";
 import categoryRouter from "./routers/categoryRouter";
-import { requestLogger } from './utils/middleware';
+import itemRouter from "./routers/itemRouter";
+import { requestLogger } from "./utils/middleware";
 
 const app = express();
 
-const path = require('path');
-app.use(express.static(path.join(__dirname, '../dist')));
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../dist")));
 
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
-app.use('/api/ping', pingRouter);
+app.use("/api/ping", pingRouter);
 app.use("/api/reports/inventory", inventoryRouter);
 app.use("/api/category", categoryRouter); //router for adding category
+app.use("/api/additem", itemRouter);
 
 /** 
 app.get('/api/reports/inventory', (req, res) => {
@@ -29,8 +31,8 @@ app.get('/api/reports/inventory', (req, res) => {
 });
 */
 
-app.get('/*', (req, res) => {
-  res.status(404).json({ message: 'Unknown endpoint!' });
+app.get("/*", (req, res) => {
+	res.status(404).json({ message: "Unknown endpoint!" });
 });
 
 export default app;
