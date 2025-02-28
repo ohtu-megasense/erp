@@ -12,8 +12,10 @@ const createSQLquery = async (
 	sql_placeholder: string,
 ) => {
 	const placeholders = values.map(() => sql_placeholder).join("");
+	sql_query += placeholders;
 	sql_query = sql_query.slice(0, -2);
 	sql_query = sql_query + ");";
+	console.log("sqlquery:", sql_query, "placeholders:", placeholders);
 	return sql_query;
 };
 
