@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { HeadingSection } from "./HeadingSection";
-import { DetailViewSection } from "../../rides/sections/DetailViewSection";
 import { CategoriesDataSection } from "../../rides/sections/CategoriesDataSection";
 
 export const CategoryPage = () => {
