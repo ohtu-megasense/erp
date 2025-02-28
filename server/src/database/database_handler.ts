@@ -155,7 +155,7 @@ export async function AddingCategoryFunction(category_name: string) {
 }
 
 if (require.main == module) {
-	temporarySensorKoosteFunction();
+	//	temporarySensorKoosteFunction();
 
 	createInventoryItem("sensors", [
 		"name",
