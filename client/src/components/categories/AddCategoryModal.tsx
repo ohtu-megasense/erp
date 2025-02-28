@@ -4,9 +4,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogTitle,
   Stack,
   TextField,
-  Typography
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closedModal } from '../../features/categorySlice';
@@ -18,6 +20,8 @@ export const AddCategoryModal = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const isOpen = useAppSelector((state) => state.category.isOpen);
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const isAtleastSmall = useMediaQuery(theme.breakpoints.up('sm'));
 
   const [postNewCategory] = useAddCategoryMutation();
 
@@ -69,11 +73,22 @@ export const AddCategoryModal = () => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={onClose} scroll="paper">
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      scroll="paper"
+      closeAfterTransition={true}
+    >
       <Box component="form" onSubmit={onSubmit}>
+        <DialogTitle>Add new category</DialogTitle>
         <DialogContent dividers={true}>
-          <Stack sx={{ gap: 2 }}>
-            <Typography variant="h5">Add new category</Typography>
+          <Stack
+            sx={{
+              gap: 2,
+              pb: 1,
+              minWidth: isAtleastSmall ? 400 : undefined
+            }}
+          >
             <TextField
               id="new-category-name"
               name="new-category-name"
