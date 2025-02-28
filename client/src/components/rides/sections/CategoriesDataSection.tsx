@@ -28,7 +28,7 @@ export const CategoriesDataSection = () => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{rows.map((row) => (
+					{rows.map((row: data) => (
 						<TableRow key={row.id}>
 							<TableCell component="th" scope="row">
 								{row.id}

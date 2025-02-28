@@ -67,7 +67,7 @@ export const Drawer = () => {
 				<List>
 					<DrawerNavigationLink href="/" text="Home" />
 					<DrawerNavigationLink href="/search" text="Search" />
-					<NavigationAccordion title="categories" isPlaceholder={false}>
+					<NavigationAccordion title="Categories" isPlaceholder={false}>
 						<OpenCategorySelector />
 					</NavigationAccordion>
 					<NavigationAccordion title="Pinned" isPlaceholder={true} />
