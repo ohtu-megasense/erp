@@ -22,6 +22,17 @@ interface CategoryResponse {
 	data: Category; // added Category object
 }
 
+interface Item {
+	item_name: string;
+	item_values: [number, number, number];
+}
+
+interface ItemResponse {
+	success: boolean;
+	data?: Item; // ? = data is optional
+	error?: string; // ? = error is optional
+}
+
 export const apiSlice = createApi({
 	reducerPath: "api",
 	baseQuery: fetchBaseQuery({
@@ -44,8 +55,15 @@ export const apiSlice = createApi({
 				body: category,
 			}),
 		}),
+		addItem: builder.mutation<ItemResponse, Item>({
+			query: (item) => ({
+				url: "additem",
+				method: "POST",
+				body: item,
+			}),
+		}),
 	}),
 });
 
-export const { useGetPingQuery, useGetInventoryQuery, useAddCategoryMutation } =
+export const { useGetPingQuery, useGetInventoryQuery, useAddCategoryMutation, useAddItemMutation } =
 	apiSlice;
