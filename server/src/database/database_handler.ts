@@ -27,10 +27,12 @@ export const createInventoryItem = async (
 	try {
 		console.log("Connected to the database");
 
-		let sql_query: string =
-			"CREATE TABLE IF NOT EXISTS %I (id SERIAL PRIMARY KEY, ";
-		let sql_placeholder: string = "%I TEXT, ";
-		let sql_text = await createSQLquery(columns, sql_query, sql_placeholder);
+		let sql_text: string = "CREATE TABLE %I (id SERIAL PRIMARY KEY, ";
+		for (let i = 0; i < columns.length; i++) {
+			sql_text = sql_text + "%I TEXT, ";
+		}
+		sql_text = sql_text.slice(0, -2); // this removes the extra , and space
+		sql_text = sql_text + ");";
 
 		console.log(sql_text);
 		console.log(tableName);
@@ -49,7 +51,6 @@ export const createInventoryItem = async (
 		console.log("Disconnected from the database");
 	}
 };
-
 export const addToInventoryItem = async (
 	tableName: string,
 	values: Array<string>,
@@ -58,9 +59,12 @@ export const addToInventoryItem = async (
 	try {
 		console.log("Connected to the database");
 
-		let sql_query: string = 'INSERT INTO "%I" VALUES (DEFAULT, ';
-		let sql_placeholder: string = "'%s', ";
-		let sql_text = await createSQLquery(values, sql_query, sql_placeholder);
+		let sql_text: string = 'INSERT INTO "%I" VALUES (DEFAULT, ';
+		for (let i = 0; i < values.length; i++) {
+			sql_text = sql_text + "'%s', ";
+		}
+		sql_text = sql_text.slice(0, -2); // this removes the extra , and space
+		sql_text = sql_text + ");";
 
 		console.log(sql_text);
 		console.log(tableName);
@@ -83,7 +87,7 @@ export async function retrieveInventoryTable(tableName: string) {
 	try {
 		console.log("Connected to the database");
 
-		let sql_text: string = 'SELECT * FROM "%I"';
+		const sql_text: string = 'SELECT * FROM "%I"';
 		console.log(sql_text);
 		console.log(tableName);
 
@@ -107,14 +111,14 @@ export async function temporarySensorKoosteFunction() {
 	try {
 		console.log("Connected to the database");
 
-		let sql_text: string =
+		const sql_text: string =
 			"SELECT COUNT(status) FROM sensors WHERE status='Active'";
 		const query = format(sql_text);
 		const result_active = await client.query(query);
 		console.log(`Retrieved count from "sensors"!`);
 		const results_active = result_active.rows;
 
-		let sql_text_all: string = "SELECT COUNT(status) FROM sensors";
+		const sql_text_all: string = "SELECT COUNT(status) FROM sensors";
 		const query_2 = format(sql_text_all);
 		const result_all = await client.query(query_2);
 		console.log(`Retrieved count from "sensors"!`);

@@ -10,7 +10,7 @@ export const Redirect = ({ to }: RedirectProps) => {
 
   useEffect(() => {
     navigate(to);
-  }, []);
+  }, [navigate, to]);
 
   return null;
 };

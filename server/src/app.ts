@@ -4,11 +4,12 @@ import pingRouter from "./routers/pingRouter";
 import inventoryRouter from "./routers/inventoryRouter";
 import categoryRouter from "./routers/categoryRouter";
 import itemRouter from "./routers/itemRouter";
+
 import { requestLogger } from "./utils/middleware";
+import path from "path";
 
 const app = express();
 
-const path = require("path");
 app.use(express.static(path.join(__dirname, "../dist")));
 
 app.use(cors());

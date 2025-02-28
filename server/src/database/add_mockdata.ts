@@ -1,4 +1,4 @@
-import { addToInventoryItem, createInventoryItem } from "./database_handler";
+import { addToInventoryItem } from "./database_handler";
 import { randomInt } from "crypto";
 
 const generateMockData = async (tableName: string, values: Array<string>) => {
