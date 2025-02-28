@@ -1,9 +1,4 @@
-import { Box, Typography } from "@mui/material";
-import { Grid2 } from "@mui/material";
-import { RidesChartGridItem } from "../charts-grid-item/RidesChartGridItem";
-import { SensorDistributionChart } from "../charts/SensorDistributionChart";
 import { useGetInventoryQuery } from "../../../features/apiSlice";
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -15,33 +10,33 @@ import Paper from "@mui/material/Paper";
 export const CategoriesDataSection = () => {
 	const { data } = useGetInventoryQuery();
 
-	console.log(data.everything);
-	if (!data || !Array.isArray(data.everything) || data.everything.length < 2) {
+	if (!data) {
 		return null; // Palautetaan null, jos data on tyhjä tai väärässä muodossa
 	}
 
-	const [headers, ...rows] = data.everything; // Ensimmäinen rivi on otsikot, loput dataa
-
+	const [...rows] = data.everything;
 	return (
 		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 650 }} aria-label="simple table">
+			<Table sx={{ minWidth: 250 }} aria-label="simple table">
 				<TableHead>
 					<TableRow>
-						{headers.map((header: string, index: number) => (
-							<TableCell key={index} align="left">
-								<strong>{header}</strong>
-							</TableCell>
-						))}
+						<TableCell align="left">ID</TableCell>
+						<TableCell align="left">name</TableCell>
+						<TableCell align="left">status</TableCell>
+						<TableCell align="left">location</TableCell>
+						<TableCell align="left">last updated</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{rows.map((row: string[], rowIndex: number) => (
-						<TableRow key={rowIndex}>
-							{row.map((cell: string, cellIndex: number) => (
-								<TableCell key={cellIndex} align="left">
-									{cell}
-								</TableCell>
-							))}
+					{rows.map((row) => (
+						<TableRow key={row.id}>
+							<TableCell component="th" scope="row">
+								{row.id}
+							</TableCell>
+							<TableCell align="left"> {row.name} </TableCell>
+							<TableCell align="left"> {row.location} </TableCell>
+							<TableCell align="left"> {row.status} </TableCell>
+							<TableCell align="left"> {row.last_updated} </TableCell>
 						</TableRow>
 					))}
 				</TableBody>
