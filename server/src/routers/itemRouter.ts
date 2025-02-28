@@ -11,4 +11,18 @@ router.post("/", (req, res) => {
 		res.status(500).json({ error: "Item needs a name" });
 		return;
 	}
+	if (item_values.len != 3) {
+		console.error("Three values required");
+		res.status(500).json({ error: "Three values required" });
+		return;
+	}
+
+	createInventoryItem(item_name, item_values)
+		.then((data) => res.json(data))
+		.catch((error) => {
+			console.error("Error adding item:", error);
+			res.status(500).json({ error: "Internal server error" });
+		});
 });
+
+export default router;
