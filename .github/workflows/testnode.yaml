@@ -33,5 +33,5 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm install cross-env
-      - run: CI=true docker compose exec backend npm run test-api
-      - run: CI=true docker compose exec backend npm run test-unit
+      - run: CI=true npm run test-unit
+      - run: CI=true npm run test-api
