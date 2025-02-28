@@ -15,7 +15,7 @@ export const createInventoryItem = async (
     console.log('Connected to the database');
 
     let sql_text: string = 'CREATE TABLE %I (id SERIAL PRIMARY KEY, ';
-    for (var col of columns) {
+    for (let i = 0; i < columns.length; i++) {
       sql_text = sql_text + '%I TEXT, ';
     }
     sql_text = sql_text.slice(0, -2); // this removes the extra , and space
@@ -48,7 +48,7 @@ export const addToInventoryItem = async (
     console.log('Connected to the database');
 
     let sql_text: string = 'INSERT INTO "%I" VALUES (DEFAULT, ';
-    for (var val of values) {
+    for (let i = 0; i < values.length; i++) {
       sql_text = sql_text + "'%s', ";
     }
     sql_text = sql_text.slice(0, -2); // this removes the extra , and space
@@ -75,7 +75,7 @@ export async function retrieveInventoryTable(tableName: string) {
   try {
     console.log('Connected to the database');
 
-    let sql_text: string = 'SELECT * FROM "%I"';
+    const sql_text: string = 'SELECT * FROM "%I"';
     console.log(sql_text);
     console.log(tableName);
 
@@ -99,14 +99,14 @@ export async function temporarySensorKoosteFunction() {
   try {
     console.log('Connected to the database');
 
-    let sql_text: string =
+    const sql_text: string =
       "SELECT COUNT(status) FROM sensors WHERE status='Active'";
     const query = format(sql_text);
     const result_active = await client.query(query);
     console.log(`Retrieved count from "sensors"!`);
     const results_active = result_active.rows;
 
-    let sql_text_all: string = 'SELECT COUNT(status) FROM sensors';
+    const sql_text_all: string = 'SELECT COUNT(status) FROM sensors';
     const query_2 = format(sql_text_all);
     const result_all = await client.query(query_2);
     console.log(`Retrieved count from "sensors"!`);
@@ -127,16 +127,15 @@ export async function temporarySensorKoosteFunction() {
 
 export async function AddingCategoryFunction(category_name: string) {
   try {
-    //creating new table named category_name with only id column by passing 
+    //creating new table named category_name with only id column by passing
     // an empty array for additional columns to createInventoryItem_function
     await createInventoryItem(category_name, []);
     return { message: `Category table '${category_name}' created` }; // returning message to client/frontend
   } catch (error) {
-    console.error("Error creating category table:", error);
+    console.error('Error creating category table:', error);
     throw error; //throwing error so errors can be caught in categoryRouter.ts
   }
 }
-
 
 if (require.main == module) {
   temporarySensorKoosteFunction();

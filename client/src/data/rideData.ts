@@ -54,13 +54,16 @@ export interface DistributionData {
   value: number;
   label: string;
 }
+interface DataItem {
+  [key: string]: number | string | unknown; // Allow for number, string, and other properties
+}
 
 export const groupAndSumByProperty = ({
   data,
   groupByKey,
   sumByKey
 }: {
-  data: any[];
+  data: DataItem[];
   groupByKey: string;
   sumByKey: string;
 }) => {
@@ -84,7 +87,7 @@ export const countOccurrencesByKey = ({
   data,
   key
 }: {
-  data: any[];
+  data: DataItem[];
   key: string;
 }): DistributionData[] => {
   const result: Record<string, number> = {};
@@ -152,7 +155,7 @@ export const getDatasetForRidesPerWeekday = () => {
 };
 
 export const sortByDayOfWeek = (
-  data: Array<Record<string, any>>,
+  data: Array<Record<string, DataItem>>,
   weekdayKey: string
 ) => {
   const sorter: Record<string, number> = {

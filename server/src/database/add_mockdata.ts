@@ -1,4 +1,4 @@
-import { addToInventoryItem, createInventoryItem } from "./database_handler";
+import { addToInventoryItem } from "./database_handler";
 import { randomInt } from "crypto";
 
 const generateMockData = async (tableName: string, values: Array<string>) => {
@@ -18,9 +18,9 @@ if (require.main == module) {
 	//"last_updated",
 	//]);
 	for (let i = 0; i < 649; i++) {
-		let cities = ["London", "Riyadh"];
-		let activity = ["Inactive", "Active"];
-		let values = ["Megasense AQ sensor", "", "", ""];
+		const cities = ["London", "Riyadh"];
+		const activity = ["Inactive", "Active"];
+		const values = ["Megasense AQ sensor", "", "", ""];
 		values[0] += `${i}`;
 		values[1] = cities[randomInt(0, 2)];
 		values[2] = activity[randomInt(0, 2)];

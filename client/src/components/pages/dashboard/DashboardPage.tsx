@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { RidesKPISection } from "../../rides/sections/RidesKPISection";
 import { RidesChartsSection } from "../../rides/sections/RidesChartsSection";
 import { HeadingSection } from "./HeadingSection";
