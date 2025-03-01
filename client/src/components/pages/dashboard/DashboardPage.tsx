@@ -1,9 +1,6 @@
-import { Box } from "@mui/material";
-import { RidesKPISection } from "../../rides/sections/RidesKPISection";
-import { RidesChartsSection } from "../../rides/sections/RidesChartsSection";
-import { HeadingSection } from "./HeadingSection";
-import { InventoryDataSection } from "../../rides/sections/InventoryDataSection";
-
+import { Box } from '@mui/material';
+import { HeadingSection } from './HeadingSection';
+import { InventoryDataSection } from '../../inventory/InventoryDataSection';
 
 export const DashboardPage = () => {
   return (
@@ -13,12 +10,6 @@ export const DashboardPage = () => {
       </Box>
       <Box mt={2}>
         <InventoryDataSection />
-      </Box>
-      <Box mt={2}>
-        <RidesKPISection />
-      </Box>
-      <Box mt={2}>
-        <RidesChartsSection />
       </Box>
     </>
   );
