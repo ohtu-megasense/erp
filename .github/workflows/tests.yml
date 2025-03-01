@@ -1,7 +1,7 @@
 name: Run Tests
 on:
   push:
-    branches: ["ci/fix-docker-workflow"]
+    branches: ["ci/fix-tests"]
   pull_request:
     branches: ["main", "dev"]
 jobs:
@@ -44,3 +44,5 @@ jobs:
     - run: npm ci
     - name: Run ESLint
       run: npm run lint
+    - name: Run Vite build
+      run: npm run build
