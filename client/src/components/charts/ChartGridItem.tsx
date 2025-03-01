@@ -6,19 +6,19 @@ import {
   Stack,
   Typography,
   useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { ReactNode } from "react";
+  useTheme
+} from '@mui/material';
+import { ReactNode } from 'react';
 
 interface RidesChartGridItem {
   title: string;
   chart: ReactNode;
 }
 
-export const RidesChartGridItem = ({ title, chart }: RidesChartGridItem) => {
+export const ChartGridItem = ({ title, chart }: RidesChartGridItem) => {
   const theme = useTheme();
-  const isAtLeastLarge = useMediaQuery(theme.breakpoints.up("lg"));
-  const isMedium = useMediaQuery(theme.breakpoints.only("md"));
+  const isAtLeastLarge = useMediaQuery(theme.breakpoints.up('lg'));
+  const isMedium = useMediaQuery(theme.breakpoints.only('md'));
 
   const getGridItemSize = () => {
     if (isAtLeastLarge) return 4;
@@ -36,7 +36,7 @@ export const RidesChartGridItem = ({ title, chart }: RidesChartGridItem) => {
             sx={{
               px: 2,
               py: 2,
-              fontWeight: 500,
+              fontWeight: 500
             }}
           >
             {title}
@@ -46,9 +46,9 @@ export const RidesChartGridItem = ({ title, chart }: RidesChartGridItem) => {
             sx={{
               pt: 2,
               aspectRatio: 1 / 0.8,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           >
             {chart}
