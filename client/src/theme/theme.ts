@@ -83,6 +83,11 @@ export const getTheme = (mode: PaletteMode): Theme => {
         defaultProps: {
           component: LinkBehavior
         } as LinkProps
+      },
+      MuiTextField: {
+        defaultProps: {
+          autoComplete: 'off'
+        }
       }
     }
   };

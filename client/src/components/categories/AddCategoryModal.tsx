@@ -7,28 +7,29 @@ import {
   DialogTitle,
   Stack,
   TextField,
+  Typography,
   useMediaQuery,
   useTheme
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closedModal } from '../../features/categorySlice';
 import { FormEvent, useState } from 'react';
-import { useAddCategoryMutation } from '../../features/apiSlice';
+import { addedCategory } from '../../features/categoryDataSlice';
 
 export const AddCategoryModal = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const isOpen = useAppSelector((state) => state.category.isOpen);
+  const [propertyCount, setPropertyCount] = useState(0);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isAtleastSmall = useMediaQuery(theme.breakpoints.up('sm'));
-
-  const [postNewCategory] = useAddCategoryMutation();
 
   const onClose = () => {
     dispatch(closedModal());
     setError(false);
     setErrorMessage('');
+    setPropertyCount(0);
   };
 
   const validateInputs = () => {
@@ -58,18 +59,45 @@ export const AddCategoryModal = () => {
     }
 
     const formData = new FormData(event.currentTarget);
-    const input = formData.get('new-category-name') as string;
+    const categoryName = formData.get('new-category-name') as string;
 
-    if (!input) {
+    const propertyNames = Array.from({ length: propertyCount }, (_, i) => {
+      const propertyName = formData.get(
+        `category-item-property-${i}`
+      ) as string;
+      return propertyName;
+    }).filter((name) => name.trim() !== '');
+
+    const itemShape: Record<string, string> = propertyNames.reduce(
+      (acc, propertyName) => {
+        acc[propertyName] = 'string'; // default type to string
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+
+    if (!categoryName) {
       return;
     }
 
     try {
-      await postNewCategory({ category_name: input }).unwrap();
+      // Post request here when api is ready.
+      dispatch(
+        addedCategory({
+          category: {
+            name: categoryName,
+            itemShape
+          }
+        })
+      );
       onClose();
     } catch (error) {
       console.log('Error adding new category', error);
     }
+  };
+
+  const onClickAddProperty = () => {
+    setPropertyCount((previousValue) => previousValue + 1);
   };
 
   return (
@@ -93,11 +121,33 @@ export const AddCategoryModal = () => {
               id="new-category-name"
               name="new-category-name"
               label="Enter category name"
-              variant="standard"
-              autoComplete="off"
               error={error}
               helperText={errorMessage}
             />
+            <Stack>
+              <Typography>Shape of an item in the category</Typography>
+              <Typography variant="caption">
+                For example a "Hardware Sensor" category item could have
+                properties "Location" and "Online Status"
+              </Typography>
+              <Box
+                sx={{
+                  mt: 1
+                }}
+              >
+                <Button onClick={onClickAddProperty}>+ Property</Button>
+              </Box>
+            </Stack>
+            {Array.from({ length: propertyCount }, (_, i) => {
+              return (
+                <TextField
+                  id={`category-item-property-${i}`}
+                  name={`category-item-property-${i}`}
+                  key={i}
+                  label={`Enter property ${i + 1} name`}
+                />
+              );
+            })}
           </Stack>
         </DialogContent>
         <DialogActions>

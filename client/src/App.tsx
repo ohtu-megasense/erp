@@ -5,7 +5,8 @@ import { DetailViewPage } from './components/pages/detail-view/DetailViewPage';
 import { Route, Routes } from 'react-router';
 import { DefaultPageLayout } from './components/pages/layout/DefaultPageLayout';
 import { Redirect } from './components/redirect/Redirect';
-import { CategoriesPage } from './components/pages/categories/CategoriesPage';
+import { VisualizeCategoriesPage } from './components/pages/categories/VisualizeCategoriesPage';
+import { ManageCategoriesPage } from './components/pages/categories/ManageCategoriesPage';
 
 export const App = () => {
   return (
@@ -14,7 +15,11 @@ export const App = () => {
       <Routes>
         <Route element={<DefaultPageLayout />}>
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/categories" element={<CategoriesPage />} />
+          <Route
+            path="/categories/visualize"
+            element={<VisualizeCategoriesPage />}
+          />
+          <Route path="/categories/manage" element={<ManageCategoriesPage />} />
           <Route path="/search" element={<DetailViewPage />} />
         </Route>
         <Route path="*" element={<Redirect to="/" />} />

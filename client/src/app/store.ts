@@ -3,12 +3,14 @@ import { apiSlice } from '../features/apiSlice';
 import exampleSlice from '../features/exampleSlice';
 import drawerSlice from '../features/drawerSlice';
 import categorySlice from '../features/categorySlice';
+import categoryDataSlice from '../features/categoryDataSlice';
 
 export const store = configureStore({
   reducer: {
     example: exampleSlice,
     drawer: drawerSlice,
     category: categorySlice,
+    categoryData: categoryDataSlice,
     [apiSlice.reducerPath]: apiSlice.reducer
   },
   middleware: (getDefaultMiddleware) => {

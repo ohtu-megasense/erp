@@ -14,7 +14,6 @@ import { CompanyLinkFull } from '../company/CompanyLinkFull';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closedDrawer } from '../../features/drawerSlice';
 import { DrawerNavigationLink } from './DrawerNavigationLink';
-import { OpenAddCategoryModalButton } from '../categories/OpenAddCategoryModalButton';
 
 export const Drawer = () => {
   const isOpen = useAppSelector((state) => state.drawer.isOpen);
@@ -65,13 +64,16 @@ export const Drawer = () => {
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
-          <DrawerNavigationLink href="/categories" text="Categories" />
           <DrawerNavigationLink href="/search" text="Search" />
+          <NavigationAccordion title="Categories" isPlaceholder={false}>
+            <DrawerNavigationLink
+              href="/categories/visualize"
+              text="Visualize"
+            />
+            <DrawerNavigationLink href="/categories/manage" text="Manage" />
+          </NavigationAccordion>
           <NavigationAccordion title="Recent" isPlaceholder={true} />
           <NavigationAccordion title="Pinned" isPlaceholder={true} />
-          <NavigationAccordion title="Actions" isPlaceholder={false}>
-            <OpenAddCategoryModalButton />
-          </NavigationAccordion>
         </List>
         <NavigationCategory title="My Work" isPlaceholder={true} />
         <NavigationCategory title="Insights" isPlaceholder={true} />
