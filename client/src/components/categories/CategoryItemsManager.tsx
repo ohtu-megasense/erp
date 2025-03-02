@@ -9,19 +9,7 @@ import {
 } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { updateItem } from '../../features/categoryDataSlice';
-
-interface Item {
-  id: number;
-  data: Record<string, string>;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  itemShape: Record<string, string>;
-  items: Item[];
-}
+import { Category, updateItem } from '../../features/categoryDataSlice';
 
 export const CategoryItemsManager = () => {
   const categories = useAppSelector(
