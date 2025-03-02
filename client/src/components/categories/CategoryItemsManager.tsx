@@ -169,5 +169,3 @@ const CategoryItemEditor = ({ category }: { category: Category }) => {
     </Box>
   );
 };
-
-export default CategoryItemsManager;
