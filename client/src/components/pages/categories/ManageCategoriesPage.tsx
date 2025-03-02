@@ -11,12 +11,16 @@ export const ManageCategoriesPage = () => {
         <ManageHeadingSection />
       </Box>
       <Box mt={4}>
-        <Typography mb={2}>Add Items</Typography>
+        <Typography fontWeight={500} mb={2}>
+          Add Items
+        </Typography>
         <AddCategoryForm />
         <AddCategoryItemsSection />
       </Box>
       <Box mt={4}>
-        <Typography mb={2}>Edit Items</Typography>
+        <Typography mb={2} fontWeight={500}>
+          Edit Items
+        </Typography>
         <CategoryItemsManager />
       </Box>
     </>

@@ -52,21 +52,21 @@ const initialState: State = {
       id: 1,
       name: 'AWS',
       itemShape: {
-        Service: 'string',
+        'Service Name': 'string',
         'Monthly Cost': 'string'
       },
       items: [
         {
           id: 3,
           data: {
-            Service: 'Bedrock Knowledge Base',
+            'Service Name': 'Bedrock Knowledge Base',
             'Monthly Cost': '2500'
           }
         },
         {
           id: 4,
           data: {
-            Service: 'Elasticsearch',
+            'Service Name': 'Elasticsearch',
             'Monthly Cost': '2500'
           }
         }

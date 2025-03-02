@@ -99,6 +99,19 @@ const CategoryItemEditor = ({ category }: { category: Category }) => {
     });
   };
 
+  const isShapeDefined = Object.keys(category.itemShape).length > 0;
+
+  if (!isShapeDefined) {
+    return (
+      <Box>
+        <Typography variant="subtitle1" gutterBottom>
+          {category.name}
+        </Typography>
+        <Typography variant="body2">No shape defined</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       <Typography variant="subtitle1" gutterBottom>
