@@ -1,20 +1,12 @@
 import { Stack, Typography } from '@mui/material';
 import { useAppSelector } from '../../../app/hooks';
-import { AddCategoryItemForm } from '../AddCategoryItemForm';
+import { AddCategoryItemForm } from './AddCategoryItemForm';
 
-export const AddCategoryItemsSection = () => {
+export const AddCategoryItems = () => {
   const data = useAppSelector((state) => state.categoryData.categoriesData);
 
   return (
     <>
-      {/* <Typography
-        variant="h5"
-        sx={{
-          mb: 2
-        }}
-      >
-        Add Items to Categories
-      </Typography> */}
       {data.length === 0 ? (
         <Typography variant="body1" color="text.secondary">
           No categories available

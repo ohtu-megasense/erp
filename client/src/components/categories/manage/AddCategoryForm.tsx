@@ -14,8 +14,8 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
-import { useAppDispatch } from '../../app/hooks';
-import { addedCategory } from '../../features/categoryDataSlice';
+import { useAppDispatch } from '../../../app/hooks';
+import { addedCategory } from '../../../features/categoryDataSlice';
 
 export const AddCategoryForm = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -144,6 +144,15 @@ export const AddCategoryForm = () => {
                 Example: "Hardware Sensor" could have "Location" and "Online
                 Status"
               </Typography>
+              <Button
+                onClick={onClickAddProperty}
+                variant="outlined"
+                size="small"
+                startIcon={<AddIcon />}
+                sx={{ alignSelf: 'flex-start' }}
+              >
+                Add Property
+              </Button>
               {Array.from({ length: propertyCount }, (_, i) => (
                 <Stack key={i} direction="row" spacing={1} alignItems="center">
                   <TextField
@@ -165,15 +174,6 @@ export const AddCategoryForm = () => {
                   </IconButton>
                 </Stack>
               ))}
-              <Button
-                onClick={onClickAddProperty}
-                variant="outlined"
-                size="small"
-                startIcon={<AddIcon />}
-                sx={{ alignSelf: 'flex-start' }}
-              >
-                Add Property
-              </Button>
             </Stack>
             <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
               <Button
@@ -197,5 +197,3 @@ export const AddCategoryForm = () => {
     </Box>
   );
 };
-
-export default AddCategoryForm;

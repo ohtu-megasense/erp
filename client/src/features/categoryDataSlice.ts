@@ -138,6 +138,7 @@ const slice = createSlice({
         ...state.categoriesData.flatMap((c) => c.items.map((i) => i.id)),
         0
       );
+
       category.items.push({
         id: maxId + 1,
         data: action.payload.item

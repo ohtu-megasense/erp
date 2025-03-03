@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 
-export const VisualizationHeadingSection = () => {
+export const HeadingSection = () => {
   return (
     <>
-      <Typography variant="h4">Categories</Typography>
+      <Typography variant="h4">Data Dashboard</Typography>
       <Typography variant="caption" ml={0.5}>
         Visualization of data in categories
       </Typography>

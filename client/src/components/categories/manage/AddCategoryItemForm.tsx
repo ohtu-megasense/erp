@@ -12,8 +12,8 @@ import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon
 } from '@mui/icons-material';
-import { useAppDispatch } from '../../app/hooks';
-import { addedItem, Category } from '../../features/categoryDataSlice';
+import { useAppDispatch } from '../../../app/hooks';
+import { addedItem, Category } from '../../../features/categoryDataSlice';
 
 interface AddCategoryItemFormProps {
   category: Category;

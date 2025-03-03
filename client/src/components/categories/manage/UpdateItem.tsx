@@ -8,32 +8,14 @@ import {
   Typography
 } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Category, updateItem } from '../../features/categoryDataSlice';
+import { Category, updateItem } from '../../../features/categoryDataSlice';
+import { useAppDispatch } from '../../../app/hooks';
 
-export const CategoryItemsManager = () => {
-  const categories = useAppSelector(
-    (state) => state.categoryData.categoriesData
-  );
+interface UpdateItemProps {
+  category: Category;
+}
 
-  return (
-    <Box>
-      {categories.length === 0 ? (
-        <Typography variant="body1" color="text.secondary">
-          No categories available
-        </Typography>
-      ) : (
-        <Stack spacing={2}>
-          {categories.map((category) => (
-            <CategoryItemEditor key={category.id} category={category} />
-          ))}
-        </Stack>
-      )}
-    </Box>
-  );
-};
-
-const CategoryItemEditor = ({ category }: { category: Category }) => {
+export const UpdateItem = ({ category }: UpdateItemProps) => {
   const [editItems, setEditItems] = useState<Record<number, boolean>>({});
   const [formValues, setFormValues] = useState<
     Record<number, Record<string, string>>

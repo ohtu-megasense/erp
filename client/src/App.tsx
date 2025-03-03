@@ -5,8 +5,8 @@ import { DetailViewPage } from './components/pages/detail-view/DetailViewPage';
 import { Route, Routes } from 'react-router';
 import { DefaultPageLayout } from './components/pages/layout/DefaultPageLayout';
 import { Redirect } from './components/redirect/Redirect';
-import { VisualizeCategoriesPage } from './components/pages/categories/VisualizeCategoriesPage';
-import { ManageCategoriesPage } from './components/pages/categories/ManageCategoriesPage';
+import { VisualizeCategoriesPage } from './components/pages/categories/visualize/VisualizeCategoriesPage';
+import { ManageCategoriesPage } from './components/pages/categories/manage/ManageCategoriesPage';
 
 export const App = () => {
   return (

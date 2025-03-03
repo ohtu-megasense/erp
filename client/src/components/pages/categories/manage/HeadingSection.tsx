@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 
-export const ManageHeadingSection = () => {
+export const HeadingSection = () => {
   return (
     <>
-      <Typography variant="h4">Categories</Typography>
+      <Typography variant="h4">Manage Data</Typography>
       <Typography variant="caption" ml={0.5}>
         Actions to manage data in categories
       </Typography>
