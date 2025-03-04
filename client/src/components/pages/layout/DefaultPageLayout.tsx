@@ -1,7 +1,7 @@
-import { Box, Container } from "@mui/material";
-import { TopBar } from "../../top-bar/TopBar";
-import { Drawer } from "../../drawer/Drawer";
-import { Outlet } from "react-router";
+import { Box, Container } from '@mui/material';
+import { TopBar } from '../../top-bar/TopBar';
+import { Drawer } from '../../drawer/Drawer';
+import { Outlet } from 'react-router';
 
 export const DefaultPageLayout = () => {
   return (
@@ -12,7 +12,7 @@ export const DefaultPageLayout = () => {
         <Container
           maxWidth="xl"
           sx={{
-            mb: 2,
+            mb: 2
           }}
         >
           <Box component="main">

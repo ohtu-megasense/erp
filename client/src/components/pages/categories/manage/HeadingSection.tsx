@@ -3,9 +3,9 @@ import { Typography } from '@mui/material';
 export const HeadingSection = () => {
   return (
     <>
-      <Typography variant="h4">Overview</Typography>
+      <Typography variant="h4">Manage Data</Typography>
       <Typography variant="caption" ml={0.5}>
-        Overview uses generated mock data
+        Actions to manage data in categories
       </Typography>
     </>
   );

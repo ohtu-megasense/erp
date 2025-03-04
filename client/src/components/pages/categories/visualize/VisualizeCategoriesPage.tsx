@@ -1,15 +1,15 @@
 import { Box } from '@mui/material';
+import { CategoryTablesSection } from '../../../categories/visualize/CategoryTablesSection';
 import { HeadingSection } from './HeadingSection';
-import { InventoryDataSection } from '../../inventory/InventoryDataSection';
 
-export const DashboardPage = () => {
+export const VisualizeCategoriesPage = () => {
   return (
     <>
       <Box mt={2}>
         <HeadingSection />
       </Box>
-      <Box mt={2}>
-        <InventoryDataSection />
+      <Box mt={4}>
+        <CategoryTablesSection />
       </Box>
     </>
   );
