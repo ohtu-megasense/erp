@@ -26,7 +26,6 @@ export const AddCategoryForm = () => {
 		name: "",
 	});
 	const [propertyCount, setPropertyCount] = useState(0);
-
 	const dispatch = useAppDispatch();
 
 	// 2. Kutsu mutaatiohook, josta saadaan funktio addCategoryMutation
@@ -81,7 +80,6 @@ export const AddCategoryForm = () => {
 				itemShape: propertyNames,
 				items: [],
 			}).unwrap();
-
 			// Jos haluat päivittää local sliceä vastaamaan uutta kategoriaa:
 			/*	dispatch(
 				addedCategory({
