@@ -5,7 +5,8 @@ export const HeadingSection = () => {
     <>
       <Typography variant="h4">Data Dashboard</Typography>
       <Typography variant="caption" ml={0.5}>
-        Visualization of data in categories
+        Visualization of data in categories. For example charts of the data and
+        AI generated insights.
       </Typography>
     </>
   );
