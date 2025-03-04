@@ -7,7 +7,12 @@ import { AddCategoryForm } from '../../../categories/manage/AddCategoryForm';
 const AddItemsSection = () => {
   return (
     <>
-      <Typography fontWeight={500} mb={2}>
+      <Typography
+        sx={{
+          fontSize: 24,
+          mb: 2
+        }}
+      >
         Add Items
       </Typography>
       <AddCategoryForm />
@@ -19,7 +24,12 @@ const AddItemsSection = () => {
 const UpdateItemsSection = () => {
   return (
     <>
-      <Typography mb={2} fontWeight={500}>
+      <Typography
+        sx={{
+          fontSize: 24,
+          mb: 2
+        }}
+      >
         Edit Items
       </Typography>
       <UpdateItems />
