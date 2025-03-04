@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useAppSelector } from '../../../app/hooks';
 import { UpdateItem } from './UpdateItem';
 
@@ -16,7 +16,13 @@ export const UpdateItems = () => {
       ) : (
         <Stack gap={2}>
           {categories.map((category) => (
-            <UpdateItem key={category.id} category={category} />
+            <Paper
+              sx={{
+                p: 2
+              }}
+            >
+              <UpdateItem key={category.id} category={category} />
+            </Paper>
           ))}
         </Stack>
       )}

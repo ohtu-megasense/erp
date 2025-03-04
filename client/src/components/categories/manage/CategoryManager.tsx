@@ -1,0 +1,108 @@
+import { useState, useRef } from 'react';
+import { Box, Paper, Typography, IconButton, Stack } from '@mui/material';
+import {
+  Edit as EditIcon,
+  Save as SaveIcon,
+  Add as AddIcon
+} from '@mui/icons-material';
+import { Category, updateItem } from '../../../features/categoryDataSlice';
+import { useAppDispatch } from '../../../app/hooks';
+import { AddCategoryItemForm } from './AddCategoryItemForm';
+import { CategoryTable } from '../visualize/CategoryTable';
+
+interface CategoryManagerProps {
+  category: Category;
+}
+
+export const CategoryManager = ({ category }: CategoryManagerProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const tableRef = useRef<{
+    getFormValues: () => Record<number, Record<string, string>>;
+  }>(null);
+  const dispatch = useAppDispatch();
+
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+  };
+
+  const handleAddToggle = () => {
+    setIsAdding((prev) => !prev);
+  };
+
+  const handleSave = () => {
+    if (tableRef.current) {
+      const dirtyFormValues = tableRef.current.getFormValues();
+      Object.entries(dirtyFormValues).forEach(([itemId, updatedItem]) => {
+        dispatch(
+          updateItem({
+            categoryId: category.id,
+            itemId: Number(itemId),
+            updatedItem
+          })
+        );
+      });
+    }
+    setIsEditing(false);
+  };
+
+  // const handleCancel = () => {
+  //   setIsEditing(false);
+  // };
+
+  return (
+    <Box>
+      <Stack
+        sx={{
+          gap: 2
+        }}
+      >
+        <Typography>{category.name}</Typography>
+        <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {isEditing ? (
+              <IconButton
+                color="primary"
+                size="small"
+                onClick={handleSave}
+                aria-label="Save changes"
+              >
+                <SaveIcon fontSize="small" />
+              </IconButton>
+            ) : (
+              <IconButton
+                color="primary"
+                size="small"
+                onClick={handleEditToggle}
+                aria-label="Edit category"
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            )}
+            <IconButton
+              color="primary"
+              size="small"
+              onClick={handleAddToggle}
+              aria-label={isAdding ? 'Hide add form' : 'Show add form'}
+            >
+              <AddIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </Box>
+
+        {isAdding && (
+          <Paper sx={{ p: 2 }}>
+            <AddCategoryItemForm category={category} />
+          </Paper>
+        )}
+        <Paper sx={{ p: 2 }}>
+          <CategoryTable
+            category={category}
+            isEditing={isEditing}
+            ref={tableRef}
+          />
+        </Paper>
+      </Stack>
+    </Box>
+  );
+};
