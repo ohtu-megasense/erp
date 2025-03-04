@@ -20,7 +20,7 @@ interface AddCategoryItemFormProps {
 }
 
 export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const dispatch = useAppDispatch();
 
@@ -56,7 +56,7 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <IconButton
           onClick={() => setIsOpen(!isOpen)}
           size="small"
@@ -76,7 +76,7 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
           <Box
             component="form"
             onSubmit={handleSubmit}
-            sx={{ p: 2, borderRadius: 1, bgcolor: '#f7f7f7ff' }}
+            sx={{ p: 2, borderRadius: 1, bgcolor: '#f7f7f7ff', mt: 2 }}
           >
             <Stack spacing={2}>
               {shapeKeys.map((key) => (

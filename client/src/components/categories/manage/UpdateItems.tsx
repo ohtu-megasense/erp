@@ -14,7 +14,7 @@ export const UpdateItems = () => {
           No categories available
         </Typography>
       ) : (
-        <Stack spacing={2}>
+        <Stack gap={2}>
           {categories.map((category) => (
             <UpdateItem key={category.id} category={category} />
           ))}

@@ -12,7 +12,11 @@ export const AddCategoryItems = () => {
           No categories available
         </Typography>
       ) : (
-        <Stack>
+        <Stack
+          sx={{
+            gap: 2
+          }}
+        >
           {data.map((category) => (
             <AddCategoryItemForm key={category.id} category={category} />
           ))}

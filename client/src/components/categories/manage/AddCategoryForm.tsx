@@ -18,7 +18,7 @@ import { useAppDispatch } from '../../../app/hooks';
 import { addedCategory } from '../../../features/categoryDataSlice';
 
 export const AddCategoryForm = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({
     name: ''
@@ -106,7 +106,7 @@ export const AddCategoryForm = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <IconButton
           onClick={() => setIsOpen(!isOpen)}
           size="small"
@@ -124,7 +124,8 @@ export const AddCategoryForm = () => {
           sx={{
             p: 2,
             bgcolor: '#f7f7f7ff',
-            borderRadius: 1
+            borderRadius: 1,
+            mt: 2
           }}
         >
           <Stack spacing={2}>

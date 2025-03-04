@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { AddCategoryItems } from '../../../categories/manage/AddCategoryItems';
 import { HeadingSection } from './HeadingSection';
 import { UpdateItems } from '../../../categories/manage/UpdateItems';
@@ -13,10 +13,16 @@ const AddItemsSection = () => {
           mb: 2
         }}
       >
-        Add Items
+        Create
       </Typography>
-      <AddCategoryForm />
-      <AddCategoryItems />
+      <Stack
+        sx={{
+          gap: 2
+        }}
+      >
+        <AddCategoryForm />
+        <AddCategoryItems />
+      </Stack>
     </>
   );
 };
@@ -30,7 +36,7 @@ const UpdateItemsSection = () => {
           mb: 2
         }}
       >
-        Edit Items
+        Update
       </Typography>
       <UpdateItems />
     </>
