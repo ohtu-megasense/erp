@@ -2,23 +2,17 @@ import { useState } from 'react';
 import {
   Box,
   Button,
-  Collapse,
   IconButton,
   Stack,
   TextField,
   Typography
 } from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon,
-  Delete as DeleteIcon
-} from '@mui/icons-material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import { useAppDispatch } from '../../../app/hooks';
 import { addedCategory } from '../../../features/categoryDataSlice';
 
 export const AddCategoryForm = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({
     name: ''
@@ -77,7 +71,6 @@ export const AddCategoryForm = () => {
 
       setFormValues({ name: '' });
       setPropertyCount(0);
-      setIsOpen(false);
       setError(null);
     } catch (error) {
       console.log('Error adding new category', error);
@@ -105,96 +98,73 @@ export const AddCategoryForm = () => {
   };
 
   return (
-    <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton
-          onClick={() => setIsOpen(!isOpen)}
+    <Box component="form" onSubmit={onSubmit}>
+      <Stack spacing={2}>
+        <TextField
+          label="Category name"
+          value={formValues.name}
+          onChange={(e) => handleInputChange('name', e.target.value)}
+          error={!!error}
+          helperText={error || ''}
+          variant="outlined"
           size="small"
-          sx={{ mr: 1 }}
-        >
-          {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </IconButton>
-        <Typography variant="subtitle1">Add New Category</Typography>
-      </Box>
-
-      <Collapse in={isOpen}>
-        <Box
-          component="form"
-          onSubmit={onSubmit}
-          sx={{
-            p: 2,
-            bgcolor: '#f7f7f7ff',
-            borderRadius: 1,
-            mt: 2
-          }}
-        >
-          <Stack spacing={2}>
-            <TextField
-              label="Category Name"
-              value={formValues.name}
-              onChange={(e) => handleInputChange('name', e.target.value)}
-              error={!!error}
-              helperText={error || ''}
-              variant="outlined"
-              size="small"
-              fullWidth
-            />
-            <Stack spacing={1}>
-              <Typography variant="subtitle2">Define Item Shape</Typography>
-              <Typography variant="caption" color="text.secondary">
-                Example: "Hardware Sensor" could have "Location" and "Online
-                Status"
-              </Typography>
-              <Button
-                onClick={onClickAddProperty}
+          fullWidth
+        />
+        <Stack gap={2}>
+          <Stack>
+            <Typography variant="subtitle2">Define Item Shape</Typography>
+            <Typography variant="caption" color="text.secondary">
+              Example: "Hardware Sensor" could have "Location" and "Online
+              Status"
+            </Typography>
+          </Stack>
+          <Button
+            onClick={onClickAddProperty}
+            variant="outlined"
+            size="small"
+            startIcon={<AddIcon />}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            Add Property
+          </Button>
+          {Array.from({ length: propertyCount }, (_, i) => (
+            <Stack key={i} direction="row" spacing={1} alignItems="center">
+              <TextField
+                label={`Property ${i + 1} name`}
+                value={formValues[`property-${i}`] || ''}
+                onChange={(e) =>
+                  handleInputChange(`property-${i}`, e.target.value)
+                }
                 variant="outlined"
                 size="small"
-                startIcon={<AddIcon />}
-                sx={{ alignSelf: 'flex-start' }}
+                fullWidth
+              />
+              <IconButton
+                onClick={() => onClickRemoveProperty(i)}
+                size="small"
+                color="error"
               >
-                Add Property
-              </Button>
-              {Array.from({ length: propertyCount }, (_, i) => (
-                <Stack key={i} direction="row" spacing={1} alignItems="center">
-                  <TextField
-                    label={`Property ${i + 1} Name`}
-                    value={formValues[`property-${i}`] || ''}
-                    onChange={(e) =>
-                      handleInputChange(`property-${i}`, e.target.value)
-                    }
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                  />
-                  <IconButton
-                    onClick={() => onClickRemoveProperty(i)}
-                    size="small"
-                    color="error"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Stack>
-              ))}
+                <DeleteIcon />
+              </IconButton>
             </Stack>
-            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setFormValues({ name: '' });
-                  setPropertyCount(0);
-                  setIsOpen(false);
-                  setError(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" variant="contained">
-                Create
-              </Button>
-            </Box>
-          </Stack>
+          ))}
+        </Stack>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setFormValues({ name: '' });
+              setPropertyCount(0);
+              setError(null);
+            }}
+          >
+            Clear All
+          </Button>
+          <Button type="submit" variant="contained">
+            Create
+          </Button>
         </Box>
-      </Collapse>
+      </Stack>
     </Box>
   );
 };
