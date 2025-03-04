@@ -1,11 +1,11 @@
 import { test, expect } from "@playwright/test";
 
-const url = "http://localhost:5173";
+const url = "http://frontend:5173";
 
-test("contains pong text", async ({ page }) => {
+test("contains Megasense text", async ({ page }) => {
   await page.goto(url);
 
-  await expect(page.getByText("pong")).toBeVisible();
+  await expect(page.getByText("Megasense")).toBeVisible();
 });
 
 test("creating a new category", async ({ page }) => {
