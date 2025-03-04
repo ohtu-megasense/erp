@@ -1,17 +1,5 @@
 import { FormEvent, useState } from 'react';
-import {
-  Box,
-  Button,
-  Collapse,
-  IconButton,
-  Stack,
-  TextField,
-  Typography
-} from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon
-} from '@mui/icons-material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { useAppDispatch } from '../../../app/hooks';
 import { addedItem, Category } from '../../../features/categoryDataSlice';
 
@@ -20,7 +8,6 @@ interface AddCategoryItemFormProps {
 }
 
 export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
-  const [isOpen, setIsOpen] = useState(true);
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const dispatch = useAppDispatch();
 
@@ -56,47 +43,61 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton
-          onClick={() => setIsOpen(!isOpen)}
-          size="small"
-          sx={{ mr: 1 }}
+      <Typography variant="subtitle2" mb={1} sx={{ fontSize: '0.8125rem' }}>
+        Add Item to {category.name}
+      </Typography>
+      {shapeKeys.length === 0 ? (
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ fontSize: '0.8125rem' }}
         >
-          {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </IconButton>
-        <Typography variant="subtitle1">Add Item to {category.name}</Typography>
-      </Box>
-
-      <Collapse in={isOpen}>
-        {shapeKeys.length === 0 ? (
-          <Typography variant="body2" color="text.secondary">
-            No shape defined for this category yet
-          </Typography>
-        ) : (
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ p: 2, borderRadius: 1, bgcolor: '#f7f7f7ff', mt: 2 }}
-          >
-            <Stack spacing={2}>
-              {shapeKeys.map((key) => (
-                <TextField
-                  key={key}
-                  label={key}
-                  value={formValues[key] || ''}
-                  onChange={(e) => handleInputChange(key, e.target.value)}
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                />
-              ))}
-              <Button type="submit" variant="outlined" color="primary">
-                Add {category.name} Item
+          No shape defined for this category yet
+        </Typography>
+      ) : (
+        <Box component="form" onSubmit={handleSubmit} sx={{ p: 0 }}>
+          <Stack spacing={1}>
+            {shapeKeys.map((key) => (
+              <TextField
+                key={key}
+                label={key}
+                value={formValues[key] || ''}
+                onChange={(e) => handleInputChange(key, e.target.value)}
+                variant="outlined"
+                size="small"
+                fullWidth
+                sx={{
+                  '& .MuiInputBase-root': {
+                    height: '28px',
+                    fontSize: '0.8125rem'
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: '0.8125rem',
+                    transform: 'translate(14px, 6px) scale(1)',
+                    '&.MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)'
+                    }
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderWidth: '1px'
+                  }
+                }}
+              />
+            ))}
+            <Box>
+              <Button
+                type="submit"
+                variant="outlined"
+                color="primary"
+                size="small"
+                sx={{ py: 0.5, fontSize: '0.8125rem' }}
+              >
+                + Add
               </Button>
-            </Stack>
-          </Box>
-        )}
-      </Collapse>
+            </Box>
+          </Stack>
+        </Box>
+      )}
     </Box>
   );
 };

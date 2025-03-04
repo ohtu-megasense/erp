@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
-import { CategoryTablesSection } from '../../../categories/visualize/CategoryTablesSection';
 import { HeadingSection } from './HeadingSection';
+import { CategoryTablesSection } from '../../../categories/visualize/CategoryTablesSection';
 
 export const VisualizeCategoriesPage = () => {
   return (

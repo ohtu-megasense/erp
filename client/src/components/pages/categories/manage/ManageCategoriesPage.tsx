@@ -1,47 +1,6 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { AddCategoryItems } from '../../../categories/manage/AddCategoryItems';
+import { Box } from '@mui/material';
 import { HeadingSection } from './HeadingSection';
-import { UpdateItems } from '../../../categories/manage/UpdateItems';
-import { AddCategoryForm } from '../../../categories/manage/AddCategoryForm';
-
-const AddItemsSection = () => {
-  return (
-    <>
-      <Typography
-        sx={{
-          fontSize: 24,
-          mb: 2
-        }}
-      >
-        Create
-      </Typography>
-      <Stack
-        sx={{
-          gap: 2
-        }}
-      >
-        <AddCategoryForm />
-        <AddCategoryItems />
-      </Stack>
-    </>
-  );
-};
-
-const UpdateItemsSection = () => {
-  return (
-    <>
-      <Typography
-        sx={{
-          fontSize: 24,
-          mb: 2
-        }}
-      >
-        Update
-      </Typography>
-      <UpdateItems />
-    </>
-  );
-};
+import { ManageCategoriesSection } from '../../../categories/manage/ManageCategoriesSection';
 
 export const ManageCategoriesPage = () => {
   return (
@@ -50,10 +9,7 @@ export const ManageCategoriesPage = () => {
         <HeadingSection />
       </Box>
       <Box mt={4}>
-        <AddItemsSection />
-      </Box>
-      <Box mt={4}>
-        <UpdateItemsSection />
+        <ManageCategoriesSection />
       </Box>
     </>
   );

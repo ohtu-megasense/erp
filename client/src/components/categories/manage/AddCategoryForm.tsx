@@ -18,7 +18,7 @@ import { useAppDispatch } from '../../../app/hooks';
 import { addedCategory } from '../../../features/categoryDataSlice';
 
 export const AddCategoryForm = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({
     name: ''
