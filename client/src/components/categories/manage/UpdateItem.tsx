@@ -82,6 +82,17 @@ export const UpdateItem = ({ category }: UpdateItemProps) => {
     );
   }
 
+  if (category.items.length === 0) {
+    return (
+      <Box>
+        <Typography variant="subtitle1" gutterBottom>
+          {category.name}
+        </Typography>
+        <Typography variant="body2">No items added</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       <Typography variant="subtitle1" gutterBottom>
@@ -100,7 +111,7 @@ export const UpdateItem = ({ category }: UpdateItemProps) => {
             <Typography variant="body2">Item ID: {item.id}</Typography>
           </Box>
           {editItems[item.id] && (
-            <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+            <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1, my: 2 }}>
               <Stack spacing={2}>
                 {Object.keys(category.itemShape).map((key) => (
                   <TextField
