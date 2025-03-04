@@ -1,14 +1,22 @@
-import { CssBaseline, Typography } from "@mui/material";
-import { ThemeProvider } from "./components/theme-provider/ThemeProvider";
-import { useGetPingQuery } from "./features/apiSlice";
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from './components/theme-provider/ThemeProvider';
+import { DashboardPage } from './components/pages/dashboard/DashboardPage';
+import { DetailViewPage } from './components/pages/detail-view/DetailViewPage';
+import { Route, Routes } from 'react-router';
+import { DefaultPageLayout } from './components/pages/layout/DefaultPageLayout';
+import { Redirect } from './components/redirect/Redirect';
 
 export const App = () => {
-  const { data } = useGetPingQuery();
-
   return (
     <ThemeProvider>
       <CssBaseline />
-      {data && <Typography variant="h3">{data.message}</Typography>}
+      <Routes>
+        <Route element={<DefaultPageLayout />}>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/search" element={<DetailViewPage />} />
+        </Route>
+        <Route path="*" element={<Redirect to="/" />} />
+      </Routes>
     </ThemeProvider>
   );
 };

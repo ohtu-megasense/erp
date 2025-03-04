@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 interface PingResponse {
   message: string;
@@ -6,12 +6,13 @@ interface PingResponse {
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   const response: PingResponse = {
-    message: "pong",
+    message: 'pong'
   };
 
   res.json(response);
 });
+
 
 export default router;
