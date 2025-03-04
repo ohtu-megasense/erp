@@ -11,8 +11,7 @@ notificationMiddleware.startListening({
       addNotification({
         id: crypto.randomUUID(),
         message: 'Item updated successfully.',
-        severity: 'success',
-        duration: 4000
+        severity: 'success'
       })
     );
   }
@@ -25,8 +24,7 @@ notificationMiddleware.startListening({
       addNotification({
         id: crypto.randomUUID(),
         message: `New item added.`,
-        severity: 'success',
-        duration: 4000
+        severity: 'success'
       })
     );
   }
@@ -39,8 +37,7 @@ notificationMiddleware.startListening({
       addNotification({
         id: crypto.randomUUID(),
         message: `New category created.`,
-        severity: 'success',
-        duration: 4000
+        severity: 'success'
       })
     );
   }
