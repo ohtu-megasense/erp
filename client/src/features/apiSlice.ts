@@ -37,10 +37,10 @@ export const apiSlice = createApi({
     //CategoryResponse = expected response from server/backend
     //Category = category_name to be sent to server/backend
     addCategory: builder.mutation<CategoryResponse, Category>({
-      query: (new_category_name) => ({
+      query: (category) => ({
         url: 'category',
         method: 'POST',
-        body: new_category_name
+        body: category
       })
     })
   })

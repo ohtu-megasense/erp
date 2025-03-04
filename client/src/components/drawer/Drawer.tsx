@@ -6,19 +6,19 @@ import {
   Toolbar,
   Typography,
   useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { NavigationCategory } from "./NavigationCategory";
-import { NavigationAccordion } from "./NavigationAccordion";
-import { CompanyLinkFull } from "../company/CompanyLinkFull";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { closedDrawer } from "../../features/drawerSlice";
-import { DrawerNavigationLink } from "./DrawerNavigationLink";
+  useTheme
+} from '@mui/material';
+import { NavigationCategory } from './NavigationCategory';
+import { NavigationAccordion } from './NavigationAccordion';
+import { CompanyLinkFull } from '../company/CompanyLinkFull';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { closedDrawer } from '../../features/drawerSlice';
+import { DrawerNavigationLink } from './DrawerNavigationLink';
 
 export const Drawer = () => {
   const isOpen = useAppSelector((state) => state.drawer.isOpen);
   const theme = useTheme();
-  const isAtleastLarge = useMediaQuery(theme.breakpoints.up("lg"));
+  const isAtleastLarge = useMediaQuery(theme.breakpoints.up('lg'));
   const dispatch = useAppDispatch();
 
   const onClose = () => {
@@ -28,25 +28,25 @@ export const Drawer = () => {
   return (
     <MuiDrawer
       sx={{
-        width: theme.palette.vars["mui-drawer-width"],
+        width: theme.palette.vars['mui-drawer-width'],
         flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          width: theme.palette.vars["mui-drawer-width"],
-          boxSizing: "border-box",
-          borderRight: 0,
-        },
+        '& .MuiDrawer-paper': {
+          width: theme.palette.vars['mui-drawer-width'],
+          boxSizing: 'border-box',
+          borderRight: 0
+        }
       }}
-      variant={isAtleastLarge ? "permanent" : "temporary"}
+      variant={isAtleastLarge ? 'permanent' : 'temporary'}
       anchor="left"
       open={isOpen}
       onClose={onClose}
     >
-      <Toolbar sx={{ gap: 2, color: "text.primary" }}>
+      <Toolbar sx={{ gap: 2, color: 'text.primary' }}>
         <CompanyLinkFull />
         <Divider
           orientation="vertical"
           sx={{
-            height: 24,
+            height: 24
           }}
         />
         <Typography variant="caption" component="span">
@@ -55,24 +55,31 @@ export const Drawer = () => {
       </Toolbar>
       <Box
         sx={{
-          overflow: "auto",
+          overflow: 'auto',
           px: 2,
           borderRight: 1,
           borderTop: 1,
-          borderColor: "divider",
+          borderColor: 'divider'
         }}
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
           <DrawerNavigationLink href="/search" text="Search" />
-          <NavigationAccordion title="Recent" />
-          <NavigationAccordion title="Pinned" />
+          <NavigationAccordion title="Categories" isPlaceholder={false}>
+            <DrawerNavigationLink
+              href="/categories/visualize"
+              text="Visualize"
+            />
+            <DrawerNavigationLink href="/categories/manage" text="Manage" />
+          </NavigationAccordion>
+          <NavigationAccordion title="Recent" isPlaceholder={true} />
+          <NavigationAccordion title="Pinned" isPlaceholder={true} />
         </List>
-        <NavigationCategory title="My Work" />
-        <NavigationCategory title="Insights" />
-        <NavigationCategory title="Providers" />
-        <NavigationCategory title="Orders" />
-        <NavigationCategory title="Orchestration" />
+        <NavigationCategory title="My Work" isPlaceholder={true} />
+        <NavigationCategory title="Insights" isPlaceholder={true} />
+        <NavigationCategory title="Providers" isPlaceholder={true} />
+        <NavigationCategory title="Orders" isPlaceholder={true} />
+        <NavigationCategory title="Orchestration" isPlaceholder={true} />
       </Box>
     </MuiDrawer>
   );
