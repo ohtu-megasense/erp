@@ -14,7 +14,7 @@ interface InventoryReport {
 }
 
 /*
-interface Category {
+active_sensorsterface Category {
 	id: number;
 	name: string;
 	itemShape: Record<string, string>;
@@ -24,6 +24,11 @@ interface Category {
 interface CategoryResponse {
 	success: boolean; // true/false if the category was added successfully in backend/server
 	data: Category; // added Category object
+}
+
+interface ItemResponse {
+	success: boolean;
+	data: Item;
 }
 
 export const apiSlice = createApi({
@@ -46,6 +51,13 @@ export const apiSlice = createApi({
 				url: "category",
 				method: "POST",
 				body: category,
+			}),
+		}),
+		addItem: builder.mutation<ItemResponse, Item>({
+			query: (item) => ({
+				url: "item",
+				method: "POST",
+				body: item,
 			}),
 		}),
 	}),
