@@ -9,7 +9,7 @@ export const ManageCategoriesPage = () => {
       <Box mt={2}>
         <HeadingSection />
       </Box>
-      <Box mt={2}>
+      <Box mt={4}>
         <AddCategorySection />
       </Box>
       <Box mt={4}>
