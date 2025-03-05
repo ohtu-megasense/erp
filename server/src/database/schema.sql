@@ -1,14 +1,14 @@
-DROP TABLE item;
-DROP TABLE category;
+DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS category;
 
 CREATE TABLE IF NOT EXISTS category (
     id SERIAL PRIMARY KEY,
     category_name TEXT NOT NULL,
-    item_shape JSON,
-    item JSON[]
+    item_shape JSONB
 );
 
 CREATE TABLE IF NOT EXISTS item (
-    id INT PRIMARY KEY REFERENCES category (id),
-    item_data JSON
+    id SERIAL PRIMARY KEY,
+    category_id INT REFERENCES category (id),
+    item_data JSONB
 );

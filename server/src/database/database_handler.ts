@@ -136,9 +136,29 @@ export async function AddingCategoryFunction(category_name: string) {
 		throw error; //throwing error so errors can be caught in categoryRouter.ts
 	}
 }
+async function demodemo() {
+	const client = await pool.connect();
+	try {
+		console.log("funktioon mentiin");
+
+		const result = await client.query("SELECT * FROM category");
+		//console.log(result.rows);
+
+		//for (let i = 0; i < 3; i++) {
+		//	console.log(result.fields[i]);
+		//}
+		console.log(result.rows[0].item);
+	} catch (error) {
+		console.log("ei tominu");
+	} finally {
+		client.release();
+		console.log("yhteys kii");
+	}
+}
 
 if (require.main == module) {
-	temporarySensorKoosteFunction();
+	//	temporarySensorKoosteFunction();
+	demodemo();
 	/**
   createInventoryItem("sensors", [
     "name",
