@@ -76,8 +76,8 @@ export const AddCategoryForm = () => {
 			const response = await addCategoryMutation({
 				// HUOM: jos backendi odottaa vain name + itemShape,
 				// tämä riittää. Muussa tapauksessa säädä backendin rajapinnan mukaan.
-				name: formValues.name,
-				itemShape,
+				category_name: formValues.name,
+				item_shape: propertyNames,
 			}).unwrap();
 
 			// Jos haluat päivittää local sliceä vastaamaan uutta kategoriaa:
