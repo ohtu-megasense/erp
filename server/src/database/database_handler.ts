@@ -145,14 +145,14 @@ export async function AddingCategoryFunction(category_name: string) {
 
 if (require.main == module) {
   //temporarySensorKoosteFunction();
-
+  /**
   createInventoryItem("sensors", [
     "name",
     "location",
     "status",
     "last_updated",
   ]);
-
+  */
 
   createInventoryItem('app_metrics', ["app_name", "platform", "downloads", "app_rating", "active_subscriptions", "revenue", "last_updated"])
   addToInventoryItem('app_metrics', ['GO2-app', 'iOS', "892", "3.9", "108", "1080"]);
