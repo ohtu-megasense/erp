@@ -26,4 +26,5 @@ jobs:
       - name: Run Playwright Tests
         run: docker exec playwright npm run test-docker
       - name: Stop Docker Compose services
+        if: always()
         run: docker compose down
