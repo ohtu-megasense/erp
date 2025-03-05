@@ -10,6 +10,7 @@ on:
   pull_request:
     branches: [dev]
   workflow_dispatch:
+
 jobs:
   playwright:
     name: "Playwright Tests"
@@ -23,8 +24,6 @@ jobs:
       - name: Wait for services to be ready
         run: sleep 15
       - name: Run Playwright Tests
-        run: |
-          docker exec playwright npm run test-docker
+        run: docker exec playwright npm run test-docker
       - name: Stop Docker Compose services
-        if: always()
         run: docker compose down
