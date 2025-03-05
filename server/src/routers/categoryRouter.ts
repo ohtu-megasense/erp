@@ -4,10 +4,10 @@ import { AddingCategoryFunction } from "../database/database_handler";
 const router = Router();
 
 router.post("/", (req, res) => {
-	const { name, ...rest } = req.body; // extracting name from request body as string
-	console.log(rest);
+	const { category_name, item_shape } = req.body; // extracting name from request body as string
+	console.log(category_name, item_shape);
 
-	if (!name) {
+	if (!category_name) {
 		console.error("Category needs name");
 		res.status(500).json({ error: "Category needs a name" });
 		return;

@@ -125,6 +125,24 @@ export async function temporarySensorKoosteFunction() {
 	}
 }
 
+
+export async function AddCategory(category_name: string,item_shape:json) {
+    const client = await pool.connect();
+  try{
+    console.log("Connected to database")
+    let sql_text: string = "INSERT INTO category (category_name, item_shape) VALUES (";
+    sql_text+="%I, %I::jsonb);"
+    console.log(sql_text);
+    console.log(category_name);
+    console.log(item_shape);
+
+    const query = format(sql_text,category_name,item_shape);
+    await client.query(query);
+
+
+  }
+}
+
 export async function AddingCategoryFunction(category_name: string) {
 	try {
 		//creating new table named category_name with only id column by passing
@@ -136,6 +154,7 @@ export async function AddingCategoryFunction(category_name: string) {
 		throw error; //throwing error so errors can be caught in categoryRouter.ts
 	}
 }
+
 async function demodemo() {
 	const client = await pool.connect();
 	try {
