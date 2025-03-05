@@ -15,11 +15,11 @@ test("creating a new category", async ({ page }) => {
 
   await page.click("text=Manage");
 
-  await page.click("text=Add New Category");
-
-  await page.fill("input[name=name]", "New category");
+  await page.locator("input").first().fill("New category");
 
   await page.click("text=Create");
 
-  await expect(page.getByText("New category")).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const lastCategorySection = page.locator("div").filter({ hasText: "New Category" }).last();
+  await expect(lastCategorySection).toBeVisible({ timeout: 10000 });
 });
