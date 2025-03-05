@@ -109,6 +109,11 @@ export const AddCategoryForm = () => {
           variant="outlined"
           size="small"
           fullWidth
+          slotProps={{
+            htmlInput: {
+              'data-testid': 'category-name-input'
+            }
+          }}
         />
         <Stack gap={2}>
           <Stack>
@@ -160,7 +165,11 @@ export const AddCategoryForm = () => {
           >
             Clear All
           </Button>
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            data-testid="create-category-btn"
+          >
             Create
           </Button>
         </Box>
