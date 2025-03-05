@@ -6,94 +6,6 @@ const pool = new Pool({
 	connectionString: database_URL,
 });
 
-export const createInventoryItem = async (
-	tableName: string,
-	columns: Array<string>,
-) => {
-	const client = await pool.connect();
-	try {
-		console.log("Connected to the database");
-
-		let sql_text: string = "CREATE TABLE %I (id SERIAL PRIMARY KEY, ";
-		for (let i = 0; i < columns.length; i++) {
-			sql_text = sql_text + "%I TEXT, ";
-		}
-		sql_text = sql_text.slice(0, -2); // this removes the extra , and space
-		sql_text = sql_text + ");";
-
-		console.log(sql_text);
-		console.log(tableName);
-		console.log(columns);
-
-		const query = format(sql_text, tableName, ...columns);
-
-		await client.query(query);
-		console.log(
-			`Table "${tableName}" with columns ${columns} created successfully!`,
-		);
-	} catch (error) {
-		console.error("Error creating table:", error);
-	} finally {
-		client.release();
-		console.log("Disconnected from the database");
-	}
-};
-
-export const addToInventoryItem = async (
-	tableName: string,
-	values: Array<string>,
-) => {
-	const client = await pool.connect();
-	try {
-		console.log("Connected to the database");
-
-		let sql_text: string = 'INSERT INTO "%I" VALUES (DEFAULT, ';
-		for (let i = 0; i < values.length; i++) {
-			sql_text = sql_text + "'%s', ";
-		}
-		sql_text = sql_text.slice(0, -2); // this removes the extra , and space
-		sql_text = sql_text + ");";
-
-		console.log(sql_text);
-		console.log(tableName);
-		console.log(values);
-
-		const query = format(sql_text, tableName, ...values);
-
-		await client.query(query);
-		console.log(`Table "${tableName}" added values ${values}!`);
-	} catch (error) {
-		console.error("Error adding values:", error);
-	} finally {
-		client.release();
-		console.log("Disconnected from the database");
-	}
-};
-
-export async function retrieveInventoryTable(tableName: string) {
-	const client = await pool.connect();
-	try {
-		console.log("Connected to the database");
-
-		const sql_text: string = 'SELECT * FROM "%I"';
-		console.log(sql_text);
-		console.log(tableName);
-
-		const query = format(sql_text, tableName);
-		console.log(query);
-		const result = await client.query(query);
-		console.log(`Retrieved everything from "${tableName}"!`);
-
-		const results = result.rows;
-		return results;
-	} catch (error) {
-		console.error("Error retrieving from table:", error);
-	} finally {
-		client.release();
-		console.log("Disconnected from the database");
-	}
-}
-
 export async function temporarySensorKoosteFunction() {
 	const client = await pool.connect();
 	try {
@@ -125,73 +37,30 @@ export async function temporarySensorKoosteFunction() {
 	}
 }
 
-
-export async function AddCategory(category_name: string,item_shape:json) {
-    const client = await pool.connect();
-  try{
-    console.log("Connected to database")
-    let sql_text: string = "INSERT INTO category (category_name, item_shape) VALUES (";
-    sql_text+="%I, %I::jsonb);"
-    console.log(sql_text);
-    console.log(category_name);
-    console.log(item_shape);
-
-    const query = format(sql_text,category_name,item_shape);
-    await client.query(query);
-
-
-  }
-}
-
-export async function AddingCategoryFunction(category_name: string) {
-	try {
-		//creating new table named category_name with only id column by passing
-		// an empty array for additional columns to createInventoryItem_function
-		await createInventoryItem(category_name, []);
-		return { message: `Category table '${category_name}' created` }; // returning message to client/frontend
-	} catch (error) {
-		console.error("Error creating category table:", error);
-		throw error; //throwing error so errors can be caught in categoryRouter.ts
-	}
-}
-
-async function demodemo() {
+export async function AddCategory(category_name: string, item_shape: JSON) {
 	const client = await pool.connect();
 	try {
-		console.log("funktioon mentiin");
+		console.log("Connected to database");
+		let sql_text: string =
+			"INSERT INTO category (category_name, item_shape) VALUES (";
+		sql_text += "%I, %I::jsonb);";
+		console.log(sql_text);
+		console.log(category_name);
+		console.log(item_shape);
 
-		const result = await client.query("SELECT * FROM category");
-		//console.log(result.rows);
-
-		//for (let i = 0; i < 3; i++) {
-		//	console.log(result.fields[i]);
-		//}
-		console.log(result.rows[0].item);
+		const query = format(sql_text, category_name, item_shape);
+		await client.query(query);
+		console.log(
+			'category "${category_name}" with item shape "${item_shape}" added',
+		);
 	} catch (error) {
-		console.log("ei tominu");
+		console.error("Error adding category:", error);
 	} finally {
 		client.release();
-		console.log("yhteys kii");
+		console.log("Disconnected from the database");
 	}
 }
 
 if (require.main == module) {
-	//	temporarySensorKoosteFunction();
-	demodemo();
-	/**
-  createInventoryItem("sensors", [
-    "name",
-    "location",
-    "status",
-    "last_updated",
-  ]);
-  */
-
-	//createInventoryItem('app_metrics', ["app_name", "platform", "downloads", "app_rating", "active_subscriptions", "revenue", "last_updated"])
-	//addToInventoryItem('app_metrics', ['GO2-app', 'iOS', "892", "3.9", "108", "1080"]);
-	//retrieveInventoryTable("app_metrics")
-	//addToInventoryItem("lusers", ["santeri", "kuusela"]);
+	//pass;
 }
-
-//export default addToInventoryItem;
-//export createInventoryItem;
