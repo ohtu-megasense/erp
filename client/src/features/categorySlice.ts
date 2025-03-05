@@ -1,24 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface State {
-  isOpen: boolean;
+	isOpen: boolean;
 }
 
 const initialState: State = {
-  isOpen: false
+	isOpen: false,
 };
 
 const slice = createSlice({
-  name: 'category',
-  initialState,
-  reducers: {
-    openedModal: (state) => {
-      state.isOpen = true;
-    },
-    closedModal: (state) => {
-      state.isOpen = false;
-    }
-  }
+	name: "category",
+	initialState,
+	reducers: {
+		openedModal: (state) => {
+			state.isOpen = true;
+		},
+		closedModal: (state) => {
+			state.isOpen = false;
+		},
+	},
 });
 
 export default slice.reducer;

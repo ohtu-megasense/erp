@@ -3,6 +3,7 @@ import cors from "cors";
 import pingRouter from "./routers/pingRouter";
 import inventoryRouter from "./routers/inventoryRouter";
 import categoryRouter from "./routers/categoryRouter";
+import itemRouter from "./routers/itemRouter";
 import { requestLogger } from "./utils/middleware";
 import path from "path";
 
@@ -17,18 +18,6 @@ app.use("/api/ping", pingRouter);
 app.use("/api/reports/inventory", inventoryRouter);
 app.use("/api/manage/categories", categoryRouter);
 app.use("/api/manage/items", itemRouter);
-
-/** 
-app.get('/api/reports/inventory', (req, res) => {
-  res.json({
-    total_sensors: 150,
-    active_sensors: 130,
-    inactive_sensors: 20,
-    total_cloud_resources: 50,
-    monthly_api_usage: 25000
-  });
-});
-*/
 
 app.get("/*", (req, res) => {
 	res.status(404).json({ message: "Unknown endpoint!" });
