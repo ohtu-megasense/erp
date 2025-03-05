@@ -72,6 +72,7 @@ export const CategoryTable = forwardRef(
     const endIndex = startIndex + itemsPerPage;
     const paginatedItems = category.items.slice(startIndex, endIndex);
     const totalPages = Math.ceil(category.items.length / itemsPerPage);
+    const inputFieldMinWidth = 80;
 
     const handlePageChange = (
       _event: React.ChangeEvent<unknown>,
@@ -121,8 +122,7 @@ export const CategoryTable = forwardRef(
                   <TableCell
                     key={key}
                     sx={{
-                      fontSize: '0.8125rem',
-                      minWidth: isEditing ? 100 : undefined
+                      fontSize: '0.8125rem'
                     }}
                   >
                     {isEditing ? (
@@ -135,6 +135,7 @@ export const CategoryTable = forwardRef(
                         size="small"
                         fullWidth={true}
                         sx={{
+                          minWidth: inputFieldMinWidth,
                           '& .MuiInputBase-root': {
                             height: '24px',
                             fontSize: '0.8125rem' // Match TableCell font size
