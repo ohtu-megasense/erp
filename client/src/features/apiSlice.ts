@@ -13,14 +13,6 @@ interface InventoryReport {
 	monthly_api_usage: number;
 }
 
-/*
-active_sensorsterface Category {
-	id: number;
-	name: string;
-	itemShape: Record<string, string>;
-	items: Item[];
-}
-*/
 interface CategoryResponse {
 	success: boolean; // true/false if the category was added successfully in backend/server
 	data: Category; // added Category object
@@ -48,14 +40,14 @@ export const apiSlice = createApi({
 		//Category = category_name to be sent to server/backend
 		addCategory: builder.mutation<CategoryResponse, Category>({
 			query: (category) => ({
-				url: "category",
+				url: "manage/categories",
 				method: "POST",
 				body: category,
 			}),
 		}),
 		addItem: builder.mutation<ItemResponse, Item>({
 			query: (item) => ({
-				url: "item",
+				url: "manage/items",
 				method: "POST",
 				body: item,
 			}),
@@ -63,5 +55,9 @@ export const apiSlice = createApi({
 	}),
 });
 
-export const { useGetPingQuery, useGetInventoryQuery, useAddCategoryMutation } =
-	apiSlice;
+export const {
+	useGetPingQuery,
+	useGetInventoryQuery,
+	useAddCategoryMutation,
+	useAddItemMutation,
+} = apiSlice;

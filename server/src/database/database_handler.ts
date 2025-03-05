@@ -60,6 +60,28 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 		console.log("Disconnected from the database");
 	}
 }
+export async function AddItem(category_id: string, item_data: JSON) {
+	const client = await pool.connect();
+	try {
+		console.log("Connected to database");
+		let sql_text: string = "INSERT INTO item (category_id, item_data) VALUES (";
+		sql_text += "%I, %I::jsonb);";
+		console.log(sql_text);
+		console.log(category_id);
+		console.log(item_data);
+
+		const query = format(sql_text, category_id, item_data);
+		await client.query(query);
+		console.log(
+			'category "${category_id}" with item data "${item_data}" added',
+		);
+	} catch (error) {
+		console.error("Error adding item:", error);
+	} finally {
+		client.release();
+		console.log("Disconnected from the database");
+	}
+}
 
 if (require.main == module) {
 	//pass;
