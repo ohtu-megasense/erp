@@ -77,18 +77,18 @@ export const AddCategoryForm = () => {
 				// tämä riittää. Muussa tapauksessa säädä backendin rajapinnan mukaan.
 				id: 1,
 				name: formValues.name,
-				itemShape: propertyNames,
+				itemShape,
 				items: [],
 			}).unwrap();
-			// Jos haluat päivittää local sliceä vastaamaan uutta kategoriaa:
-			/*	dispatch(
+			console.log(response);
+			dispatch(
 				addedCategory({
 					category: {
 						name: formValues.name,
 						itemShape,
 					},
 				}),
-			);*/
+			);
 
 			// Tyhjennä lomake
 			setFormValues({ name: "" });
