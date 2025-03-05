@@ -6,37 +6,6 @@ const pool = new Pool({
 	connectionString: database_URL,
 });
 
-export async function temporarySensorKoosteFunction() {
-	const client = await pool.connect();
-	try {
-		console.log("Connected to the database");
-
-		const sql_text: string =
-			"SELECT COUNT(status) FROM sensors WHERE status='Active'";
-		const query = format(sql_text);
-		const result_active = await client.query(query);
-		console.log(`Retrieved count from "sensors"!`);
-		const results_active = result_active.rows;
-
-		const sql_text_all: string = "SELECT COUNT(status) FROM sensors";
-		const query_2 = format(sql_text_all);
-		const result_all = await client.query(query_2);
-		console.log(`Retrieved count from "sensors"!`);
-		const results_all = result_all.rows;
-
-		return {
-			total_sensors: results_all[0]["count"],
-			active_sensors: results_active[0]["count"],
-			inactive_sensors: results_all[0]["count"] - results_active[0]["count"],
-		};
-	} catch (error) {
-		console.error("Error retrieving from table:", error);
-	} finally {
-		client.release();
-		console.log("Disconnected from the database");
-	}
-}
-
 export async function AddCategory(category_name: string, item_shape: JSON) {
 	const client = await pool.connect();
 	try {
