@@ -97,7 +97,11 @@ export const CategoryTable = forwardRef(
     }
 
     return (
-      <Box>
+      <Box
+        sx={{
+          overflowX: 'auto'
+        }}
+      >
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -114,7 +118,13 @@ export const CategoryTable = forwardRef(
               <TableRow key={item.id}>
                 <TableCell sx={{ fontSize: '0.8125rem' }}>{item.id}</TableCell>
                 {Object.keys(category.itemShape).map((key) => (
-                  <TableCell key={key} sx={{ fontSize: '0.8125rem' }}>
+                  <TableCell
+                    key={key}
+                    sx={{
+                      fontSize: '0.8125rem',
+                      minWidth: isEditing ? 100 : undefined
+                    }}
+                  >
                     {isEditing ? (
                       <TextField
                         value={formValues[item.id]?.[key] || ''}
@@ -144,7 +154,13 @@ export const CategoryTable = forwardRef(
           </TableBody>
         </Table>
         {totalPages > 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              py: 1
+            }}
+          >
             <Pagination
               count={totalPages}
               page={page}
