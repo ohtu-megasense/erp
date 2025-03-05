@@ -72,6 +72,7 @@ export const CategoryTable = forwardRef(
     const endIndex = startIndex + itemsPerPage;
     const paginatedItems = category.items.slice(startIndex, endIndex);
     const totalPages = Math.ceil(category.items.length / itemsPerPage);
+    const inputFieldMinWidth = 80;
 
     const handlePageChange = (
       _event: React.ChangeEvent<unknown>,
@@ -97,7 +98,11 @@ export const CategoryTable = forwardRef(
     }
 
     return (
-      <Box>
+      <Box
+        sx={{
+          overflowX: 'auto'
+        }}
+      >
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -114,7 +119,12 @@ export const CategoryTable = forwardRef(
               <TableRow key={item.id}>
                 <TableCell sx={{ fontSize: '0.8125rem' }}>{item.id}</TableCell>
                 {Object.keys(category.itemShape).map((key) => (
-                  <TableCell key={key} sx={{ fontSize: '0.8125rem' }}>
+                  <TableCell
+                    key={key}
+                    sx={{
+                      fontSize: '0.8125rem'
+                    }}
+                  >
                     {isEditing ? (
                       <TextField
                         value={formValues[item.id]?.[key] || ''}
@@ -125,6 +135,7 @@ export const CategoryTable = forwardRef(
                         size="small"
                         fullWidth={true}
                         sx={{
+                          minWidth: inputFieldMinWidth,
                           '& .MuiInputBase-root': {
                             height: '24px',
                             fontSize: '0.8125rem' // Match TableCell font size
@@ -144,7 +155,13 @@ export const CategoryTable = forwardRef(
           </TableBody>
         </Table>
         {totalPages > 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              py: 1
+            }}
+          >
             <Pagination
               count={totalPages}
               page={page}
