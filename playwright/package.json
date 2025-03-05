@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "test": "npx playwright test",
-    "test-ui": "npx playwright test --ui"
+    "test-ui": "npx playwright test --ui",
+    "test-docker": "DOCKER=true npx playwright test"
   },
   "keywords": [],
   "author": "",

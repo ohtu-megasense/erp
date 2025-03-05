@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Playwright in Docker
         run: |
-          docker compose run --rm playwright sh -c "npm install @playwright/test && npx playwright install --with-deps && npx playwright test"
+          docker compose run --rm playwright sh -c "npm run test-docker"
 
       - name: Copy test reports from container
         if: always()
