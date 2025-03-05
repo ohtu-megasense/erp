@@ -11,15 +11,14 @@ export const ManageCategoriesSection = () => {
     <Stack gap={4}>
       {categoriesData.map((category) => {
         return (
-          <>
-            <Paper
-              sx={{
-                p: 2
-              }}
-            >
-              <CategoryManager key={category.id} category={category} />
-            </Paper>
-          </>
+          <Paper
+            key={category.id}
+            sx={{
+              p: 2
+            }}
+          >
+            <CategoryManager category={category} />
+          </Paper>
         );
       })}
     </Stack>
