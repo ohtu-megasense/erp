@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Playwright in Docker
         run: |
-          docker compose run --rm playwright sh npm run test-docker
+          docker compose run --rm playwright bash -c "npm run test-docker"
 
       - name: Stop Docker Compose services
         if: always()
