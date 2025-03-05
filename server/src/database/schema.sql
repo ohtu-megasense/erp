@@ -3,7 +3,7 @@ DROP TABLE category;
 
 CREATE TABLE IF NOT EXISTS category (
     id SERIAL PRIMARY KEY,
-    item_name TEXT NOT NULL,
+    category_name TEXT NOT NULL,
     item_shape JSON,
     item JSON[]
 );
