@@ -2,39 +2,39 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [ ci/playwright-workflow ]
+    branches: [ci/playwright-workflow]
     paths:
-      - 'playwright/**'
-      - 'src/**'
-      - 'docker-compose.yml'
+      - "playwright/**"
+      - "src/**"
+      - "docker-compose.yml"
   pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:  # Allows manual triggering
+    branches: [dev]
+  workflow_dispatch:
 
 jobs:
   playwright:
-    name: 'Playwright Tests'
+    name: "Playwright Tests"
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Start services with Docker Compose
         run: docker compose up -d frontend backend
-      
+
       - name: Run Playwright in Docker
         run: |
           docker compose run --rm playwright sh -c "npm install @playwright/test && npx playwright install --with-deps && npx playwright test"
-      
+
       - name: Copy test reports from container
         if: always()
         run: |
           mkdir -p playwright-report
           docker cp playwright:/tests/playwright-report ./
-      
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -42,7 +42,7 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-      
+
       - name: Stop Docker Compose services
         if: always()
         run: docker compose down
