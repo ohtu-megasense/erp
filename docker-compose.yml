@@ -55,7 +55,7 @@ services:
     volumes:
       - ./playwright:/tests
       - ./playwright/playwright-report:/tests/playwright-report
-      - /app/node_modules
+      - /tests/node_modules
     environment:
       - BASE_URL=http://frontend:5173
     depends_on:
