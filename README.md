@@ -1,8 +1,5 @@
 # MegaSense AI ERP
 
-![CI Badge]()
-[![codecov]()
-
 ### Introduction
 
 MegaSense AI ERP is a prototype for an AI based enterprise resource planning software developed for MegaSense. 
