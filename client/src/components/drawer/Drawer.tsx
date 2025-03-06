@@ -1,10 +1,8 @@
 import {
   Box,
-  Divider,
   List,
   Drawer as MuiDrawer,
   Toolbar,
-  Typography,
   useMediaQuery,
   useTheme
 } from '@mui/material';
@@ -43,15 +41,6 @@ export const Drawer = () => {
     >
       <Toolbar sx={{ gap: 2, color: 'text.primary' }}>
         <CompanyLinkFull />
-        <Divider
-          orientation="vertical"
-          sx={{
-            height: 24
-          }}
-        />
-        <Typography variant="caption" component="span">
-          UI Mockup
-        </Typography>
       </Toolbar>
       <Box
         sx={{
