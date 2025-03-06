@@ -44,6 +44,7 @@ export const Drawer = () => {
       <Box
         sx={{
           overflow: 'auto',
+          minHeight: 'calc(100dvh - 64px)',
           px: 2,
           borderRight: 1,
           borderTop: 1,
