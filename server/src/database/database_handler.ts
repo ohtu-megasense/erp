@@ -12,7 +12,7 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 		console.log("Connected to database");
 		let sql_text: string =
 			"INSERT INTO category (category_name, item_shape) VALUES (";
-		sql_text += "%I, %I::jsonb);";
+		sql_text += "%I,{ %I}::jsonb);";
 		console.log(sql_text);
 		console.log(category_name);
 		console.log(item_shape);
@@ -34,7 +34,7 @@ export async function AddItem(category_id: string, item_data: JSON) {
 	try {
 		console.log("Connected to database");
 		let sql_text: string = "INSERT INTO item (category_id, item_data) VALUES (";
-		sql_text += "%I, %I::jsonb);";
+		sql_text += "'%I', '%I'::jsonb);";
 		console.log(sql_text);
 		console.log(category_id);
 		console.log(item_data);
