@@ -4,10 +4,10 @@ import { AddCategory } from "../database/database_handler";
 const router = Router();
 
 router.post("/", (req, res) => {
-	const { category_name, item_shape } = req.body; // extracting name from request body as string
-	console.log(category_name, item_shape);
+	const { id, items, name, itemShape } = req.body; // extracting name from request body as string
+	console.log(name, itemShape);
 
-	if (!category_name || !item_shape) {
+	if (!name || !itemShape) {
 		console.error("Category needs name or item needs shape");
 		res
 			.status(500)
@@ -15,7 +15,7 @@ router.post("/", (req, res) => {
 		return;
 	}
 
-	AddCategory(category_name, item_shape)
+	AddCategory(name, itemShape)
 		.then((data) => res.json(data)) // sending back confirmation message to client/frontend that category has been added
 		.catch((error) => {
 			console.error("Error adding category:", error); // adding error message to console

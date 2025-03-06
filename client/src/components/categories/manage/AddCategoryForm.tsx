@@ -65,7 +65,7 @@ export const AddCategoryForm = () => {
 
 		const itemShape: Record<string, string> = propertyNames.reduce(
 			(acc, propertyName) => {
-				acc[propertyName] = "";
+				acc[propertyName] = "TEXT";
 				return acc;
 			},
 			{} as Record<string, string>,
@@ -76,19 +76,21 @@ export const AddCategoryForm = () => {
 			const response = await addCategoryMutation({
 				// HUOM: jos backendi odottaa vain name + itemShape,
 				// tämä riittää. Muussa tapauksessa säädä backendin rajapinnan mukaan.
-				category_name: formValues.name,
-				item_shape: propertyNames,
+				id: 1,
+				name: formValues.name,
+				itemShape: propertyNames:"string",
+				items: [],
 			}).unwrap();
 
 			// Jos haluat päivittää local sliceä vastaamaan uutta kategoriaa:
-			dispatch(
+			/*	dispatch(
 				addedCategory({
 					category: {
 						name: formValues.name,
 						itemShape,
 					},
 				}),
-			);
+			);*/
 
 			// Tyhjennä lomake
 			setFormValues({ name: "" });
