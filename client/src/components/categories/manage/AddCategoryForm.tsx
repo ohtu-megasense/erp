@@ -78,7 +78,7 @@ export const AddCategoryForm = () => {
 				// tämä riittää. Muussa tapauksessa säädä backendin rajapinnan mukaan.
 				id: 1,
 				name: formValues.name,
-				itemShape: propertyNames:"string",
+				itemShape: propertyNames,
 				items: [],
 			}).unwrap();
 
