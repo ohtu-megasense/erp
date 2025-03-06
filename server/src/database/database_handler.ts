@@ -9,10 +9,10 @@ const pool = new Pool({
 export async function AddCategory(category_name: string, item_shape: JSON) {
 	const client = await pool.connect();
 	try {
-		console.log("Connected to database");
+		console.log("Connected to database addcategory");
 		let sql_text: string =
 			"INSERT INTO category (category_name, item_shape) VALUES (";
-		sql_text += "%I,{ %I}::jsonb);";
+		sql_text += "%L, %L);";
 		console.log(sql_text);
 		console.log(category_name);
 		console.log(item_shape);
@@ -32,9 +32,9 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 export async function AddItem(category_id: string, item_data: JSON) {
 	const client = await pool.connect();
 	try {
-		console.log("Connected to database");
+		console.log("Connected to database additem");
 		let sql_text: string = "INSERT INTO item (category_id, item_data) VALUES (";
-		sql_text += "'%I', '%I'::jsonb);";
+		sql_text += "'%L, %L);";
 		console.log(sql_text);
 		console.log(category_id);
 		console.log(item_data);
