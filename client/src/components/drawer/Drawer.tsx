@@ -53,10 +53,6 @@ export const Drawer = () => {
         <List>
           <DrawerNavigationLink href="/" text="Home" />
           <NavigationAccordion title="Categories" isPlaceholder={false}>
-            <DrawerNavigationLink
-              href="/categories/visualize"
-              text="Visualize"
-            />
             <DrawerNavigationLink href="/categories/manage" text="Manage" />
           </NavigationAccordion>
         </List>
