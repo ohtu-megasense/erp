@@ -6,7 +6,6 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import { NavigationCategory } from './NavigationCategory';
 import { NavigationAccordion } from './NavigationAccordion';
 import { CompanyLinkFull } from '../company/CompanyLinkFull';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -60,14 +59,9 @@ export const Drawer = () => {
             />
             <DrawerNavigationLink href="/categories/manage" text="Manage" />
           </NavigationAccordion>
-          <NavigationAccordion title="Recent" isPlaceholder={true} />
-          <NavigationAccordion title="Pinned" isPlaceholder={true} />
+          <NavigationAccordion title="Recent" isPlaceholder={false} />
+          <NavigationAccordion title="Pinned" isPlaceholder={false} />
         </List>
-        <NavigationCategory title="My Work" isPlaceholder={true} />
-        <NavigationCategory title="Insights" isPlaceholder={true} />
-        <NavigationCategory title="Providers" isPlaceholder={true} />
-        <NavigationCategory title="Orders" isPlaceholder={true} />
-        <NavigationCategory title="Orchestration" isPlaceholder={true} />
       </Box>
     </MuiDrawer>
   );
