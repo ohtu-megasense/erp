@@ -4,7 +4,7 @@ import { AddCategory } from "../database/database_handler";
 const router = Router();
 
 router.post("/", (req, res) => {
-	const { id, items, name, itemShape } = req.body; // extracting name from request body as string
+	const { name, itemShape } = req.body; // extracting name from request body as string
 	console.log("routerissa:", name, itemShape);
 
 	if (!name || !itemShape) {

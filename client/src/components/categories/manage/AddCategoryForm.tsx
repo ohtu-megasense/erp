@@ -26,27 +26,6 @@ export const AddCategoryForm = () => {
 		name: "",
 	});
 	const [propertyCount, setPropertyCount] = useState(0);
-	/*=======
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  TextField,
-  Typography
-} from '@mui/material';
-import { Delete as DeleteIcon } from '@mui/icons-material';
-import AddIcon from '@mui/icons-material/Add';
-import { useAppDispatch } from '../../../app/hooks';
-import { addedCategory } from '../../../features/categoryDataSlice';
-
-export const AddCategoryForm = () => {
-  const [error, setError] = useState<string | null>(null);
-  const [formValues, setFormValues] = useState<Record<string, string>>({
-    name: ''
-  });
-  const [propertyCount, setPropertyCount] = useState(0);
->>>>>>> dev
-*/
 	const dispatch = useAppDispatch();
 
 	// 2. Kutsu mutaatiohook, josta saadaan funktio addCategoryMutation
@@ -91,7 +70,6 @@ export const AddCategoryForm = () => {
 			{} as Record<string, string>,
 		);
 
-		//<<<<<<< HEAD
 		try {
 			// Kutsu backendiä RTK Queryn kautta
 			const response = await addCategoryMutation({
@@ -102,26 +80,15 @@ export const AddCategoryForm = () => {
 				itemShape,
 				items: [],
 			}).unwrap();
-			/*=======
-      setFormValues({ name: '' });
-      setPropertyCount(0);
-      setError(null);
-    } catch (error) {
-      console.log('Error adding new category', error);
-    }
-  };
->>>>>>> dev
-
-*/
-			// Jos haluat päivittää local sliceä vastaamaan uutta kategoriaa:
-			/*	dispatch(
+			console.log(response);
+			dispatch(
 				addedCategory({
 					category: {
 						name: formValues.name,
 						itemShape,
 					},
 				}),
-			);*/
+			);
 
 			// Tyhjennä lomake
 			setFormValues({ name: "" });

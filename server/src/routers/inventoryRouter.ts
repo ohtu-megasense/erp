@@ -1,21 +1,9 @@
-import { Router } from 'express';
-import { temporarySensorKoosteFunction } from "../database/database_handler";
-
-
+import { Router } from "express";
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    temporarySensorKoosteFunction()
-    .then(data => res.json(data))
-    .catch(error => console.error("Error retrieving data:", error))
-
-    /**
-    retrieveInventoryTable("app_metrics")
-    .then(data => res.json(data))
-    .catch(error => console.error('Error retrieving data:', error));
-    */
-});
+//router.get('/', (req, res) => {
+//});
 
 /**
 router.get('/api/reports/inventory', (req, res) => {
