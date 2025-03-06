@@ -52,6 +52,30 @@ export async function AddItem(category_id: string, item_data: JSON) {
 	}
 }
 
+export async function GetCategories() {
+	const client = await pool.connect();
+	try {
+		console.log("Connected to database GetCategories");
+		let sql_text: string = "SELECT * FROM category;";
+		const query = format(sql_text);
+		const result = await client.query(query);
+		console.log("Retrieved categories", result);
+		const result_field = result.fields;
+		const result_count = result.rowCount;
+		const result_rows = result.rows;
+		return {
+			name: result_field[0].name,
+			count: result_count,
+			item_shape: result_rows[0],
+		};
+	} catch (error) {
+		console.error("Error retrieving categories: ", error);
+	} finally {
+		client.release();
+		console.log("Disconnected from database GetCategories");
+	}
+}
+
 if (require.main == module) {
 	//pass;
 }

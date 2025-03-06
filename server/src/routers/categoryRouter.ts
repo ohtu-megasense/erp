@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AddCategory } from "../database/database_handler";
+import { AddCategory, GetCategories } from "../database/database_handler";
 
 const router = Router();
 
@@ -21,6 +21,12 @@ router.post("/", (req, res) => {
 			console.error("Error adding category:", error); // adding error message to console
 			res.status(500).json({ error: "Internal server error" }); // adding error message so that client/frontend can display it
 		});
+});
+
+router.get("/", (req, res) => {
+	GetCategories()
+		.then((data) => res.json(data))
+		.catch((error) => console.error("Error getting data: ", error));
 });
 
 export default router;

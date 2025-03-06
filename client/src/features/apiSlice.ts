@@ -5,12 +5,11 @@ interface PingResponse {
 	message: string;
 }
 
-interface InventoryReport {
-	total_sensors: number;
-	active_sensors: number;
-	inactive_sensors: number;
-	total_cloud_resources: number;
-	monthly_api_usage: number;
+interface CategoryList {
+	id: number;
+	name: string;
+	item_shape: Record<string, unknown>;
+	count: number;
 }
 
 interface CategoryResponse {
@@ -32,8 +31,8 @@ export const apiSlice = createApi({
 		getPing: builder.query<PingResponse, void>({
 			query: () => "ping",
 		}),
-		getInventory: builder.query<InventoryReport, void>({
-			query: () => "reports/inventory",
+		getCategories: builder.query<CategoryList, void>({
+			query: () => "manage/categories",
 		}),
 		//mutation used for POST requests to server/backend.
 		//CategoryResponse = expected response from server/backend
@@ -57,7 +56,7 @@ export const apiSlice = createApi({
 
 export const {
 	useGetPingQuery,
-	useGetInventoryQuery,
+	useGetCategoriesQuery,
 	useAddCategoryMutation,
 	useAddItemMutation,
 } = apiSlice;
