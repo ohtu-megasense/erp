@@ -1,14 +1,11 @@
 import {
   Box,
-  Divider,
   List,
   Drawer as MuiDrawer,
   Toolbar,
-  Typography,
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import { NavigationCategory } from './NavigationCategory';
 import { NavigationAccordion } from './NavigationAccordion';
 import { CompanyLinkFull } from '../company/CompanyLinkFull';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -43,15 +40,6 @@ export const Drawer = () => {
     >
       <Toolbar sx={{ gap: 2, color: 'text.primary' }}>
         <CompanyLinkFull />
-        <Divider
-          orientation="vertical"
-          sx={{
-            height: 24
-          }}
-        />
-        <Typography variant="caption" component="span">
-          UI Mockup
-        </Typography>
       </Toolbar>
       <Box
         sx={{
@@ -64,22 +52,10 @@ export const Drawer = () => {
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
-          <DrawerNavigationLink href="/search" text="Search" />
           <NavigationAccordion title="Categories" isPlaceholder={false}>
-            <DrawerNavigationLink
-              href="/categories/visualize"
-              text="Visualize"
-            />
             <DrawerNavigationLink href="/categories/manage" text="Manage" />
           </NavigationAccordion>
-          <NavigationAccordion title="Recent" isPlaceholder={true} />
-          <NavigationAccordion title="Pinned" isPlaceholder={true} />
         </List>
-        <NavigationCategory title="My Work" isPlaceholder={true} />
-        <NavigationCategory title="Insights" isPlaceholder={true} />
-        <NavigationCategory title="Providers" isPlaceholder={true} />
-        <NavigationCategory title="Orders" isPlaceholder={true} />
-        <NavigationCategory title="Orchestration" isPlaceholder={true} />
       </Box>
     </MuiDrawer>
   );
