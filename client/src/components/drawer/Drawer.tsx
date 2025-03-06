@@ -59,8 +59,6 @@ export const Drawer = () => {
             />
             <DrawerNavigationLink href="/categories/manage" text="Manage" />
           </NavigationAccordion>
-          <NavigationAccordion title="Recent" isPlaceholder={false} />
-          <NavigationAccordion title="Pinned" isPlaceholder={false} />
         </List>
       </Box>
     </MuiDrawer>
