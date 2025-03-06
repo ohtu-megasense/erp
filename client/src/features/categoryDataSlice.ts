@@ -60,21 +60,21 @@ const initialState: State = {
           }
         }
       ]
-    },
-    {
-      id: 3,
-      name: 'Empty Category',
-      itemShape: {},
-      items: []
-    },
-    {
-      id: 4,
-      name: 'Empty Category With Shape',
-      itemShape: {
-        Random: 'string'
-      },
-      items: []
     }
+    // {
+    //   id: 3,
+    //   name: 'Empty Category',
+    //   itemShape: {},
+    //   items: []
+    // },
+    // {
+    //   id: 4,
+    //   name: 'Empty Category With Shape',
+    //   itemShape: {
+    //     Random: 'string'
+    //   },
+    //   items: []
+    // }
   ]
 };
 
