@@ -2,12 +2,15 @@ import { useState } from 'react';
 import {
   Box,
   Button,
-  IconButton,
-  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
-  Typography
+  Typography,
+  Pagination
 } from '@mui/material';
-import { Edit as EditIcon } from '@mui/icons-material';
 import { Category, updateItem } from '../../../features/categoryDataSlice';
 import { useAppDispatch } from '../../../app/hooks';
 
@@ -16,25 +19,20 @@ interface UpdateItemProps {
 }
 
 export const UpdateItem = ({ category }: UpdateItemProps) => {
-  const [editItems, setEditItems] = useState<Record<number, boolean>>({});
   const [formValues, setFormValues] = useState<
     Record<number, Record<string, string>>
-  >({});
+  >(
+    category.items.reduce(
+      (acc, item) => {
+        acc[item.id] = { ...item.data };
+        return acc;
+      },
+      {} as Record<number, Record<string, string>>
+    )
+  );
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
   const dispatch = useAppDispatch();
-
-  const toggleEdit = (itemId: number) => {
-    const isEditing = editItems[itemId];
-    if (!isEditing) {
-      const item = category.items.find((i) => i.id === itemId);
-      if (item) {
-        setFormValues((prev) => ({
-          ...prev,
-          [itemId]: { ...item.data }
-        }));
-      }
-    }
-    setEditItems((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
-  };
 
   const handleInputChange = (itemId: number, key: string, value: string) => {
     setFormValues((prev) => ({
@@ -46,27 +44,29 @@ export const UpdateItem = ({ category }: UpdateItemProps) => {
     }));
   };
 
-  const handleUpdate = (itemId: number) => {
-    const updatedItem = formValues[itemId];
-    if (updatedItem) {
+  const handleSave = () => {
+    Object.entries(formValues).forEach(([itemId, updatedItem]) => {
       dispatch(
         updateItem({
           categoryId: category.id,
-          itemId,
+          itemId: Number(itemId),
           updatedItem
         })
       );
-      setEditItems((prev) => ({ ...prev, [itemId]: false }));
-    }
+    });
   };
 
-  const handleCancel = (itemId: number) => {
-    setEditItems((prev) => ({ ...prev, [itemId]: false }));
-    setFormValues((prev) => {
-      const newValues = { ...prev };
-      delete newValues[itemId];
-      return newValues;
-    });
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedItems = category.items.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(category.items.length / itemsPerPage);
+
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setPage(newPage);
   };
 
   const isShapeDefined = Object.keys(category.itemShape).length > 0;
@@ -93,30 +93,35 @@ export const UpdateItem = ({ category }: UpdateItemProps) => {
     );
   }
 
+  const headers = ['ID', ...Object.keys(category.itemShape)];
+
   return (
     <Box>
-      <Typography variant="subtitle1" gutterBottom>
-        {category.name}
-      </Typography>
-      {category.items.map((item) => (
-        <Box key={item.id} sx={{ mb: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton
-              onClick={() => toggleEdit(item.id)}
-              size="small"
-              sx={{ mr: 1 }}
-            >
-              <EditIcon />
-            </IconButton>
-            <Typography variant="body2">Item ID: {item.id}</Typography>
-          </Box>
-          {editItems[item.id] && (
-            <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1, my: 2 }}>
-              <Stack spacing={2}>
-                {Object.keys(category.itemShape).map((key) => (
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Typography variant="subtitle1" gutterBottom>
+          {category.name}
+        </Typography>
+        <Button variant="contained" onClick={handleSave}>
+          Save
+        </Button>
+      </Box>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            {headers.map((header) => (
+              <TableCell key={header}>
+                <Typography variant="subtitle2">{header}</Typography>
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {paginatedItems.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.id}</TableCell>
+              {Object.keys(category.itemShape).map((key) => (
+                <TableCell key={key}>
                   <TextField
-                    key={key}
-                    label={key}
                     value={formValues[item.id]?.[key] || ''}
                     onChange={(e) =>
                       handleInputChange(item.id, key, e.target.value)
@@ -124,29 +129,28 @@ export const UpdateItem = ({ category }: UpdateItemProps) => {
                     variant="outlined"
                     size="small"
                     fullWidth
+                    sx={{
+                      '& .MuiInputBase-root': {
+                        height: '32px'
+                      }
+                    }}
                   />
-                ))}
-                <Box
-                  sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}
-                >
-                  <Button
-                    onClick={() => handleCancel(item.id)}
-                    variant="outlined"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() => handleUpdate(item.id)}
-                    variant="contained"
-                  >
-                    Save
-                  </Button>
-                </Box>
-              </Stack>
-            </Box>
-          )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+          />
         </Box>
-      ))}
+      )}
     </Box>
   );
 };
