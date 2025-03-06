@@ -27,26 +27,15 @@ const initialState: State = {
 				Status: "string",
 				"Last Updated": "string",
 			},
-			items: [
-				{
-					id: 1,
-					data: {
-						Name: "R1-D1",
-						Location: "London",
-						Status: "Online",
-						"Last Updated": new Date().toISOString(),
-					},
+			items: Array.from({ length: 300 }, (_, index) => ({
+				id: index + 1,
+				data: {
+					Name: `R1-D${index + 1}`,
+					Location: index % 2 === 0 ? "London" : "Riyadh",
+					Status: index % 3 === 0 ? "Offline" : "Online",
+					"Last Updated": new Date().toISOString(),
 				},
-				{
-					id: 2,
-					data: {
-						Name: "R1-D2",
-						Location: "Ridyah",
-						Status: "Offline",
-						"Last Updated": new Date().toISOString(),
-					},
-				},
-			],
+			})),
 		},
 		{
 			id: 1,
@@ -72,6 +61,20 @@ const initialState: State = {
 				},
 			],
 		},
+		// {
+		//   id: 3,
+		//   name: 'Empty Category',
+		//   itemShape: {},
+		//   items: []
+		// },
+		// {
+		//   id: 4,
+		//   name: 'Empty Category With Shape',
+		//   itemShape: {
+		//     Random: 'string'
+		//   },
+		//   items: []
+		// }
 	],
 };
 
