@@ -1,17 +1,5 @@
 import { FormEvent, useState } from "react";
-import {
-	Box,
-	Button,
-	Collapse,
-	IconButton,
-	Stack,
-	TextField,
-	Typography,
-} from "@mui/material";
-import {
-	ExpandMore as ExpandMoreIcon,
-	ExpandLess as ExpandLessIcon,
-} from "@mui/icons-material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useAppDispatch } from "../../../app/hooks";
 import { addedItem, Category } from "../../../features/categoryDataSlice";
 
@@ -20,7 +8,6 @@ interface AddCategoryItemFormProps {
 }
 
 export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
-	const [isOpen, setIsOpen] = useState(true);
 	const [formValues, setFormValues] = useState<Record<string, string>>({});
 	const dispatch = useAppDispatch();
 
