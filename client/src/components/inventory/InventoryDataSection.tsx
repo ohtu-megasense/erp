@@ -1,4 +1,11 @@
-import { Box, Typography } from "@mui/material";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow,
+	Typography,
+} from "@mui/material";
 import { useGetCategoriesQuery } from "../../features/apiSlice";
 
 export const InventoryDataSection = () => {
@@ -9,16 +16,27 @@ export const InventoryDataSection = () => {
 	}
 
 	return (
-		<Box>
-			<Typography variant="h6">Categories Data</Typography>
-			<Typography>Total categories: {data.count}</Typography>
-			<Typography>Total categories: {data.name}</Typography>
-			<Typography>Total categories: {data.item_shape.category_name}</Typography>
-		</Box>
+		<Table>
+			<TableHead>
+				<TableRow>
+					<TableCell>ID</TableCell>
+					<TableCell>Category Name</TableCell>
+					<TableCell>Item Shape</TableCell>
+				</TableRow>
+			</TableHead>
+			<TableBody>
+				{data.item_shape.map((item) => (
+					<TableRow key={item.id}>
+						<TableCell>{item.id}</TableCell>
+						<TableCell>{item.category_name}</TableCell>
+						<TableCell>
+							{Object.entries(item.item_shape).map(([key, val]) => (
+								<Typography key={key}>{`${key}: ${val}`}</Typography>
+							))}
+						</TableCell>
+					</TableRow>
+				))}
+			</TableBody>
+		</Table>
 	);
 };
-/*{data.map((category) => (
-				<Typography key={category.item_shape}>
-					Category name:{category.item_shape}
-				</Typography>
-			))}*/

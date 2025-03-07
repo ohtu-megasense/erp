@@ -66,7 +66,7 @@ export async function GetCategories() {
 		return {
 			name: result_field[0].name,
 			count: result_count,
-			item_shape: result_rows[0],
+			item_shape: result_rows,
 		};
 	} catch (error) {
 		console.error("Error retrieving categories: ", error);
@@ -85,8 +85,9 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 		let sql_text: string = "UPDATE category SET item_shape = %L WHERE id = %L;";
 		const query = format(sql_text, item_shape, category_id);
 		await client.query(query);
-		console.log('category "${category_id}" updated with item shape "${item_shape}"');
-
+		console.log(
+			'category "${category_id}" updated with item shape "${item_shape}"',
+		);
 	} catch (error) {
 		console.error("Error updating category:", error);
 	} finally {
@@ -96,9 +97,7 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 }
 
 if (require.main == module) {
-
 	//Test
 	//AlterCategory("1", {"name": "TEXT", "tilanne": "TEXT", "location": "TEXT"} as any);
-
 	//pass;
 }
