@@ -43,6 +43,12 @@ export const apiSlice = createApi({
 				method: "POST",
 				body: category,
 			}),
+			transformResponse: (response: CategoryResponse, meta, arg) => {
+				return {
+					...response,
+					additionalField: "succee",
+				};
+			},
 		}),
 		addItem: builder.mutation<ItemResponse, Item>({
 			query: (item) => ({
