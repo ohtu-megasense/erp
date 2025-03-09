@@ -12,7 +12,7 @@ const getCaPath = (): string | undefined => {
   }
 
   if (env === 'production') {
-    return '../../etc/certs/ca.pem';
+    return '/etc/certs/ca.pem';
   }
 
   // NOTE: Development mode should really not use caPath
