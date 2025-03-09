@@ -18,19 +18,14 @@ const getDatabaseClient = (): Client => {
   if (process.env.NODE_ENV === 'production') {
     const caPath = getCaPath();
     logger.info(
-      `Database certificate authority file is using path: ${caPath}.`
+      `Database certificate authority file for pg.Client is using path: ${caPath}.`
     );
 
     if (!caPath) {
       throw new Error(
-        'Certificate authority path is undefined. Is the process node env in production mode?'
+        'Certificate authority path for pg.Client is undefined. Is the process node env in production mode?'
       );
     }
-
-    logger.info(
-      'Certificate file content: ',
-      fs.readFileSync(caPath).toString()
-    );
 
     return new Client({
       connectionString: database_URL,
@@ -50,19 +45,14 @@ const getDatabasePool = (): Pool => {
   if (process.env.NODE_ENV === 'production') {
     const caPath = getCaPath();
     logger.info(
-      `Database certificate authority file is using path: ${caPath}.`
+      `Database certificate authority file for pg.Pool is using path: ${caPath}.`
     );
 
     if (!caPath) {
       throw new Error(
-        'Certificate authority path is undefined. Is the process node env in production mode?'
+        'Certificate authority path for pg.Pool is undefined. Is the process node env in production mode?'
       );
     }
-
-    logger.info(
-      'Certificate file content: ',
-      fs.readFileSync(caPath).toString()
-    );
 
     return new Pool({
       connectionString: database_URL,
