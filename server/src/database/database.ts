@@ -4,10 +4,37 @@ import fs from 'fs';
 import path from 'path';
 import logger from '../utils/logger';
 
-const caPath = path.join(__dirname, '../../development_certificate.pem');
+const getCaPath = (): string | undefined => {
+  const env = process.env.NODE_ENV;
+
+  if (!env) {
+    return undefined;
+  }
+
+  if (env === 'production') {
+    return '/etc/certs/ca.pem';
+  }
+
+  // NOTE: Development mode should really not use caPath
+  // but it can be useful for local debugging.
+  if (env === 'development') {
+    return path.join(__dirname, '../../etc/certs/ca.pem');
+  }
+};
 
 const getDatabaseClient = (): Client => {
   if (process.env.NODE_ENV === 'production') {
+    const caPath = getCaPath();
+    logger.info(
+      `Database certificate authority file is using path: ${caPath}.`
+    );
+
+    if (!caPath) {
+      throw new Error(
+        'Certificate authority path is undefined. Is the process node env in production mode?'
+      );
+    }
+
     return new Client({
       connectionString: database_URL,
       ssl: {
@@ -27,8 +54,6 @@ export const client = getDatabaseClient();
 export const connectToDatabase = async (): Promise<{
   isConnectionSuccessful: boolean;
 }> => {
-  logger.info(`Database certificate authority file is using path: ${caPath}.`);
-
   try {
     await client.connect();
     logger.info('Connected to database.');
