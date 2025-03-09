@@ -6,13 +6,23 @@ import logger from '../utils/logger';
 
 const caPath = path.join(__dirname, '../../development_certificate.pem');
 
-export const client = new Client({
-  connectionString: database_URL,
-  ssl: {
-    rejectUnauthorized: true,
-    ca: fs.readFileSync(caPath).toString()
+const getDatabaseClient = (): Client => {
+  if (process.env.NODE_ENV === 'production') {
+    return new Client({
+      connectionString: database_URL,
+      ssl: {
+        rejectUnauthorized: true,
+        ca: fs.readFileSync(caPath).toString()
+      }
+    });
   }
-});
+
+  return new Client({
+    connectionString: database_URL
+  });
+};
+
+export const client = getDatabaseClient();
 
 export const connectToDatabase = async (): Promise<{
   isConnectionSuccessful: boolean;
