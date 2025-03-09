@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import { Client, Pool } from 'pg';
 import { database_URL } from '../config';
 import fs from 'fs';
 import path from 'path';
@@ -46,7 +46,44 @@ const getDatabaseClient = (): Client => {
   });
 };
 
-export const client = getDatabaseClient();
+const getDatabasePool = (): Pool => {
+  if (process.env.NODE_ENV === 'production') {
+    const caPath = getCaPath();
+    logger.info(
+      `Database certificate authority file is using path: ${caPath}.`
+    );
+
+    if (!caPath) {
+      throw new Error(
+        'Certificate authority path is undefined. Is the process node env in production mode?'
+      );
+    }
+
+    logger.info(
+      'Certificate file content: ',
+      fs.readFileSync(caPath).toString()
+    );
+
+    return new Pool({
+      connectionString: database_URL,
+      ssl: {
+        rejectUnauthorized: true,
+        ca: fs.readFileSync(caPath).toString()
+      }
+    });
+  }
+
+  return new Pool({
+    connectionString: database_URL
+  });
+};
+
+// Client is used for checking if
+// database connection can be established
+// successfully and for load schema script.
+const client = getDatabaseClient();
+
+export const pool = getDatabasePool();
 
 export const connectToDatabase = async (): Promise<{
   isConnectionSuccessful: boolean;

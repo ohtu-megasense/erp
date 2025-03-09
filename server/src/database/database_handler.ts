@@ -1,5 +1,6 @@
 import format from 'pg-format';
-import { client } from './database';
+import logger from '../utils/logger';
+import { pool } from './database';
 
 export async function AddCategory(category_name: string, item_shape: JSON) {
   try {
@@ -12,7 +13,7 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
     console.log(item_shape);
 
     const query = format(sql_text, category_name, item_shape);
-    await client.query(query);
+    await pool.query(query);
 
     console.log(
       'category "${category_name}" with item shape "${item_shape}" added'
@@ -32,7 +33,7 @@ export async function AddItem(category_id: string, item_data: JSON) {
     console.log(item_data);
 
     const query = format(sql_text, category_id, item_data);
-    await client.query(query);
+    await pool.query(query);
 
     console.log(
       'category "${category_id}" with item data "${item_data}" added'
@@ -41,3 +42,9 @@ export async function AddItem(category_id: string, item_data: JSON) {
     console.error('Error adding item:', error);
   }
 }
+
+export const testLogCategories = async () => {
+  const sqlText = `SELECT id, category_name, item_shape FROM category;`;
+  const result = await pool.query(sqlText);
+  logger.info('Categories from database', result.rows);
+};
