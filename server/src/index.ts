@@ -1,13 +1,13 @@
 import logger from './utils/logger';
 import app from './app';
-import { connectToDatabase } from './database/database';
+import { testDatabaseConnection } from './database/database';
 import { port } from './config';
 import { testLogCategories } from './database/database_handler';
 
 const startServer = async () => {
   logger.info(`Starting server with node env ${process.env.NODE_ENV}.`);
 
-  const { isConnectionSuccessful } = await connectToDatabase();
+  const { isConnectionSuccessful } = await testDatabaseConnection();
 
   // NOTE: Just for testing if categories can be queried.
   try {
