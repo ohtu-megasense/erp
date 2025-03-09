@@ -85,12 +85,15 @@ const client = getDatabaseClient();
 
 export const pool = getDatabasePool();
 
-export const connectToDatabase = async (): Promise<{
+export const testDatabaseConnection = async (): Promise<{
   isConnectionSuccessful: boolean;
 }> => {
   try {
     await client.connect();
-    logger.info('Connected to database.');
+
+    logger.info('Data base connection successful.');
+
+    await client.end();
 
     return {
       isConnectionSuccessful: true
