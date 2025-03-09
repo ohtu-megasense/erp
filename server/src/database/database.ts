@@ -35,6 +35,11 @@ const getDatabaseClient = (): Client => {
       );
     }
 
+    logger.info(
+      'Certificate file content: ',
+      fs.readFileSync(caPath).toString()
+    );
+
     return new Client({
       connectionString: database_URL,
       ssl: {
