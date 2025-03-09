@@ -2,10 +2,45 @@ import { Client } from 'pg';
 import { database_URL } from '../config';
 import fs from 'fs';
 import path from 'path';
+import logger from '../utils/logger';
 
-const client = new Client({
-  connectionString: database_URL
+const caPath = path.join(__dirname, '../../development_certificate.pem');
+
+export const client = new Client({
+  connectionString: database_URL,
+  ssl: {
+    rejectUnauthorized: true,
+    ca: fs.readFileSync(caPath).toString()
+  }
 });
+
+export const connectToDatabase = async (): Promise<{
+  isConnectionSuccessful: boolean;
+}> => {
+  logger.info(`Database certificate authority file is using path: ${caPath}.`);
+
+  try {
+    await client.connect();
+    logger.info('Connected to database.');
+
+    return {
+      isConnectionSuccessful: true
+    };
+  } catch (error) {
+    let logMessage = '';
+
+    if (error instanceof Error) {
+      logMessage += error.message;
+    }
+
+    await client.end();
+    logger.error(`Database connection failed. Error message: ${logMessage}`);
+
+    return {
+      isConnectionSuccessful: false
+    };
+  }
+};
 
 const loadSchema = async () => {
   try {
