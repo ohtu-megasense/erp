@@ -1,5 +1,6 @@
 import format from 'pg-format';
 import { client } from './database';
+import logger from '../utils/logger';
 
 export async function AddCategory(category_name: string, item_shape: JSON) {
   try {
@@ -41,3 +42,9 @@ export async function AddItem(category_id: string, item_data: JSON) {
     console.error('Error adding item:', error);
   }
 }
+
+export const testLogCategories = async () => {
+  const sqlText = `SELECT id, category_name, item_shape FROM category;`;
+  const result = await client.query(sqlText);
+  logger.info('Categories from database', result);
+};
