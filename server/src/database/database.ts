@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import logger from '../utils/logger';
 
-const caPath = path.join(__dirname, '../../development_certificate.pem');
+const caPath = path.join(__dirname, '../../etc/certs/ca.pem');
 
 const getDatabaseClient = (): Client => {
   if (process.env.NODE_ENV === 'production') {
