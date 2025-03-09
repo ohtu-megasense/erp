@@ -8,7 +8,7 @@ services:
       - /app/node_modules
     command: sh -c "npm ci && npm run dev -- --host"
     environment:
-      NODE_ENV: dev
+      NODE_ENV: development
     ports:
       - 5173:5173
       - 24678:24678 # Vite Hot Module Replacement
@@ -22,7 +22,7 @@ services:
       - /app/node_modules
     command: sh -c "npm ci && npm run dev"
     environment:
-      NODE_ENV: dev
+      NODE_ENV: development
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
     ports:
       - 3000:3000
