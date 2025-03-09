@@ -7,19 +7,11 @@ import logger from '../utils/logger';
 const getCaPath = (): string | undefined => {
   const env = process.env.NODE_ENV;
 
-  if (!env) {
-    return undefined;
-  }
-
   if (env === 'production') {
-    return '/etc/certs/ca.pem';
+    return process.env.CA_PATH || path.join(__dirname, '../../ca.pem');
   }
 
-  // NOTE: Development mode should really not use caPath
-  // but it can be useful for local debugging.
-  if (env === 'development') {
-    return path.join(__dirname, '../../etc/certs/ca.pem');
-  }
+  return undefined;
 };
 
 const getDatabaseClient = (): Client => {
