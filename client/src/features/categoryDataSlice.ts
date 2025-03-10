@@ -17,65 +17,7 @@ interface State {
 }
 
 const initialState: State = {
-	categoriesData: [
-		{
-			id: 0,
-			name: "Hardware Sensors",
-			itemShape: {
-				Name: "string",
-				Location: "string",
-				Status: "string",
-				"Last Updated": "string",
-			},
-			items: Array.from({ length: 300 }, (_, index) => ({
-				id: index + 1,
-				data: {
-					Name: `R1-D${index + 1}`,
-					Location: index % 2 === 0 ? "London" : "Riyadh",
-					Status: index % 3 === 0 ? "Offline" : "Online",
-					"Last Updated": new Date().toISOString(),
-				},
-			})),
-		},
-		{
-			id: 1,
-			name: "AWS",
-			itemShape: {
-				"Service Name": "string",
-				"Monthly Cost": "string",
-			},
-			items: [
-				{
-					id: 3,
-					data: {
-						"Service Name": "Bedrock Knowledge Base",
-						"Monthly Cost": "2500",
-					},
-				},
-				{
-					id: 4,
-					data: {
-						"Service Name": "Elasticsearch",
-						"Monthly Cost": "2500",
-					},
-				},
-			],
-		},
-		// {
-		//   id: 3,
-		//   name: 'Empty Category',
-		//   itemShape: {},
-		//   items: []
-		// },
-		// {
-		//   id: 4,
-		//   name: 'Empty Category With Shape',
-		//   itemShape: {
-		//     Random: 'string'
-		//   },
-		//   items: []
-		// }
-	],
+	categoriesData: [],
 };
 
 interface ValidateShapeParams {

@@ -91,11 +91,10 @@ export const AddCategoryForm = () => {
 			);
 
 			// Tyhjennä lomake
-			/*setFormValues({ name: "" });
+			setFormValues({ name: "" });
 			setPropertyCount(0);
 			setIsOpen(false);
 			setError(null);
-		*/
 		} catch (error) {
 			console.log("Error adding new category", error);
 		}
