@@ -43,7 +43,7 @@ export const apiSlice = createApi({
 				method: "POST",
 				body: category,
 			}),
-			transformResponse: (response: CategoryResponse, meta, arg) => {
+			transformResponse: (response: CategoryResponse) => {
 				return {
 					...response,
 					additionalField: "succee",
