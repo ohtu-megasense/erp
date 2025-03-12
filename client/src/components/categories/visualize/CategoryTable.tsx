@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Category } from '../../../features/categoryDataSlice';
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface CategoryTableProps {
   category: Category;
@@ -150,6 +151,8 @@ export const CategoryTable = forwardRef(
                     )}
                   </TableCell>
                 ))}
+
+                {isEditing && <DeleteIcon/>}
               </TableRow>
             ))}
           </TableBody>
