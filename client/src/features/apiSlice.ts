@@ -11,11 +11,6 @@ interface CategoryList {
 	count: number;
 }
 
-interface CategoryResponse {
-	success: boolean; // true/false if the category was added successfully in backend/server
-	data: Category; // added Category object
-}
-
 interface ItemResponse {
 	success: boolean;
 	data: Item;
@@ -47,18 +42,12 @@ export const apiSlice = createApi({
 		//mutation used for POST requests to server/backend.
 		//CategoryResponse = expected response from server/backend
 		//Category = category_name to be sent to server/backend
-		addCategory: builder.mutation<CategoryResponse, Category>({
+		addCategory: builder.mutation<Category, Category>({
 			query: (category) => ({
 				url: "manage/categories",
 				method: "POST",
 				body: category,
 			}),
-			transformResponse: (response: CategoryResponse, meta, arg) => {
-				return {
-					...response,
-					additionalField: "succee",
-				};
-			},
 		}),
 		addItem: builder.mutation<ItemResponse, Item>({
 			query: (item) => ({

@@ -12,16 +12,22 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 		console.log("Connected to database addcategory");
 		let sql_text: string =
 			"INSERT INTO category (category_name, item_shape) VALUES (";
-		sql_text += "%L, %L);";
+		sql_text += "%L, %L) RETURNING category_name, item_shape;";
 		console.log(sql_text);
 		console.log(category_name);
 		console.log(item_shape);
 
 		const query = format(sql_text, category_name, item_shape);
-		await client.query(query);
+		const result = await client.query(query);
 		console.log(
 			'category "${category_name}" with item shape "${item_shape}" added',
 		);
+		return result.rows.map((row) => ({
+			id: row.id,
+			name: row.category_name,
+			itemShape: row.item_shape || {},
+			items: row.items || [],
+		}));
 	} catch (error) {
 		console.error("Error adding category:", error);
 	} finally {
