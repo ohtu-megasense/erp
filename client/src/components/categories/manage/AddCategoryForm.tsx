@@ -29,7 +29,7 @@ export const AddCategoryForm = () => {
 	const dispatch = useAppDispatch();
 
 	// 2. Kutsu mutaatiohook, josta saadaan funktio addCategoryMutation
-	const [addCategoryMutation, {isLoading}] = useAddCategoryMutation();
+	const [addCategoryMutation] = useAddCategoryMutation();
 
 	const handleInputChange = (key: string, value: string) => {
 		setFormValues((prev) => ({
