@@ -1,15 +1,12 @@
-
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Category, Item } from './categoryDataSlice';
-
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface PingResponse {
-  message: string;
+	message: string;
 }
 
 interface ItemResponse {
-  success: boolean;
-  data: Item;
+	success: boolean;
+	data: Item;
 }
 export interface Item {
 	id: number;
@@ -24,7 +21,6 @@ export interface Category {
 }
 
 export const apiSlice = createApi({
-
 	reducerPath: "api",
 	baseQuery: fetchBaseQuery({
 		baseUrl: "/api",
@@ -57,22 +53,20 @@ export const apiSlice = createApi({
 			}),
 			invalidatesTags: ["Item"],
 		}),
-       deleteItem: builder.mutation<ItemResponse, number>({
-      query: (id) => ({
-        url: `items/${id}`,
-        method: 'DELETE',
-        body: id
-        }),
-      }),
+		deleteItem: builder.mutation<ItemResponse, number>({
+			query: (id) => ({
+				url: `items/${id}`,
+				method: "DELETE",
+				body: id,
+			}),
+		}),
 	}),
 });
 
 export const {
-  useGetPingQuery,
-  useGetInventoryQuery,
-  useAddCategoryMutation,
-  useAddItemMutation,
-  useDeleteItemMutation
-
-});
+	useGetPingQuery,
+	useGetCategoriesQuery,
+	useAddCategoryMutation,
+	useAddItemMutation,
+	useDeleteItemMutation,
 } = apiSlice;
