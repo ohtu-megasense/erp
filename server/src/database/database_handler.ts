@@ -71,7 +71,7 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 if (require.main == module) {
 
 	//Test
-	AlterCategory("1", {"name": "TEXT", "situation": "TEXT", "position": "TEXT"} as any);
+	//AlterCategory("1", {"name": "TEXT", "situation": "TEXT", "position": "TEXT"} as any);
 
 	//pass;
 }
