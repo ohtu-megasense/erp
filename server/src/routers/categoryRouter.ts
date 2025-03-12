@@ -11,7 +11,7 @@ router.post("/", (req, res) => {
 	const { name, itemShape } = req.body; // extracting name from request body as string
 	console.log("routerissa:", name, itemShape);
 
-	if (!name || !itemShape) {
+	if (!name || Object.keys(itemShape).length === 0) {
 		console.error("Category needs name or item needs shape");
 		res
 			.status(500)
