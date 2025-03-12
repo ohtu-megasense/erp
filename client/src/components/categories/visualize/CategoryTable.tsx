@@ -156,13 +156,15 @@ export const CategoryTable = forwardRef(
                 ))}
 
                 {isEditing && (
-                  <IconButton
-                    onClick={() => deleteItemMutation(item.id)}
-                    size="small"
-                    color="error"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                  <TableCell sx={{ fontSize: '0.0125rem' }}>
+                    <IconButton
+                      onClick={() => deleteItemMutation(item.id)}
+                      size="small"
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 )}
               </TableRow>
             ))}
