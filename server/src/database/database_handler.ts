@@ -48,3 +48,30 @@ export const testLogCategories = async () => {
   const result = await pool.query(sqlText);
   logger.info('Categories from database', result.rows);
 };
+
+export async function AlterCategory(category_id: string, item_shape: JSON) {
+	const client = await pool.connect();
+	try {
+		console.log("Connected to database AlterCategory");
+
+		//updating the item_shape JSON of a category, replacing it with a new JSON structure
+		const sql_text: string = "UPDATE category SET item_shape = %L WHERE id = %L;";
+		const query = format(sql_text, item_shape, category_id);
+		await client.query(query);
+		console.log('category "${category_id}" updated with item shape "${item_shape}"');
+
+	} catch (error) {
+		console.error("Error updating category:", error);
+	} finally {
+		client.release();
+		console.log("Disconnected from database AlterCategory")
+	}
+}
+
+if (require.main == module) {
+
+	//Test
+	//AlterCategory("1", {"nimi": "TEXT", "situation": "TEXT", "position": "TEXT"} as any);
+
+	//pass;
+}
