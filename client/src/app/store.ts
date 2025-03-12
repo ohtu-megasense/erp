@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '../features/apiSlice';
-import exampleSlice from '../features/exampleSlice';
 import drawerSlice from '../features/drawerSlice';
 import categoryDataSlice from '../features/categoryDataSlice';
 import notificationSlice from '../features/notificationSlice';
@@ -8,7 +7,6 @@ import { notificationMiddleware } from '../features/middleware/notificationMiddl
 
 export const store = configureStore({
   reducer: {
-    example: exampleSlice,
     drawer: drawerSlice,
     categoryData: categoryDataSlice,
     notification: notificationSlice,
