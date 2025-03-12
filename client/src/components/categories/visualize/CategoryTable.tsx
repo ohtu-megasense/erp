@@ -6,12 +6,14 @@ import {
   TableHead,
   TableRow,
   Typography,
+  IconButton,
   Pagination,
   TextField
 } from '@mui/material';
 import { Category } from '../../../features/categoryDataSlice';
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-
+import { Delete as DeleteIcon } from '@mui/icons-material';
+import { useDeleteItemMutation } from '../../../features/apiSlice';
 interface CategoryTableProps {
   category: Category;
   isEditing: boolean;
@@ -27,6 +29,8 @@ export const CategoryTable = forwardRef(
     const itemsPerPage = 10;
 
     const isShapeDefined = Object.keys(category.itemShape).length > 0;
+
+    const [deleteItemMutation] = useDeleteItemMutation();
 
     useEffect(() => {
       if (isEditing) {
@@ -150,6 +154,18 @@ export const CategoryTable = forwardRef(
                     )}
                   </TableCell>
                 ))}
+
+                {isEditing && (
+                  <TableCell sx={{ fontSize: '0.0125rem' }}>
+                    <IconButton
+                      onClick={() => deleteItemMutation(item.id)}
+                      size="small"
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
