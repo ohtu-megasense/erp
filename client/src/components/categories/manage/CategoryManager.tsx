@@ -46,10 +46,6 @@ export const CategoryManager = ({ category }: CategoryManagerProps) => {
     setIsEditing(false);
   };
 
-  // const handleCancel = () => {
-  //   setIsEditing(false);
-  // };
-
   return (
     <Box>
       <Stack
