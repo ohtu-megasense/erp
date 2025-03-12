@@ -4,13 +4,6 @@ interface PingResponse {
 	message: string;
 }
 
-interface CategoryList {
-	id: number;
-	name: string;
-	item_shape: Record<string, unknown>;
-	count: number;
-}
-
 interface ItemResponse {
 	success: boolean;
 	data: Item;
