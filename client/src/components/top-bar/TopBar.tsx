@@ -28,13 +28,6 @@ export const TopBar = () => {
             <>
               <OpenDrawerButton />
               <CompanyLinkSmall />
-              <Divider
-                orientation="vertical"
-                sx={{
-                  height: 24,
-                  bgcolor: 'primary.light'
-                }}
-              />
             </>
           )}
         </Toolbar>
