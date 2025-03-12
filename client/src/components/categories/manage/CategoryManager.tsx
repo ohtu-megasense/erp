@@ -9,16 +9,13 @@ import { updateItem } from "../../../features/categoryDataSlice";
 import { useAppDispatch } from "../../../app/hooks";
 import { AddCategoryItemForm } from "./AddCategoryItemForm";
 import { CategoryTable } from "../visualize/CategoryTable";
-import { useGetCategoriesQuery } from "../../../features/apiSlice";
+import { Category } from "../../../features/apiSlice";
 
 interface CategoryManagerProps {
 	category: Category;
 }
 
 export const CategoryManager = ({ category }: CategoryManagerProps) => {
-	const { data } = useGetCategoriesQuery();
-
-	const categoriesData = data === undefined ? [] : data;
 	const [isEditing, setIsEditing] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
 	const tableRef = useRef<{

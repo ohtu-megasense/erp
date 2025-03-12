@@ -28,6 +28,7 @@ export const CategoryTable = forwardRef(
 
 		const isShapeDefined = Object.keys(category.itemShape).length > 0;
 
+		console.log(isShapeDefined);
 		useEffect(() => {
 			if (isEditing) {
 				const initialValues = category.items.reduce(
@@ -89,7 +90,7 @@ export const CategoryTable = forwardRef(
 			);
 		}
 
-		if (category.items.length === 0) {
+		if (category.items.length === 1) {
 			return (
 				<Box>
 					<Typography variant="caption">No items added</Typography>

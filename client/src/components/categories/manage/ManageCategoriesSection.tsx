@@ -3,9 +3,8 @@ import { CategoryManager } from "./CategoryManager";
 import { useGetCategoriesQuery } from "../../../features/apiSlice";
 
 export const ManageCategoriesSection = () => {
-	const { data } = useGetCategoriesQuery();
-
-	const categoriesData = data === undefined ? [] : data;
+	const { data: categoriesData = [] } = useGetCategoriesQuery();
+	console.log(categoriesData);
 	return (
 		<Stack gap={4}>
 			{categoriesData.map((category) => {

@@ -34,7 +34,7 @@ export async function AddItem(category_id: string, item_data: JSON) {
 	try {
 		console.log("Connected to database additem");
 		let sql_text: string = "INSERT INTO item (category_id, item_data) VALUES (";
-		sql_text += "'%L, %L);";
+		sql_text += "%L, %L);";
 		console.log(sql_text);
 		console.log(category_id);
 		console.log(item_data);
@@ -64,7 +64,7 @@ export async function GetCategories() {
 
 		return result.rows.map((row) => ({
 			id: row.id,
-			name: row.name,
+			name: row.category_name,
 			itemShape: row.item_shape || {},
 			items: row.items || [],
 		}));

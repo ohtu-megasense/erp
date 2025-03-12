@@ -1,7 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { useAppDispatch } from "../../../app/hooks";
-import { addedItem, Category } from "../../../features/categoryDataSlice";
+import { useAddItemMutation, Category } from "../../../features/apiSlice";
 
 interface AddCategoryItemFormProps {
 	category: Category;
@@ -9,8 +8,7 @@ interface AddCategoryItemFormProps {
 
 export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 	const [formValues, setFormValues] = useState<Record<string, string>>({});
-	const dispatch = useAppDispatch();
-
+	const [addItem] = useAddItemMutation();
 	const shapeKeys = Object.keys(category.itemShape);
 
 	const handleInputChange = (key: string, value: string) => {
@@ -20,7 +18,7 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 		}));
 	};
 
-	const handleSubmit = (event: FormEvent) => {
+	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
 
 		const newItem = shapeKeys.reduce(
@@ -30,13 +28,20 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 			}),
 			{} as Record<string, string>,
 		);
-
-		dispatch(
-			addedItem({
-				categoryId: category.id,
-				item: newItem,
-			}),
-		);
+		try {
+			await addItem({
+				id: category.id,
+				data: newItem,
+			}).unwrap();
+		} catch (error) {
+			console.log("error: ", error);
+		}
+		//		dispatch(
+		//		addedItem({
+		//		categoryId: category.id,
+		//	item: newItem,
+		//	}),
+		//	);
 
 		setFormValues({});
 	};
