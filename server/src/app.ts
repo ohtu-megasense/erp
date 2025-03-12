@@ -18,6 +18,7 @@ app.use('/api/ping', pingRouter);
 app.use('/api/reports/inventory', inventoryRouter);
 app.use('/api/manage/categories', categoryRouter);
 app.use('/api/manage/items', itemRouter);
+app.use('/api/items/id', itemRouter);
 
 app.get('/*', (req, res) => {
   res.status(404).json({ message: 'Unknown endpoint!' });

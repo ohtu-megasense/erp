@@ -1,16 +1,19 @@
 import {
-	Box,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableRow,
-	Typography,
-	Pagination,
-	TextField,
-} from "@mui/material";
-import { Category } from "../../../features/apiSlice";
-import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  IconButton,
+  Pagination,
+  TextField
+} from '@mui/material';
+import { Category } from '../../../features/categoryDataSlice';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { Delete as DeleteIcon } from '@mui/icons-material';
+import { useDeleteItemMutation } from '../../../features/apiSlice';
 
 interface CategoryTableProps {
 	category: Category;
@@ -28,23 +31,26 @@ export const CategoryTable = forwardRef(
 
 		const isShapeDefined = Object.keys(category.itemShape).length > 0;
 
-		console.log(isShapeDefined);
-		useEffect(() => {
-			if (isEditing) {
-				const initialValues = category.items.reduce(
-					(acc, item) => {
-						acc[item.id] = { ...item.data };
-						return acc;
-					},
-					{} as Record<number, Record<string, string>>,
-				);
-				setFormValues(initialValues);
-				setDirtyItems(new Set());
-			} else {
-				setFormValues({});
-				setDirtyItems(new Set());
-			}
-		}, [isEditing, category.items]);
+
+    const [deleteItemMutation] = useDeleteItemMutation();
+
+    useEffect(() => {
+      if (isEditing) {
+        const initialValues = category.items.reduce(
+          (acc, item) => {
+            acc[item.id] = { ...item.data };
+            return acc;
+          },
+          {} as Record<number, Record<string, string>>
+        );
+        setFormValues(initialValues);
+        setDirtyItems(new Set());
+      } else {
+        setFormValues({});
+        setDirtyItems(new Set());
+      }
+    }, [isEditing, category.items]);
+
 
 		const handleInputChange = (itemId: number, key: string, value: string) => {
 			setFormValues((prev) => ({
@@ -98,81 +104,95 @@ export const CategoryTable = forwardRef(
 			);
 		}
 
-		return (
-			<Box
-				sx={{
-					overflowX: "auto",
-				}}
-			>
-				<Table size="small">
-					<TableHead>
-						<TableRow>
-							<TableCell sx={{ fontSize: "0.8125rem" }}>ID</TableCell>
-							{Object.keys(category.itemShape).map((key) => (
-								<TableCell key={key} sx={{ fontSize: "0.8125rem" }}>
-									{key}
-								</TableCell>
-							))}
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{paginatedItems.map((item) => (
-							<TableRow key={item.id}>
-								<TableCell sx={{ fontSize: "0.8125rem" }}>{item.id}</TableCell>
-								{Object.keys(category.itemShape).map((key) => (
-									<TableCell
-										key={key}
-										sx={{
-											fontSize: "0.8125rem",
-										}}
-									>
-										{isEditing ? (
-											<TextField
-												value={formValues[item.id]?.[key] || ""}
-												onChange={(e) =>
-													handleInputChange(item.id, key, e.target.value)
-												}
-												variant="outlined"
-												size="small"
-												fullWidth={true}
-												sx={{
-													minWidth: inputFieldMinWidth,
-													"& .MuiInputBase-root": {
-														height: "24px",
-														fontSize: "0.8125rem", // Match TableCell font size
-													},
-													"& .MuiOutlinedInput-notchedOutline": {
-														borderWidth: "1px", // Keep border thin for density
-													},
-												}}
-											/>
-										) : (
-											item.data[key] || ""
-										)}
-									</TableCell>
-								))}
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-				{totalPages > 1 && (
-					<Box
-						sx={{
-							display: "flex",
-							justifyContent: "center",
-							py: 1,
-						}}
-					>
-						<Pagination
-							count={totalPages}
-							page={page}
-							onChange={handlePageChange}
-							color="primary"
-							size="small"
-						/>
-					</Box>
-				)}
-			</Box>
-		);
-	},
+
+    return (
+      <Box
+        sx={{
+          overflowX: 'auto'
+        }}
+      >
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontSize: '0.8125rem' }}>ID</TableCell>
+              {Object.keys(category.itemShape).map((key) => (
+                <TableCell key={key} sx={{ fontSize: '0.8125rem' }}>
+                  {key}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {paginatedItems.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell sx={{ fontSize: '0.8125rem' }}>{item.id}</TableCell>
+                {Object.keys(category.itemShape).map((key) => (
+                  <TableCell
+                    key={key}
+                    sx={{
+                      fontSize: '0.8125rem'
+                    }}
+                  >
+                    {isEditing ? (
+                      <TextField
+                        value={formValues[item.id]?.[key] || ''}
+                        onChange={(e) =>
+                          handleInputChange(item.id, key, e.target.value)
+                        }
+                        variant="outlined"
+                        size="small"
+                        fullWidth={true}
+                        sx={{
+                          minWidth: inputFieldMinWidth,
+                          '& .MuiInputBase-root': {
+                            height: '24px',
+                            fontSize: '0.8125rem' // Match TableCell font size
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderWidth: '1px' // Keep border thin for density
+                          }
+                        }}
+                      />
+                    ) : (
+                      item.data[key] || ''
+                    )}
+                  </TableCell>
+                ))}
+
+                {isEditing && (
+                  <TableCell sx={{ fontSize: '0.0125rem' }}>
+                    <IconButton
+                      onClick={() => deleteItemMutation(item.id)}
+                      size="small"
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {totalPages > 1 && (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              py: 1
+            }}
+          >
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              size="small"
+            />
+          </Box>
+        )}
+      </Box>
+    );
+  }
+
 );
