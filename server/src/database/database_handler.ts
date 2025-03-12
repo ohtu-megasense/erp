@@ -55,7 +55,7 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 		console.log("Connected to database AlterCategory");
 
 		//updating the item_shape JSON of a category, replacing it with a new JSON structure
-		let sql_text: string = "UPDATE category SET item_shape = %L WHERE id = %L;";
+		const sql_text: string = "UPDATE category SET item_shape = %L WHERE id = %L;";
 		const query = format(sql_text, item_shape, category_id);
 		await client.query(query);
 		console.log('category "${category_id}" updated with item shape "${item_shape}"');
@@ -71,7 +71,7 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 if (require.main == module) {
 
 	//Test
-	//AlterCategory("1", {"name": "TEXT", "situation": "TEXT", "position": "TEXT"} as any);
+	//AlterCategory("1", {"nimi": "TEXT", "situation": "TEXT", "position": "TEXT"} as any);
 
 	//pass;
 }
