@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AddCategory } from "../database/database_handler";
+import { AddCategory, AlterCategory } from "../database/database_handler";
 
 const router = Router();
 
@@ -20,6 +20,26 @@ router.post("/", (req, res) => {
 		.catch((error) => {
 			console.error("Error adding category:", error); // adding error message to console
 			res.status(500).json({ error: "Internal server error" }); // adding error message so that client/frontend can display it
+		});
+});
+
+router.put("/:categoryId", (req, res) => {
+	const { categoryId } = req.params;
+	const { itemShape } = req.body;
+
+	if (!categoryId || !itemShape) {
+		console.error("Category ID and new item shape are required");
+		res
+			.status(400)
+			.json({ error: "Category ID and item shape are required" });
+		return;
+	}
+
+	AlterCategory(categoryId, itemShape)
+		.then(() => res.json({ message: `Category ${categoryId} updated successfully` }))
+		.catch((error) => {
+			console.error("Error updating category:", error);
+			res.status(500).json({ error: "Internal server error" });
 		});
 });
 
