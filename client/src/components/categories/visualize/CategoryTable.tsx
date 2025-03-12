@@ -90,7 +90,7 @@ export const CategoryTable = forwardRef(
 			);
 		}
 
-		if (category.items.length === 1) {
+		if (category.items[0].data === null) {
 			return (
 				<Box>
 					<Typography variant="caption">No items added</Typography>

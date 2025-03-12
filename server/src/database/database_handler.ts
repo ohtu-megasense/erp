@@ -1,13 +1,8 @@
-import { Pool } from "pg";
 import format from "pg-format";
-import { database_URL } from "../config";
-
-const pool = new Pool({
-	connectionString: database_URL,
-});
+import logger from "../utils/logger";
+import { pool } from "./database";
 
 export async function AddCategory(category_name: string, item_shape: JSON) {
-	const client = await pool.connect();
 	try {
 		console.log("Connected to database addcategory");
 		let sql_text: string =
@@ -18,7 +13,7 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 		console.log(item_shape);
 
 		const query = format(sql_text, category_name, item_shape);
-		const result = await client.query(query);
+		const result = await pool.query(query);
 		console.log(
 			'category "${category_name}" with item shape "${item_shape}" added',
 		);
@@ -31,32 +26,37 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 	} catch (error) {
 		console.error("Error adding category:", error);
 	} finally {
-		client.release();
 		console.log("Disconnected from the database");
 	}
 }
+
 export async function AddItem(category_id: string, item_data: JSON) {
-	const client = await pool.connect();
 	try {
-		console.log("Connected to database additem");
 		let sql_text: string = "INSERT INTO item (category_id, item_data) VALUES (";
 		sql_text += "%L, %L);";
+
 		console.log(sql_text);
 		console.log(category_id);
 		console.log(item_data);
 
 		const query = format(sql_text, category_id, item_data);
-		await client.query(query);
+		await pool.query(query);
+
 		console.log(
 			'category "${category_id}" with item data "${item_data}" added',
 		);
 	} catch (error) {
 		console.error("Error adding item:", error);
 	} finally {
-		client.release();
 		console.log("Disconnected from the database");
 	}
 }
+
+export const testLogCategories = async () => {
+	const sqlText = `SELECT id, category_name, item_shape FROM category;`;
+	const result = await pool.query(sqlText);
+	logger.info("Categories from database", result.rows);
+};
 
 export async function GetCategories() {
 	const client = await pool.connect();
@@ -104,7 +104,5 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 }
 
 if (require.main == module) {
-	//Test
-	//AlterCategory("1", {"name": "TEXT", "tilanne": "TEXT", "location": "TEXT"} as any);
-	//pass;
+	//
 }

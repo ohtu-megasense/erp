@@ -41,6 +41,8 @@ RUN chmod 755 .
 USER 1001
 
 ENV PORT=3000
+ENV NODE_ENV=production
+ENV CA_PATH=/etc/certs/ca.pem
 
 EXPOSE 3000
 

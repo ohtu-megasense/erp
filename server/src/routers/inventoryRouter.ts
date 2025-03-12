@@ -1,12 +1,8 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 const router = Router();
 
-//router.get('/', (req, res) => {
-//});
-
-/**
-router.get('/api/reports/inventory', (req, res) => {
+router.get('/', (req, res) => {
   res.json({
     total_sensors: 150,
     active_sensors: 130,
@@ -15,6 +11,5 @@ router.get('/api/reports/inventory', (req, res) => {
     monthly_api_usage: 25000
   });
 });
-*/
 
 export default router;

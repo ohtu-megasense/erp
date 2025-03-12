@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { AddCategory, GetCategories, AlterCategory } from "../database/database_handler";
+import {
+	AddCategory,
+	GetCategories,
+	AlterCategory,
+} from "../database/database_handler";
 
 const router = Router();
 
@@ -35,19 +39,18 @@ router.put("/:categoryId", (req, res) => {
 
 	if (!categoryId || !itemShape) {
 		console.error("Category ID and new item shape are required");
-		res
-			.status(400)
-			.json({ error: "Category ID and item shape are required" });
+		res.status(400).json({ error: "Category ID and item shape are required" });
 		return;
 	}
 
 	AlterCategory(categoryId, itemShape)
-		.then(() => res.json({ message: `Category ${categoryId} updated successfully` }))
+		.then(() =>
+			res.json({ message: `Category ${categoryId} updated successfully` }),
+		)
 		.catch((error) => {
 			console.error("Error updating category:", error);
 			res.status(500).json({ error: "Internal server error" });
 		});
 });
-
 
 export default router;
