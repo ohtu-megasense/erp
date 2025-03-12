@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { AddItem } from "../database/database_handler";
-import { DeleteItem } from "../database/database_handler";
+import { AddItem, DeleteItem, CheckItemIdFound } from "../database/database_handler";
 
 const router = Router();
 
@@ -27,9 +26,9 @@ router.delete("/:id", (req, res) => {
 	const id = req.params.id;
 	console.log(id)
 
-	if (!id) {
-		console.error("invalid request, missing name or data");
-		res.status(400).json({ error: "item_id is required" });
+	if (!CheckItemIdFound(id)) {
+		console.error("did not find the item by ID");
+		res.status(400).json({ error: "did not find the item by ID" });
 		return;
 	}
 

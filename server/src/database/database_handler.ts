@@ -60,6 +60,30 @@ export async function DeleteItem(item_id: string) {
   }
 }
 
+export async function CheckItemIdFound(item_id: string): Promise<boolean> {
+  try {
+    let sql_text: string = "SELECT * FROM item WHERE id=";
+    sql_text += "%L;";
+
+    console.log(sql_text);
+    console.log("printing item id:", item_id);
+
+    const query = format(sql_text, item_id);
+    const result = await pool.query(query);
+
+    console.log(result.rows.length);
+    if (result.rows.length==1) {
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch (error) {
+    console.error('Error finding the item by ID:', error);
+    return false;
+  }
+}
+
 export const testLogCategories = async () => {
   const sqlText = `SELECT id, category_name, item_shape FROM category;`;
   const result = await pool.query(sqlText);
