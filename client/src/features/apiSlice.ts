@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Category, Item } from "./categoryDataSlice";
 
 interface PingResponse {
 	message: string;
@@ -21,6 +20,17 @@ interface ItemResponse {
 	success: boolean;
 	data: Item;
 }
+export interface Item {
+	id: number;
+	data: Record<string, string>;
+}
+
+export interface Category {
+	id: number;
+	name: string;
+	itemShape: Record<string, string>;
+	items: Item[];
+}
 
 export const apiSlice = createApi({
 	reducerPath: "api",
@@ -31,7 +41,7 @@ export const apiSlice = createApi({
 		getPing: builder.query<PingResponse, void>({
 			query: () => "ping",
 		}),
-		getCategories: builder.query<CategoryList, void>({
+		getCategories: builder.query<Category[], void>({
 			query: () => "manage/categories",
 		}),
 		//mutation used for POST requests to server/backend.

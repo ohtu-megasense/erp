@@ -11,10 +11,7 @@ import { useGetCategoriesQuery } from "../../features/apiSlice";
 export const InventoryDataSection = () => {
 	const { data } = useGetCategoriesQuery();
 
-	if (!data) {
-		return null;
-	}
-
+	const categoriesData = data === undefined ? [] : data;
 	return (
 		<Table>
 			<TableHead>
@@ -25,12 +22,12 @@ export const InventoryDataSection = () => {
 				</TableRow>
 			</TableHead>
 			<TableBody>
-				{data.item_shape.map((item) => (
-					<TableRow key={item.id}>
-						<TableCell>{item.id}</TableCell>
-						<TableCell>{item.category_name}</TableCell>
+				{categoriesData.map((items) => (
+					<TableRow key={items.id}>
+						<TableCell>{items.id}</TableCell>
+						<TableCell>{items.name}</TableCell>
 						<TableCell>
-							{Object.entries(item.item_shape).map(([key, val]) => (
+							{Object.entries(items.itemShape).map(([key, val]) => (
 								<Typography key={key}>{`${key}: ${val}`}</Typography>
 							))}
 						</TableCell>
