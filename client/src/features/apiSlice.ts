@@ -25,12 +25,14 @@ export const apiSlice = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: "/api",
 	}),
+	tagTypes: ["Category", "Item"],
 	endpoints: (builder) => ({
 		getPing: builder.query<PingResponse, void>({
 			query: () => "ping",
 		}),
 		getCategories: builder.query<Category[], void>({
 			query: () => "manage/categories",
+			providesTags: ["Category"],
 		}),
 		//mutation used for POST requests to server/backend.
 		//CategoryResponse = expected response from server/backend
@@ -41,6 +43,7 @@ export const apiSlice = createApi({
 				method: "POST",
 				body: category,
 			}),
+			invalidatesTags: ["Category"],
 		}),
 		addItem: builder.mutation<ItemResponse, Item>({
 			query: (item) => ({
@@ -48,6 +51,7 @@ export const apiSlice = createApi({
 				method: "POST",
 				body: item,
 			}),
+			invalidatesTags: ["Item"],
 		}),
 	}),
 });
