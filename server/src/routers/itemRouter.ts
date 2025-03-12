@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { AddItem } from "../database/database_handler";
+import { DeleteItem } from "../database/database_handler";
 
 const router = Router();
 
@@ -19,6 +20,25 @@ router.post("/", (req, res) => {
 			console.error("Error adding item:", error);
 			res.status(500).json({ error: "Internal server error" });
 		});
+});
+
+
+router.post("/:id", (req, res) => {
+	const id = req.params.id;
+	console.log(id)
+
+	if (!id) {
+		console.error("invalid request, missing name or data");
+		res.status(400).json({ error: "item_id is required" });
+		return;
+	}
+
+	DeleteItem(id)
+	.then((data) => res.json(data))
+	.catch((error) => {
+		console.error("Error deleting item:", error);
+		res.status(500).json({ error: "Internal server error" });
+	});
 });
 
 export default router;

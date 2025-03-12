@@ -26,7 +26,7 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 export async function AddItem(category_id: string, item_data: JSON) {
   try {
     let sql_text: string = 'INSERT INTO item (category_id, item_data) VALUES (';
-    sql_text += "'%L, %L);";
+    sql_text += "%L, %L);";
 
     console.log(sql_text);
     console.log(category_id);
@@ -40,6 +40,23 @@ export async function AddItem(category_id: string, item_data: JSON) {
     );
   } catch (error) {
     console.error('Error adding item:', error);
+  }
+}
+
+export async function DeleteItem(item_id: string) {
+  try {
+    let sql_text: string = "DELETE FROM item WHERE id=";
+    sql_text += "%L;";
+
+    console.log(sql_text);
+    console.log(item_id);
+
+    const query = format(sql_text, item_id);
+    await pool.query(query);
+
+    console.log('item with item_id "${item_id}" deleted');
+  } catch (error) {
+    console.error('Error deleting item:', error);
   }
 }
 
