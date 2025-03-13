@@ -24,7 +24,6 @@ router.post("/", (req, res) => {
 
 router.delete("/:id", (req, res) => {
 	const id = req.params.id;
-	console.log(id)
 
 	if (!CheckItemIdFound(id)) {
 		console.error("did not find the item by ID");
