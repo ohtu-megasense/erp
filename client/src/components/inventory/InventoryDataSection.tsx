@@ -1,33 +1,39 @@
-import { Box, Typography } from '@mui/material';
-import { Grid2 } from '@mui/material';
-import { SensorDistributionChart } from './SensorDistributionChart';
-import { ChartGridItem } from '../charts/ChartGridItem';
-import { useGetInventoryQuery } from '../../features/apiSlice';
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow,
+	Typography,
+} from "@mui/material";
+import { useGetCategoriesQuery } from "../../features/apiSlice";
 
 export const InventoryDataSection = () => {
-  const { data } = useGetInventoryQuery();
+	const { data } = useGetCategoriesQuery();
 
-  if (!data) {
-    return null;
-  }
-
-  return (
-    <Box>
-      <Typography variant="h6">Inventory Data</Typography>
-      <Typography>Total sensors: {data.total_sensors}</Typography>
-      <Typography>Active sensor count: {data.active_sensors}</Typography>
-      <Typography>Inactive sensor count: {data.inactive_sensors}</Typography>
-      <Typography>
-        Total cloud resources: {data.total_cloud_resources}
-      </Typography>
-      <Typography>Monthly API usage: {data.monthly_api_usage}</Typography>
-
-      <Grid2 container spacing={2}>
-        <ChartGridItem
-          title="Sensor status distribution"
-          chart={<SensorDistributionChart />}
-        />
-      </Grid2>
-    </Box>
-  );
+	const categoriesData = data === undefined ? [] : data;
+	return (
+		<Table>
+			<TableHead>
+				<TableRow>
+					<TableCell>ID</TableCell>
+					<TableCell>Category Name</TableCell>
+					<TableCell>Item Shape</TableCell>
+				</TableRow>
+			</TableHead>
+			<TableBody>
+				{categoriesData.map((items) => (
+					<TableRow key={items.id}>
+						<TableCell>{items.id}</TableCell>
+						<TableCell>{items.name}</TableCell>
+						<TableCell>
+							{Object.entries(items.itemShape).map(([key, val]) => (
+								<Typography key={key}>{`${key}: ${val}`}</Typography>
+							))}
+						</TableCell>
+					</TableRow>
+				))}
+			</TableBody>
+		</Table>
+	);
 };

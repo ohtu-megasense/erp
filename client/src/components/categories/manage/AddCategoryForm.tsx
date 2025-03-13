@@ -80,7 +80,8 @@ export const AddCategoryForm = () => {
 				itemShape,
 				items: [],
 			}).unwrap();
-			console.log(response);
+			console.log("täälllä", response);
+			console.log("itemshape", Object.keys(itemShape).length);
 			dispatch(
 				addedCategory({
 					category: {
