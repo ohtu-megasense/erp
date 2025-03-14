@@ -31,11 +31,9 @@ export async function AddCategory(category_name: string, item_shape: JSON) {
 }
 
 export async function AddItem(category_id: string, item_data: JSON) {
-
 	try {
 		let sql_text: string = "INSERT INTO item (category_id, item_data) VALUES (";
 		sql_text += "%L, %L);";
-
 
 		console.log(sql_text);
 		console.log(category_id);
@@ -55,44 +53,43 @@ export async function AddItem(category_id: string, item_data: JSON) {
 }
 
 export async function DeleteItem(item_id: string) {
-  try {
-    let sql_text: string = "DELETE FROM item WHERE id=";
-    sql_text += "%L;";
+	try {
+		let sql_text: string = "DELETE FROM item WHERE id=";
+		sql_text += "%L;";
 
-    console.log(sql_text);
-    console.log(item_id);
+		console.log(sql_text);
+		console.log(item_id);
 
-    const query = format(sql_text, item_id);
-    await pool.query(query);
+		const query = format(sql_text, item_id);
+		await pool.query(query);
 
-    console.log('item with item_id "${item_id}" deleted');
-  } catch (error) {
-    console.error('Error deleting item:', error);
-  }
+		console.log('item with item_id "${item_id}" deleted');
+	} catch (error) {
+		console.error("Error deleting item:", error);
+	}
 }
 
 export async function CheckItemIdFound(item_id: string): Promise<boolean> {
-  try {
-    let sql_text: string = "SELECT * FROM item WHERE id=";
-    sql_text += "%L;";
+	try {
+		let sql_text: string = "SELECT * FROM item WHERE id=";
+		sql_text += "%L;";
 
-    console.log(sql_text);
-    console.log("printing item id:", item_id);
+		console.log(sql_text);
+		console.log("printing item id:", item_id);
 
-    const query = format(sql_text, item_id);
-    const result = await pool.query(query);
+		const query = format(sql_text, item_id);
+		const result = await pool.query(query);
 
-    console.log(result.rows.length);
-    if (result.rows.length==1) {
-      return true;
-    } else {
-      return false;
-    }
-
-  } catch (error) {
-    console.error('Error finding the item by ID:', error);
-    return false;
-  }
+		console.log(result.rows.length);
+		if (result.rows.length == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	} catch (error) {
+		console.error("Error finding the item by ID:", error);
+		return false;
+	}
 }
 
 export const testLogCategories = async () => {

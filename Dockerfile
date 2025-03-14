@@ -46,4 +46,4 @@ ENV CA_PATH=/etc/certs/ca.pem
 
 EXPOSE 3000
 
-CMD ["node", "-watch", "./src/index.js"]
+CMD ["node", "./src/index.js"]
