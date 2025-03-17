@@ -2,11 +2,12 @@ import { test, expect } from "@playwright/test";
 import { baseUrl } from "../config";
 
 const pageUrl = baseUrl + "/categories/manage";
+const apiBaseUrl = "http://localhost:3000";
 
-// test.beforeEach(async ({ request }) => {
-//   const response = await request.post(baseUrl + "/api/testing/reset");
-//   expect(response.status()).toBe(200);
-// });
+test.beforeEach(async ({ request }) => {
+  const response = await request.post(apiBaseUrl + "/api/testing/reset");
+  expect(response.status()).toBe(200);
+});
 
 // test("Dummy test", async ({ page }) => {
 //   await page.goto(pageUrl);
