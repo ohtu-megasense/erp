@@ -13,9 +13,6 @@ const apiBaseUrl = "http://localhost:3000";
 test("Dummy test", async ({ page, request }) => {
   await page.goto(pageUrl);
   await expect(page.getByText("Megasense")).toBeVisible();
-
-  const response = await request.get(baseUrl + "/api/manage/categories");
-  console.log("Response from api categories " + response.body());
 });
 
 // test("category with 2 properties can be created", async ({ page }) => {
