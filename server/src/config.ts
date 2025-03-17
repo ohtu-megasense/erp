@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import logger from './utils/logger';
 
+// NOTE: The urls need to be set for github actions.
+
 const getDatabaseUrl = (): string | undefined => {
   switch (process.env.NODE_ENV) {
     case 'production':
@@ -9,10 +11,12 @@ const getDatabaseUrl = (): string | undefined => {
     case 'test':
       // Logger does not log with NODE_ENV=test
       logger.info('Using test database url.');
-      return process.env.DATABASE_URL_TEST;
+      // return process.env.DATABASE_URL_TEST;
+      return 'postgres://postgres:postgres@postgres:5432/postgres';
     case 'development':
       logger.info('Using development database url.');
-      return process.env.DATABASE_URL_DEVELOPMENT;
+      // return process.env.DATABASE_URL_DEVELOPMENT;
+      return 'postgres://postgres:postgres@postgres:5432/postgres';
     default:
       logger.info(
         'Process env NODE_ENV is not defined. Cant determine which database url to use.'
