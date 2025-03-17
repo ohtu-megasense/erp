@@ -16,21 +16,20 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 import { useDeleteItemMutation } from '../../../features/apiSlice';
 
 interface CategoryTableProps {
-	category: Category;
-	isEditing: boolean;
+  category: Category;
+  isEditing: boolean;
 }
 
 export const CategoryTable = forwardRef(
-	({ category, isEditing }: CategoryTableProps, ref) => {
-		const [page, setPage] = useState(1);
-		const [formValues, setFormValues] = useState<
-			Record<number, Record<string, string>>
-		>({});
-		const [dirtyItems, setDirtyItems] = useState<Set<number>>(new Set());
-		const itemsPerPage = 10;
+  ({ category, isEditing }: CategoryTableProps, ref) => {
+    const [page, setPage] = useState(1);
+    const [formValues, setFormValues] = useState<
+      Record<number, Record<string, string>>
+    >({});
+    const [dirtyItems, setDirtyItems] = useState<Set<number>>(new Set());
+    const itemsPerPage = 10;
 
-		const isShapeDefined = Object.keys(category.itemShape).length > 0;
-
+    const isShapeDefined = Object.keys(category.itemShape).length > 0;
 
     const [deleteItemMutation] = useDeleteItemMutation();
 
@@ -51,59 +50,57 @@ export const CategoryTable = forwardRef(
       }
     }, [isEditing, category.items]);
 
+    const handleInputChange = (itemId: number, key: string, value: string) => {
+      setFormValues((prev) => ({
+        ...prev,
+        [itemId]: {
+          ...prev[itemId],
+          [key]: value
+        }
+      }));
+      setDirtyItems((prev) => new Set(prev).add(itemId));
+    };
 
-		const handleInputChange = (itemId: number, key: string, value: string) => {
-			setFormValues((prev) => ({
-				...prev,
-				[itemId]: {
-					...prev[itemId],
-					[key]: value,
-				},
-			}));
-			setDirtyItems((prev) => new Set(prev).add(itemId));
-		};
+    useImperativeHandle(ref, () => ({
+      getFormValues: () => {
+        const dirtyFormValues: Record<number, Record<string, string>> = {};
+        dirtyItems.forEach((itemId) => {
+          if (formValues[itemId]) {
+            dirtyFormValues[itemId] = formValues[itemId];
+          }
+        });
+        return dirtyFormValues;
+      }
+    }));
 
-		useImperativeHandle(ref, () => ({
-			getFormValues: () => {
-				const dirtyFormValues: Record<number, Record<string, string>> = {};
-				dirtyItems.forEach((itemId) => {
-					if (formValues[itemId]) {
-						dirtyFormValues[itemId] = formValues[itemId];
-					}
-				});
-				return dirtyFormValues;
-			},
-		}));
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedItems = category.items.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(category.items.length / itemsPerPage);
+    const inputFieldMinWidth = 80;
 
-		const startIndex = (page - 1) * itemsPerPage;
-		const endIndex = startIndex + itemsPerPage;
-		const paginatedItems = category.items.slice(startIndex, endIndex);
-		const totalPages = Math.ceil(category.items.length / itemsPerPage);
-		const inputFieldMinWidth = 80;
+    const handlePageChange = (
+      _event: React.ChangeEvent<unknown>,
+      newPage: number
+    ) => {
+      setPage(newPage);
+    };
 
-		const handlePageChange = (
-			_event: React.ChangeEvent<unknown>,
-			newPage: number,
-		) => {
-			setPage(newPage);
-		};
+    if (!isShapeDefined) {
+      return (
+        <Box>
+          <Typography variant="caption">No shape defined</Typography>
+        </Box>
+      );
+    }
 
-		if (!isShapeDefined) {
-			return (
-				<Box>
-					<Typography variant="caption">No shape defined</Typography>
-				</Box>
-			);
-		}
-
-		if (category.items[0].data === null) {
-			return (
-				<Box>
-					<Typography variant="caption">No items added</Typography>
-				</Box>
-			);
-		}
-
+    if (category.items[0].data === null) {
+      return (
+        <Box>
+          <Typography variant="caption">No items added</Typography>
+        </Box>
+      );
+    }
 
     return (
       <Box
@@ -111,7 +108,7 @@ export const CategoryTable = forwardRef(
           overflowX: 'auto'
         }}
       >
-        <Table size="small">
+        <Table size="small" data-testid="category-table">
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontSize: '0.8125rem' }}>ID</TableCell>
@@ -194,5 +191,4 @@ export const CategoryTable = forwardRef(
       </Box>
     );
   }
-
 );
