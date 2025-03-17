@@ -3,10 +3,10 @@ import { baseUrl } from "../config";
 
 const pageUrl = baseUrl + "/categories/manage";
 
-// test.beforeEach(async ({ request }) => {
-//   const response = await request.post(baseUrl + "/api/testing/reset");
-//   expect(response.status()).toBe(200);
-// });
+test.beforeEach(async ({ request }) => {
+  const response = await request.post(baseUrl + "/api/testing/reset");
+  expect(response.status()).toBe(200);
+});
 
 test("Dummy test", async ({ page }) => {
   await page.goto(pageUrl);
