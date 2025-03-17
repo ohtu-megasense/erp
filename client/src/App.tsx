@@ -7,12 +7,13 @@ import { Redirect } from './components/redirect/Redirect';
 import { VisualizeCategoriesPage } from './components/pages/categories/visualize/VisualizeCategoriesPage';
 import { ManageCategoriesPage } from './components/pages/categories/manage/ManageCategoriesPage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
-import { useGetCategoriesQuery } from './features/apiSlice';
+import { useGetPingQuery } from './features/apiSlice';
 
 export const App = () => {
-  const { data, error } = useGetCategoriesQuery();
+  // const { data, error } = useGetCategoriesQuery();
+  const { data, error } = useGetPingQuery();
 
-  console.log('App test get categories hook data', data, 'error', error);
+  console.log('App test ping query', data, 'error', error);
 
   return (
     <ThemeProvider>

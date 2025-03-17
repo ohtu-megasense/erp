@@ -17,7 +17,7 @@ jobs:
       - name: Start frontend backend and postgres docker containers
         run: docker compose up -d frontend backend postgres
       - name: Wait for services to be ready
-        run: sleep 120
+        run: sleep 30
       - name: Install dependencies
         run: cd playwright && npm ci
       - name: Install Playwright Browsers

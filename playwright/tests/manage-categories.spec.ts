@@ -9,12 +9,12 @@ const apiBaseUrl = "http://localhost:3000";
 // Tested it from frontend queries and also here with
 // requests.
 
-test.beforeEach(async ({ request }) => {
-  const response = await request.post(apiBaseUrl + "/api/testing/reset");
-  expect(response.status()).toBe(200);
-});
+// test.beforeEach(async ({ request }) => {
+//   const response = await request.post(apiBaseUrl + "/api/testing/reset");
+//   expect(response.status()).toBe(200);
+// });
 
-test("Dummy test", async ({ page, request }) => {
+test("Dummy test", async ({ page }) => {
   await page.goto(pageUrl);
   await expect(page.getByText("Megasense")).toBeVisible();
 });
