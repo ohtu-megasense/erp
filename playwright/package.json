@@ -2,7 +2,7 @@
   "name": "playwright",
   "version": "1.0.0",
   "scripts": {
-    "test": "npx playwright test",
+    "test": "npx playwright test --max-failures=1 --workers=1",
     "test-ui": "npx playwright test --ui",
     "test-docker": "DOCKER=true npx playwright test"
   },
