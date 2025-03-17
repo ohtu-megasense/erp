@@ -3,33 +3,33 @@ import { baseUrl } from "../config";
 
 const pageUrl = baseUrl + "/categories/manage";
 
-test.beforeEach(async ({ request }) => {
-  const response = await request.post(baseUrl + "/api/testing/reset");
-  expect(response.status()).toBe(200);
-});
-
-test("Dummy test", async ({ page }) => {
-  await page.goto(pageUrl);
-  await expect(page.getByText("Megasense")).toBeVisible();
-});
-
-// test("category with 2 properties can be created", async ({ page }) => {
-//   await page.goto(pageUrl);
-
-//   await page.locator("input").first().fill("New category");
-
-//   await page.click("text=Add property");
-//   await page.locator("input").nth(1).fill("Property1");
-
-//   await page.click("text=Add property");
-//   await page.locator("input").nth(2).fill("Property2");
-
-//   await expect(page.locator("input")).toHaveCount(3);
-
-//   await page.click("button:has-text('Create')");
-
-//   await expect(page.getByText("New category created")).toBeVisible();
+// test.beforeEach(async ({ request }) => {
+//   const response = await request.post(baseUrl + "/api/testing/reset");
+//   expect(response.status()).toBe(200);
 // });
+
+// test("Dummy test", async ({ page }) => {
+//   await page.goto(pageUrl);
+//   await expect(page.getByText("Megasense")).toBeVisible();
+// });
+
+test("category with 2 properties can be created", async ({ page }) => {
+  await page.goto(pageUrl);
+
+  await page.locator("input").first().fill("New category");
+
+  await page.click("text=Add property");
+  await page.locator("input").nth(1).fill("Property1");
+
+  await page.click("text=Add property");
+  await page.locator("input").nth(2).fill("Property2");
+
+  await expect(page.locator("input")).toHaveCount(3);
+
+  await page.click("button:has-text('Create')");
+
+  await expect(page.getByText("New category created")).toBeVisible();
+});
 
 // test("items can be added to a category", async ({ page }) => {
 //   await page.goto(pageUrl);
