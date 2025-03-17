@@ -5,10 +5,14 @@ import { baseUrl } from "../config";
 const pageUrl = baseUrl + "/categories/manage";
 const apiBaseUrl = "http://localhost:3000";
 
-// test.beforeEach(async ({ request }) => {
-//   const response = await request.post(apiBaseUrl + "/api/testing/reset");
-//   expect(response.status()).toBe(200);
-// });
+// NOTE: Api requests return 500 in github actions
+// Tested it from frontend queries and also here with
+// requests.
+
+test.beforeEach(async ({ request }) => {
+  const response = await request.post(apiBaseUrl + "/api/testing/reset");
+  expect(response.status()).toBe(200);
+});
 
 test("Dummy test", async ({ page, request }) => {
   await page.goto(pageUrl);
