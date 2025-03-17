@@ -30,6 +30,8 @@ jobs:
           name: playwright-report
           path: ./playwright/playwright-report/
           retention-days: 7
+      - name: Show docker logs
+        run: docker compose logs
       - name: Stop Docker Compose services
         if: always()
         run: docker compose down
