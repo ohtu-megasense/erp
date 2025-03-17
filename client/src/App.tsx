@@ -7,8 +7,13 @@ import { Redirect } from './components/redirect/Redirect';
 import { VisualizeCategoriesPage } from './components/pages/categories/visualize/VisualizeCategoriesPage';
 import { ManageCategoriesPage } from './components/pages/categories/manage/ManageCategoriesPage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
+import { useGetCategoriesQuery } from './features/apiSlice';
 
 export const App = () => {
+  const { data, error } = useGetCategoriesQuery();
+
+  console.log('App test get categories hook data', data, 'error', error);
+
   return (
     <ThemeProvider>
       <CssBaseline />
