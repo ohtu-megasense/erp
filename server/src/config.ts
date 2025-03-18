@@ -3,17 +3,16 @@ import logger from './utils/logger';
 
 const getDatabaseUrl = (): string | undefined => {
   switch (process.env.NODE_ENV) {
-    case 'development':
-      logger.info('Using local postgres as database url.');
-      return 'postgres://postgres:postgres@postgres:5432/postgres';
-    // NOTE: Should the test database be different?
-    case 'test':
-      // NOTE: Logger does not log with NODE_ENV=test
-      logger.info('Using local postgres as database url.');
-      return 'postgres://postgres:postgres@postgres:5432/postgres';
     case 'production':
-      logger.info('Using database url from process env.');
+      logger.info('Using production database url.');
       return process.env.DATABASE_URL;
+    case 'test':
+      // Logger does not log with NODE_ENV=test
+      logger.info('Using test database url.');
+      return 'postgres://postgres:postgres@postgres:5432/postgres';
+    case 'development':
+      logger.info('Using development database url.');
+      return 'postgres://postgres:postgres@postgres:5432/postgres';
     default:
       logger.info(
         'Process env NODE_ENV is not defined. Cant determine which database url to use.'
