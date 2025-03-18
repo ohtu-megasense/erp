@@ -5,6 +5,7 @@ services:
     working_dir: /usr/src/app
     volumes:
       - ./client:/usr/src/app
+      - ./shared:/usr/src/shared
       - /app/node_modules
     command: sh -c "npm ci && npm run dev -- --host"
     environment:
@@ -19,6 +20,7 @@ services:
     working_dir: /usr/src/app
     volumes:
       - ./server:/usr/src/app
+      - ./shared:/usr/src/shared
       - /app/node_modules
     command: sh -c "npm ci && npm run dev"
     environment:

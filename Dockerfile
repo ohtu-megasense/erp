@@ -7,6 +7,7 @@ COPY ./client/package*.json .
 RUN npm ci
 
 COPY ./client .
+COPY ./shared ../shared
 
 RUN npm run build
 
@@ -19,6 +20,7 @@ COPY ./server/package*.json .
 RUN npm ci
 
 COPY ./server .
+COPY ./shared ../shared
 
 RUN npm run build
 
