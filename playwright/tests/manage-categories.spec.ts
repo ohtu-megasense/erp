@@ -1,25 +1,17 @@
 import { test, expect } from "@playwright/test";
-import { baseUrl } from "../config";
-
-// Locally both work when running docker
-const pageUrl = baseUrl + "/categories/manage";
-
-// NOTE: Api requests return 500 in github actions
-// Tested it from frontend queries and also here with
-// requests.
 
 test.beforeEach(async ({ request }) => {
-  const response = await request.post(baseUrl + "/api/testing/reset");
+  const response = await request.post("/api/testing/reset");
   expect(response.status()).toBe(200);
 });
 
-test("Dummy test", async ({ page }) => {
-  await page.goto(pageUrl);
+test("dummy test", async ({ page }) => {
+  await page.goto("/categories/manage");
   await expect(page.getByText("Megasense")).toBeVisible();
 });
 
 test("category with 2 properties can be created", async ({ page }) => {
-  await page.goto(pageUrl);
+  await page.goto("/categories/manage");
 
   await page.locator("input").first().fill("New category");
 
@@ -37,7 +29,7 @@ test("category with 2 properties can be created", async ({ page }) => {
 });
 
 test("items can be added to a category", async ({ page }) => {
-  await page.goto(pageUrl);
+  await page.goto("/categories/manage");
 
   await page.getByTestId("category-name-input").fill("Test Category 1234");
 
