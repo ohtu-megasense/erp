@@ -104,6 +104,17 @@ export const testDatabaseConnection = async (): Promise<{
   }
 };
 
+export const resetDatabase = async () => {
+  const query = {
+    text: `
+      DELETE FROM item;
+      DELETE FROM category;
+    `
+  };
+
+  await pool.query(query);
+};
+
 const loadSchema = async () => {
   try {
     await client.connect();
