@@ -19,6 +19,15 @@ app.use('/api/reports/inventory', inventoryRouter);
 app.use('/api/manage/categories', categoryRouter);
 app.use('/api/items', itemRouter);
 
+const env = process.env.NODE_ENV;
+
+if (env === 'test' || env === 'development') {
+  // https://typescript-eslint.io/rules/no-require-imports/
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const testingRouter = require('./routers/testingRouter');
+  app.use('/api/testing', testingRouter.default);
+}
+
 app.get('/*', (req, res) => {
   res.status(404).json({ message: 'Unknown endpoint!' });
 });
