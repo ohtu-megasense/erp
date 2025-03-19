@@ -9,14 +9,23 @@ const isStringRecord = (obj: unknown): obj is Record<string, string> => {
     return false;
   }
 
-  if (Object.keys(obj).length === 0) {
-    return false;
-  }
-
   const values = Object.values(obj);
 
   for (const value of values) {
     if (typeof value !== 'string') {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+// NOTE: Currently only 'TEXT' value is allowed.
+const isValidItemShape = (itemShape: Record<string, string>): boolean => {
+  const values = Object.values(itemShape);
+
+  for (const value of values) {
+    if (value !== 'TEXT') {
       return false;
     }
   }
@@ -51,6 +60,18 @@ export const toAddCategoryRequest = (body: unknown): AddCategoryRequest => {
     const error = new Error(
       'Item shape must be of type Record<string, string>'
     );
+    error.name = 'PARSING_ERROR';
+    throw error;
+  }
+
+  if (!isValidItemShape(body.itemShape)) {
+    const error = new Error("Item shape can only contain 'TEXT' values");
+    error.name = 'PARSING_ERROR';
+    throw error;
+  }
+
+  if (Object.keys(body.itemShape).length === 0) {
+    const error = new Error('Item shape must have at least one property');
     error.name = 'PARSING_ERROR';
     throw error;
   }
