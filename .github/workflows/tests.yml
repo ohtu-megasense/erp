@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Start frontend backend and postgres docker containers
+      - name: Start backend and postgres docker containers
         run: docker compose up -d backend postgres
       - name: Wait for services to be ready
         run: sleep 30
