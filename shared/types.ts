@@ -6,3 +6,9 @@ export interface AddCategoryRequest {
   name: string;
   itemShape: Record<string, string>;
 }
+
+export interface AddCategoryResponse {
+  id: number;
+  name: string;
+  itemShape: Record<string, string>;
+}
