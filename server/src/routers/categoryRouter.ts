@@ -24,6 +24,7 @@ router.post('/', async (req, res) => {
       }
     }
 
+    logger.error(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
