@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { AddCategoryRequest, AddCategoryResponse } from '../../../shared/types';
+import { addNotification } from './notificationSlice';
 
 interface PingResponse {
   message: string;
@@ -37,13 +39,35 @@ export const apiSlice = createApi({
     //mutation used for POST requests to server/backend.
     //CategoryResponse = expected response from server/backend
     //Category = category_name to be sent to server/backend
-    addCategory: builder.mutation<Category, Category>({
+    addCategory: builder.mutation<AddCategoryResponse, AddCategoryRequest>({
       query: (category) => ({
         url: 'manage/categories',
         method: 'POST',
         body: category
       }),
-      invalidatesTags: ['Category']
+      invalidatesTags: ['Category'],
+      async onQueryStarted(_, mutationLifeCycleApi) {
+        try {
+          await mutationLifeCycleApi.queryFulfilled;
+
+          mutationLifeCycleApi.dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `New category created`,
+              severity: 'info'
+            })
+          );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          mutationLifeCycleApi.dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Failed to add category: ${error.error.data.error}.`,
+              severity: 'error'
+            })
+          );
+        }
+      }
     }),
     addItem: builder.mutation<ItemResponse, Item>({
       query: (item) => ({
