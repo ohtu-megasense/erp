@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Start backend and postgres docker containers
         run: docker compose up -d backend postgres
+      - name: Wait for services to be ready
+        run: sleep 30
       - name: Server unit tests
         run: docker exec backend npm run test-unit
       - name: Server api tests
