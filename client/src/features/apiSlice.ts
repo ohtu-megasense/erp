@@ -58,7 +58,8 @@ export const apiSlice = createApi({
         url: `items/${id}`,
         method: 'DELETE',
         body: id
-      })
+      }),
+      invalidatesTags: ['Item', 'Category']
     })
   })
 });
