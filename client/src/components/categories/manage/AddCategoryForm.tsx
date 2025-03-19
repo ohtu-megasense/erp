@@ -14,9 +14,6 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
-import { useAppDispatch } from '../../../app/hooks';
-import { addedCategory } from '../../../features/categoryDataSlice';
-// 1. Importoi mutaatiohook
 import { useAddCategoryMutation } from '../../../features/apiSlice';
 
 export const AddCategoryForm = () => {
@@ -26,7 +23,6 @@ export const AddCategoryForm = () => {
     name: ''
   });
   const [propertyCount, setPropertyCount] = useState(0);
-  const dispatch = useAppDispatch();
 
   // 2. Kutsu mutaatiohook, josta saadaan funktio addCategoryMutation
   const [addCategoryMutation] = useAddCategoryMutation();
@@ -49,7 +45,6 @@ export const AddCategoryForm = () => {
     return true;
   };
 
-  // 3. Muuta onSubmit asynkroniseksi, kutsu addCategoryMutation ja dispatchaa vasta onnistumisen jälkeen
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -71,33 +66,17 @@ export const AddCategoryForm = () => {
     );
 
     try {
-      // Kutsu backendiä RTK Queryn kautta
-      const response = await addCategoryMutation({
-        // HUOM: jos backendi odottaa vain name + itemShape,
-        // tämä riittää. Muussa tapauksessa säädä backendin rajapinnan mukaan.
-        id: 1,
+      await addCategoryMutation({
         name: formValues.name,
-        itemShape,
-        items: []
+        itemShape
       }).unwrap();
-      console.log('täälllä', response);
-      console.log('itemshape', Object.keys(itemShape).length);
-      dispatch(
-        addedCategory({
-          category: {
-            name: formValues.name,
-            itemShape
-          }
-        })
-      );
 
-      // Tyhjennä lomake
       setFormValues({ name: '' });
       setPropertyCount(0);
       setIsOpen(false);
       setError(null);
-    } catch (error) {
-      console.log('Error adding new category', error);
+    } catch {
+      // pass
     }
   };
 
