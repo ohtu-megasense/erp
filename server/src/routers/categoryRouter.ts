@@ -5,20 +5,21 @@ import {
   addCategory
 } from '../database/database_handler';
 import { toAddCategoryRequest } from '../utils/parsers';
+import logger from '../utils/logger';
 
 const router = Router();
 
 router.post('/', async (req, res) => {
   try {
     const addCategoryRequest = toAddCategoryRequest(req.body);
-    const newCategory = addCategory(addCategoryRequest);
+    const newCategory = await addCategory(addCategoryRequest);
     res.status(201).json(newCategory);
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message);
+      logger.error(error.message);
 
       if (error.name === 'PARSING_ERROR') {
-        res.status(404).json({ error: error.message });
+        res.status(400).json({ error: error.message });
         return;
       }
     }
