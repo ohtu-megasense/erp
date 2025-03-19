@@ -8,14 +8,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Start backend and postgres docker containers
+      - name: Start frontend backend and postgres docker containers
         run: docker compose up -d backend postgres
       - name: Wait for services to be ready
         run: sleep 30
-      - name: Unit tests
+      - name: Server unit tests
         run: docker exec backend npm run test-unit
-      - name: Api tests
+      - name: Server api tests
         run: docker exec backend npm run test-api
       - name: Stop docker containers
         if: always()
         run: docker compose down
+
+  client-lint:
+    name: Client Lint Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: ./client/package-lock.json
+      - run: npm ci
+      - name: Run ESLint
+        run: npm run lint
+      - name: Run Vite build
+        run: npm run build
