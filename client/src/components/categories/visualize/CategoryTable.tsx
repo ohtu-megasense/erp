@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -14,6 +15,11 @@ import { Category } from '../../../features/categoryDataSlice';
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import { useDeleteItemMutation } from '../../../features/apiSlice';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 interface CategoryTableProps {
   category: Category;
@@ -32,6 +38,8 @@ export const CategoryTable = forwardRef(
     const isShapeDefined = Object.keys(category.itemShape).length > 0;
 
     const [deleteItemMutation] = useDeleteItemMutation();
+
+    const [openDialogs, setOpenDialogs] = useState<Record<number, boolean>>({});
 
     useEffect(() => {
       if (isEditing) {
@@ -59,6 +67,20 @@ export const CategoryTable = forwardRef(
         }
       }));
       setDirtyItems((prev) => new Set(prev).add(itemId));
+    };
+
+    const handleOpenDialog = (id: number) => {
+      setOpenDialogs((prev) => ({
+        ...prev,
+        [id]: true
+      }));
+    };
+  
+    const handleCloseDialog = (id: number) => {
+      setOpenDialogs((prev) => ({
+        ...prev,
+        [id]: false
+      }));
     };
 
     useImperativeHandle(ref, () => ({
@@ -159,12 +181,29 @@ export const CategoryTable = forwardRef(
                 {isEditing && (
                   <TableCell sx={{ fontSize: '0.0125rem' }}>
                     <IconButton
-                      onClick={() => deleteItemMutation(item.id)}
+                      onClick={() => handleOpenDialog(item.id)}
                       size="small"
                       color="error"
                     >
                       <DeleteIcon />
                     </IconButton>
+                    <Dialog
+                      open={openDialogs[item.id] || false}
+                      onClose={() => handleCloseDialog(item.id)}
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {"Do you want to delete this item?"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-text">
+                          If you delete this item, it can't be undone
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={()=> deleteItemMutation(item.id).unwrap().then(() => handleCloseDialog(item.id))}>Yes</Button>
+                        <Button onClick={()=> handleCloseDialog(item.id)}>No</Button>
+                      </DialogActions>
+                    </Dialog>
                   </TableCell>
                 )}
               </TableRow>
