@@ -1,9 +1,9 @@
 name: Run Tests
 on:
   push:
-    # branches: ["ci/fix-tests"]
-  # pull_request:
-  #   branches: ["main", "dev"]
+    branches: ["ci/fix-tests"]
+  pull_request:
+    branches: ["main", "dev"]
 jobs:
   server-tests:
     name: "Server api and unit tests"
