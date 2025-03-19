@@ -1,4 +1,4 @@
-import { CreateCategoryRequest } from '../../../shared/types';
+import { AddCategoryRequest } from '../../../shared/types';
 
 const isStringRecord = (obj: unknown): obj is Record<string, string> => {
   if (!obj || typeof obj !== 'object') {
@@ -24,7 +24,7 @@ const isStringRecord = (obj: unknown): obj is Record<string, string> => {
   return true;
 };
 
-export const toAddCategoryRequest = (body: unknown): CreateCategoryRequest => {
+export const toAddCategoryRequest = (body: unknown): AddCategoryRequest => {
   if (!body || typeof body !== 'object') {
     const error = new Error('Request body must be an object');
     error.name = 'PARSING_ERROR';
