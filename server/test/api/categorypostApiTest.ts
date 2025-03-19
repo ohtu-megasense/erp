@@ -94,7 +94,7 @@ describe('Category API - Add Category', () => {
       assert.strictEqual(response.statusCode, 400);
       assert.strictEqual(
         response.body.error,
-        "Item shape can only contain 'string' values"
+        "Item shape can only contain 'TEXT' values"
       );
     });
   });
@@ -104,8 +104,8 @@ describe('Category API - Add Category', () => {
       const requestBody: AddCategoryRequest = {
         name: 'A valid category request',
         itemShape: {
-          a: 'string',
-          b: 'string'
+          a: 'TEXT',
+          b: 'TEXT'
         }
       };
 
