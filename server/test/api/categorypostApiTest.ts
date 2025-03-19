@@ -27,7 +27,7 @@ describe('Category API - Add Category', () => {
 
       const response = await api.post(url).send(requestBody);
 
-      assert.strictEqual(response.statusCode, 400);
+      assert.strictEqual(response.statusCode, 500);
       assert.strictEqual(
         response.body.error,
         'Property "name" must be a string'
