@@ -1,6 +1,12 @@
 import format from 'pg-format';
 import logger from '../utils/logger';
 import { pool } from './database';
+import { Category } from '../../../shared/types';
+
+// TODO: In getCategories sql query if a category has
+// no items the items array will contain a single object
+// like { id: null, data: null }. Ideally an empty
+// array would be returned.
 
 interface AddCategoryParams {
   name: string;
@@ -39,6 +45,42 @@ export const addCategory = async (
     name: row.category_name,
     itemShape: row.item_shape
   };
+};
+
+export const getCategories = async (): Promise<Category[]> => {
+  const query = {
+    text: `
+      SELECT 
+        category.id, 
+        category_name, 
+        item_shape, 
+        ARRAY_AGG(
+          json_build_object(
+            'id', item.id, 
+            'data', item.item_data  
+          )
+        ) as items 
+      FROM category LEFT JOIN item ON item.category_id = category.id
+      GROUP BY category_name, category.id;
+    `
+  };
+
+  const result = await pool.query(query);
+
+  // NOTE: The filtering is done to items because
+  // the query can return items array with an object
+  // like { id: null, data: null }
+
+  const categories: Category[] = result.rows.map((row) => {
+    return {
+      id: row.id,
+      name: row.category_name,
+      itemShape: row.item_shape,
+      items: row.items.filter((item: { id: number | null }) => item.id)
+    };
+  });
+
+  return categories;
 };
 
 export async function AddItem(category_id: string, item_data: JSON) {
@@ -108,30 +150,6 @@ export const testLogCategories = async () => {
   const result = await pool.query(sqlText);
   logger.info('Categories from database', result.rows);
 };
-
-export async function GetCategories() {
-  const client = await pool.connect();
-  try {
-    console.log('Connected to database GetCategories');
-    const sql_text: string =
-      "SELECT category.id, category_name, item_shape, ARRAY_AGG( json_build_object( 'id', item.id, 'data', item.item_data  ) ) as items FROM category LEFT JOIN item ON item.category_id = category.id GROUP BY category_name, category.id;";
-    const query = format(sql_text);
-    const result = await client.query(query);
-    console.log('Retrieved categories', result.rows);
-
-    return result.rows.map((row) => ({
-      id: row.id,
-      name: row.category_name,
-      itemShape: row.item_shape || {},
-      items: row.items || []
-    }));
-  } catch (error) {
-    console.error('Error retrieving categories: ', error);
-  } finally {
-    client.release();
-    console.log('Disconnected from database GetCategories');
-  }
-}
 
 export async function AlterCategory(category_id: string, item_shape: JSON) {
   const client = await pool.connect();
