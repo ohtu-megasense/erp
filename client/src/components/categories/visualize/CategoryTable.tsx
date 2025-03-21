@@ -75,7 +75,7 @@ export const CategoryTable = forwardRef(
         [id]: true
       }));
     };
-  
+
     const handleCloseDialog = (id: number) => {
       setOpenDialogs((prev) => ({
         ...prev,
@@ -116,7 +116,7 @@ export const CategoryTable = forwardRef(
       );
     }
 
-    if (category.items[0].data === null) {
+    if (category.items.length === 0) {
       return (
         <Box>
           <Typography variant="caption">No items added</Typography>
@@ -192,7 +192,7 @@ export const CategoryTable = forwardRef(
                       onClose={() => handleCloseDialog(item.id)}
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {"Do you want to delete this item?"}
+                        {'Do you want to delete this item?'}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-text">
@@ -200,8 +200,18 @@ export const CategoryTable = forwardRef(
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={()=> deleteItemMutation(item.id).unwrap().then(() => handleCloseDialog(item.id))}>Yes</Button>
-                        <Button onClick={()=> handleCloseDialog(item.id)}>No</Button>
+                        <Button
+                          onClick={() =>
+                            deleteItemMutation(item.id)
+                              .unwrap()
+                              .then(() => handleCloseDialog(item.id))
+                          }
+                        >
+                          Yes
+                        </Button>
+                        <Button onClick={() => handleCloseDialog(item.id)}>
+                          No
+                        </Button>
                       </DialogActions>
                     </Dialog>
                   </TableCell>
