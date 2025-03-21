@@ -1,26 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AddCategoryRequest, AddCategoryResponse } from '../../../shared/types';
+import {
+  AddCategoryRequest,
+  AddCategoryResponse,
+  Category,
+  Item,
+  AddItemResponse,
+  PingResponse
+} from '../../../shared/types';
 import { addNotification } from './notificationSlice';
-
-interface PingResponse {
-  message: string;
-}
-
-interface ItemResponse {
-  success: boolean;
-  data: Item;
-}
-export interface Item {
-  id: number;
-  data: Record<string, string>;
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  itemShape: Record<string, string>;
-  items: Item[];
-}
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -69,7 +56,7 @@ export const apiSlice = createApi({
         }
       }
     }),
-    addItem: builder.mutation<ItemResponse, Item>({
+    addItem: builder.mutation<AddItemResponse, Item>({
       query: (item) => ({
         url: 'items',
         method: 'POST',
@@ -77,7 +64,7 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Item', 'Category']
     }),
-    deleteItem: builder.mutation<ItemResponse, number>({
+    deleteItem: builder.mutation<AddItemResponse, number>({
       query: (id) => ({
         url: `items/${id}`,
         method: 'DELETE',

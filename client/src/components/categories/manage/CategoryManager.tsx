@@ -9,7 +9,7 @@ import { updateItem } from '../../../features/categoryDataSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { AddCategoryItemForm } from './AddCategoryItemForm';
 import { CategoryTable } from '../visualize/CategoryTable';
-import { Category } from '../../../features/apiSlice';
+import { Category } from '../../../../../shared/types';
 
 interface CategoryManagerProps {
   category: Category;

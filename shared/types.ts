@@ -12,3 +12,24 @@ export interface AddCategoryResponse {
   name: string;
   itemShape: Record<string, string>;
 }
+
+export interface AddItemResponse {
+  success: boolean;
+  data: Item;
+}
+
+export interface PingResponse {
+  message: string;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  itemShape: Record<string, string>;
+  items: Item[];
+}
+
+export interface Item {
+  id: number;
+  data: Record<string, string>;
+}
