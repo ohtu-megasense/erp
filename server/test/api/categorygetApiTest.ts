@@ -15,6 +15,11 @@ beforeEach(async () => {
   assert.strictEqual(statusCode, 200);
 });
 
+after(async () => {
+  const { statusCode } = await api.post('/api/testing/reset');
+  assert.strictEqual(statusCode, 200);
+});
+
 describe('Categories API - Get categories', async () => {
   after(async () => {
     await api.post('/api/testing/reset');
