@@ -1,7 +1,3 @@
-// Not yet in use. Added as an example.
-// Would be used on client in apiSlice
-// and on server when parsing the request.
-
 export interface AddCategoryRequest {
   name: string;
   itemShape: Record<string, string>;
@@ -21,6 +17,8 @@ export interface AddItemResponse {
 export interface PingResponse {
   message: string;
 }
+
+export type GetCategoriesResponse = Category[];
 
 export interface Category {
   id: number;
