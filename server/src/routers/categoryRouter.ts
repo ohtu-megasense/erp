@@ -1,11 +1,15 @@
 import { Router } from 'express';
 import {
-  GetCategories,
   AlterCategory,
-  addCategory
+  addCategory,
+  getCategories
 } from '../database/database_handler';
 import { toAddCategoryRequest } from '../utils/parsers';
 import logger from '../utils/logger';
+import {
+  AddCategoryResponse,
+  GetCategoriesResponse
+} from '../../../shared/types';
 
 const router = Router();
 
@@ -13,7 +17,8 @@ router.post('/', async (req, res) => {
   try {
     const addCategoryRequest = toAddCategoryRequest(req.body);
     const newCategory = await addCategory(addCategoryRequest);
-    res.status(201).json(newCategory);
+    const response: AddCategoryResponse = newCategory;
+    res.status(201).json(response);
   } catch (error) {
     if (error instanceof Error) {
       logger.error(error.message);
@@ -29,10 +34,14 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', (req, res) => {
-  GetCategories()
-    .then((data) => res.json(data))
-    .catch((error) => console.error('Error getting data: ', error));
+router.get('/', async (_, res) => {
+  try {
+    const categories: GetCategoriesResponse = await getCategories();
+    res.status(200).json(categories);
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
 });
 
 router.put('/:categoryId', (req, res) => {
