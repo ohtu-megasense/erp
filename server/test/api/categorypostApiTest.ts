@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import { describe, test, beforeEach } from 'node:test';
+import { describe, test, beforeEach, after } from 'node:test';
 import assert from 'node:assert';
 import app from '../../src/app';
 import { AddCategoryRequest } from '../../../shared/types';
@@ -12,6 +12,11 @@ const api = supertest(app);
 const url = '/api/manage/categories';
 
 beforeEach(async () => {
+  const { statusCode } = await api.post('/api/testing/reset');
+  assert.strictEqual(statusCode, 200);
+});
+
+after(async () => {
   const { statusCode } = await api.post('/api/testing/reset');
   assert.strictEqual(statusCode, 200);
 });
@@ -100,11 +105,6 @@ describe('Category API - Add Category', () => {
   });
 
   describe('correct status code and response is sent when', () => {
-    test.after(async () => {
-      const { statusCode } = await api.post('/api/testing/reset');
-      assert.strictEqual(statusCode, 200);
-    });
-
     test('a new category is created', async () => {
       const requestBody: AddCategoryRequest = {
         name: 'A valid category request',
