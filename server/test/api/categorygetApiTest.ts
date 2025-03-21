@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import { describe, test, beforeEach } from 'node:test';
+import { describe, test, beforeEach, after } from 'node:test';
 import assert from 'node:assert';
 import app from '../../src/app';
 import { AddCategoryRequest } from '../../../shared/types';
@@ -15,7 +15,11 @@ beforeEach(async () => {
   assert.strictEqual(statusCode, 200);
 });
 
-describe('Categories API - Get categories', () => {
+describe('Categories API - Get categories', async () => {
+  after(async () => {
+    await api.post('/api/testing/reset');
+  });
+
   test('initially an empty array is returned', async () => {
     const response = await api.get(url);
     assert.strictEqual(response.statusCode, 200);
