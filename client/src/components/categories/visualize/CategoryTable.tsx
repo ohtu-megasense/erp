@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Category } from '../../../features/categoryDataSlice';
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { Delete as DeleteIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import { useDeleteItemMutation } from '../../../features/apiSlice';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -83,6 +83,12 @@ export const CategoryTable = forwardRef(
       }));
     };
 
+    // ATTEMPT TO ADD FUNCTION TO HANDLE ADD COLUMN BUTTON ACTION STARTS 
+    const handleAddColumn = () => {
+      console.log('Add column clicked');
+    };
+    // ATTEMPT TO ADD FUNCTION TO HANDLE ADD COLUMN BUTTON ACTION ENDS 
+
     useImperativeHandle(ref, () => ({
       getFormValues: () => {
         const dirtyFormValues: Record<number, Record<string, string>> = {};
@@ -134,11 +140,28 @@ export const CategoryTable = forwardRef(
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontSize: '0.8125rem' }}>ID</TableCell>
+              
               {Object.keys(category.itemShape).map((key) => (
                 <TableCell key={key} sx={{ fontSize: '0.8125rem' }}>
                   {key}
                 </TableCell>
               ))}
+
+              {/* ATTEMPT TO ADD COLUMN BUTTON START*/}
+              {isEditing && (
+                <TableCell sx={{ fontSize: '0.8125rem' }}>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={handleAddColumn}
+                    aria-label="Add column"
+                  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                </TableCell>
+              )}
+              {/* ATTEMPT TO ADD COLUMN BUTTON ENDS */}
+
             </TableRow>
           </TableHead>
           <TableBody>
