@@ -88,20 +88,20 @@ export async function AddItem(category_id: string, item_data: JSON) {
     let sql_text: string = 'INSERT INTO item (category_id, item_data) VALUES (';
     sql_text += '%L, %L);';
 
-    console.log(sql_text);
-    console.log(category_id);
-    console.log(item_data);
+    logger.info(sql_text);
+    logger.info(category_id);
+    logger.info(item_data);
 
     const query = format(sql_text, category_id, item_data);
     await pool.query(query);
 
-    console.log(
+    logger.info(
       'category "${category_id}" with item data "${item_data}" added'
     );
   } catch (error) {
-    console.error('Error adding item:', error);
+    logger.error('Error adding item:', error);
   } finally {
-    console.log('Disconnected from the database');
+    logger.info('Disconnected from the database');
   }
 }
 
@@ -110,15 +110,15 @@ export async function DeleteItem(item_id: string) {
     let sql_text: string = 'DELETE FROM item WHERE id=';
     sql_text += '%L;';
 
-    console.log(sql_text);
-    console.log(item_id);
+    logger.info(sql_text);
+    logger.info(item_id);
 
     const query = format(sql_text, item_id);
     await pool.query(query);
 
-    console.log('item with item_id "${item_id}" deleted');
+    logger.info('item with item_id "${item_id}" deleted');
   } catch (error) {
-    console.error('Error deleting item:', error);
+    logger.error('Error deleting item:', error);
   }
 }
 
@@ -127,20 +127,20 @@ export async function CheckItemIdFound(item_id: string): Promise<boolean> {
     let sql_text: string = 'SELECT * FROM item WHERE id=';
     sql_text += '%L;';
 
-    console.log(sql_text);
-    console.log('printing item id:', item_id);
+    logger.info(sql_text);
+    logger.info('printing item id:', item_id);
 
     const query = format(sql_text, item_id);
     const result = await pool.query(query);
 
-    console.log(result.rows.length);
+    logger.info(result.rows.length);
     if (result.rows.length == 1) {
       return true;
     } else {
       return false;
     }
   } catch (error) {
-    console.error('Error finding the item by ID:', error);
+    logger.error('Error finding the item by ID:', error);
     return false;
   }
 }
@@ -154,21 +154,21 @@ export const testLogCategories = async () => {
 export async function AlterCategory(category_id: string, item_shape: JSON) {
   const client = await pool.connect();
   try {
-    console.log('Connected to database AlterCategory');
+    logger.info('Connected to database AlterCategory');
 
     //updating the item_shape JSON of a category, replacing it with a new JSON structure
     const sql_text: string =
       'UPDATE category SET item_shape = %L WHERE id = %L;';
     const query = format(sql_text, item_shape, category_id);
     await client.query(query);
-    console.log(
+    logger.info(
       'category "${category_id}" updated with item shape "${item_shape}"'
     );
   } catch (error) {
-    console.error('Error updating category:', error);
+    logger.error('Error updating category:', error);
   } finally {
     client.release();
-    console.log('Disconnected from database AlterCategory');
+    logger.info('Disconnected from database AlterCategory');
   }
 }
 
