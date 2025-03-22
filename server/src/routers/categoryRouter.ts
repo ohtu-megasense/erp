@@ -64,4 +64,27 @@ router.put('/:categoryId', (req, res) => {
     });
 });
 
+// ATTEMPT TO ADD DUMMY ROUTE FOR ADDING COLUMN STARTS
+router.post('/:categoryId/columns', (req, res) => {
+  const { categoryId } = req.params;
+  const { columnName } = req.body;
+
+  console.log(`Received request to add column "${columnName}" to category ${categoryId}`);
+
+  res.status(200).json({
+    success: true,
+    updatedCategory: {
+      id: Number(categoryId),
+      name: 'Stubbed Category',
+      itemShape: {
+        name: 'string',
+        existingColumn: 'string',
+        [columnName]: 'string' 
+      },
+      items: []
+    }
+  });
+});
+// ATTEMPT TO ADD DUMMY ROUTE FOR ADDING COLUMN ENDS
+
 export default router;

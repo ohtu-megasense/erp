@@ -5,7 +5,11 @@ import {
   Category,
   Item,
   AddItemResponse,
-  PingResponse
+  PingResponse,
+  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
+  AddColumnRequest,
+  AddColumnResponse
+  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
 } from '../../../shared/types';
 import { addNotification } from './notificationSlice';
 
@@ -71,7 +75,37 @@ export const apiSlice = createApi({
         body: id
       }),
       invalidatesTags: ['Item', 'Category']
+    }),
+    //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
+    addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
+      query: ({ categoryId, columnName }) => ({
+        url: `manage/categories/${categoryId}/columns`, // Update if your backend uses a different path
+        method: 'POST', // Use PATCH if that's what your backend expects
+        body: { columnName }
+      }),
+      invalidatesTags: ['Category'],
+      async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Column "${columnName}" added successfully`,
+              severity: 'info'
+            })
+          );
+        } catch (error: any) {
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Failed to add column: ${error.error.data.error}`,
+              severity: 'error'
+            })
+          );
+        }
+      }
     })
+    //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN ENDS
   })
 });
 
@@ -80,5 +114,8 @@ export const {
   useGetCategoriesQuery,
   useAddCategoryMutation,
   useAddItemMutation,
-  useDeleteItemMutation
+  useDeleteItemMutation,
+  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
+  useAddColumnMutation
+  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN ENDS
 } = apiSlice;

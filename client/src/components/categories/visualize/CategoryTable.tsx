@@ -14,7 +14,7 @@ import {
 import { Category } from '../../../features/categoryDataSlice';
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-import { useDeleteItemMutation } from '../../../features/apiSlice';
+import { useDeleteItemMutation, useAddColumnMutation } from '../../../features/apiSlice';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -40,6 +40,8 @@ export const CategoryTable = forwardRef(
     const [deleteItemMutation] = useDeleteItemMutation();
 
     const [openDialogs, setOpenDialogs] = useState<Record<number, boolean>>({});
+
+    const [addColumn] = useAddColumnMutation();
 
     useEffect(() => {
       if (isEditing) {
@@ -84,8 +86,21 @@ export const CategoryTable = forwardRef(
     };
 
     // ATTEMPT TO ADD FUNCTION TO HANDLE ADD COLUMN BUTTON ACTION STARTS 
-    const handleAddColumn = () => {
-      console.log('Add column clicked');
+    const handleAddColumn = async () => {
+      const newKey = prompt('Enter name for new column:');
+      if (!newKey) return;
+    
+      console.log('New column name:', newKey);
+      
+      try {
+        await addColumn({
+          categoryId: category.id,
+          columnName: newKey
+        }).unwrap();
+        console.log(`Column "${newKey}" added successfully`);
+      } catch (error) {
+        console.error('Failed to add column:', error);
+      }
     };
     // ATTEMPT TO ADD FUNCTION TO HANDLE ADD COLUMN BUTTON ACTION ENDS 
 
