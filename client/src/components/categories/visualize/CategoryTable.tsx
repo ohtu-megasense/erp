@@ -24,15 +24,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface CategoryTableProps {
   category: Category;
   isEditing: boolean;
-  // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
   refetchCategories: () => void;
-  // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
 }
 
 export const CategoryTable = forwardRef(
-  // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
   ({ category, isEditing, refetchCategories }: CategoryTableProps, ref) => {
-  // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
     const [page, setPage] = useState(1);
     const [formValues, setFormValues] = useState<
       Record<number, Record<string, string>>
@@ -90,7 +86,6 @@ export const CategoryTable = forwardRef(
       }));
     };
 
-    // ATTEMPT TO ADD FUNCTION TO HANDLE ADD COLUMN BUTTON ACTION STARTS 
     const handleAddColumn = async () => {
       const newKey = prompt('Enter name for new column:');
       if (!newKey) return;
@@ -103,14 +98,11 @@ export const CategoryTable = forwardRef(
           columnName: newKey
         }).unwrap();
         console.log(`Column "${newKey}" added successfully`);
-        // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
-        refetchCategories();
-        // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
+        refetchCategories(); // rendering the new column name
       } catch (error) {
         console.error('Failed to add column:', error);
       }
     };
-    // ATTEMPT TO ADD FUNCTION TO HANDLE ADD COLUMN BUTTON ACTION ENDS 
 
     useImperativeHandle(ref, () => ({
       getFormValues: () => {
@@ -170,7 +162,6 @@ export const CategoryTable = forwardRef(
                 </TableCell>
               ))}
 
-              {/* ATTEMPT TO ADD COLUMN BUTTON START*/}
               {isEditing && (
                 <TableCell sx={{ fontSize: '0.8125rem' }}>
                   <IconButton
@@ -183,7 +174,6 @@ export const CategoryTable = forwardRef(
                   </IconButton>
                 </TableCell>
               )}
-              {/* ATTEMPT TO ADD COLUMN BUTTON ENDS */}
 
             </TableRow>
           </TableHead>

@@ -76,11 +76,10 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Item', 'Category']
     }),
-    //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
     addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
       query: ({ categoryId, columnName }) => ({
-        url: `manage/categories/${categoryId}/columns`, // Update if your backend uses a different path
-        method: 'POST', // Use PATCH if that's what your backend expects
+        url: `manage/categories/${categoryId}/columns`, 
+        method: 'POST', 
         body: { columnName }
       }),
       invalidatesTags: ['Category'],
@@ -105,7 +104,6 @@ export const apiSlice = createApi({
         }
       }
     })
-    //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN ENDS
   })
 });
 
@@ -115,7 +113,5 @@ export const {
   useAddCategoryMutation,
   useAddItemMutation,
   useDeleteItemMutation,
-  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
   useAddColumnMutation
-  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN ENDS
 } = apiSlice;

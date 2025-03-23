@@ -3,7 +3,6 @@ import { CategoryManager } from "./CategoryManager";
 import { useGetCategoriesQuery } from "../../../features/apiSlice";
 
 export const ManageCategoriesSection = () => {
-	// ATTEMPT TO RENDER NEW COLUMN NAME STARTS
 	const { data: categoriesData = [], refetch } = useGetCategoriesQuery();
 	console.log(categoriesData);
 	return (

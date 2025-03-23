@@ -64,7 +64,7 @@ router.put('/:categoryId', (req, res) => {
     });
 });
 
-// ATTEMPT TO ADD DUMMY ROUTE FOR ADDING AND RENDERING COLUMN STARTS
+// DUMMY ROUTE FOR ADDING AND RENDERING COLUMN JUST TO VERIFY FUNCTIONALITY IN FRONTEND
 router.post('/:categoryId/columns', async (req, res) => {
   const { categoryId } = req.params;
   const { columnName } = req.body;
@@ -72,7 +72,6 @@ router.post('/:categoryId/columns', async (req, res) => {
   console.log(`Received request to add column "${columnName}" to category ${categoryId}`);
 
   try {
-    // 1. Fetch existing categories
     const categories = await getCategories();
     const category = categories.find((cat) => cat.id === Number(categoryId));
 
@@ -80,16 +79,13 @@ router.post('/:categoryId/columns', async (req, res) => {
       return res.status(404).json({ error: 'Category not found' });
     }
 
-    // 2. Add new column to itemShape
     const updatedShape = {
       ...category.itemShape,
       [columnName]: 'string'
     };
 
-    // 3. Persist it using your existing logic
     await AlterCategory(categoryId, updatedShape);
 
-    // 4. Return the updated category
     res.status(200).json({
       success: true,
       updatedCategory: {
@@ -102,6 +98,5 @@ router.post('/:categoryId/columns', async (req, res) => {
     res.status(500).json({ error: 'Failed to add column' });
   }
 });
-// ATTEMPT TO ADD DUMMY ROUTE FOR ADDING AND RENDERING COLUMN ENDS
 
 export default router;
