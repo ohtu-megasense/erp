@@ -24,10 +24,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface CategoryTableProps {
   category: Category;
   isEditing: boolean;
+  // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
+  refetchCategories: () => void;
+  // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
 }
 
 export const CategoryTable = forwardRef(
-  ({ category, isEditing }: CategoryTableProps, ref) => {
+  // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
+  ({ category, isEditing, refetchCategories }: CategoryTableProps, ref) => {
+  // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
     const [page, setPage] = useState(1);
     const [formValues, setFormValues] = useState<
       Record<number, Record<string, string>>
@@ -98,6 +103,9 @@ export const CategoryTable = forwardRef(
           columnName: newKey
         }).unwrap();
         console.log(`Column "${newKey}" added successfully`);
+        // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
+        refetchCategories();
+        // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
       } catch (error) {
         console.error('Failed to add column:', error);
       }

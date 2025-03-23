@@ -13,9 +13,13 @@ import { Category } from '../../../../../shared/types';
 
 interface CategoryManagerProps {
   category: Category;
+  // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
+  refetchCategories: () => void;
+  // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
 }
-
-export const CategoryManager = ({ category }: CategoryManagerProps) => {
+// ATTEMPT TO RENDER NEW COLUMN NAME STARTS
+export const CategoryManager = ({ category, refetchCategories }: CategoryManagerProps) => {
+// ATTEMPT TO RENDER NEW COLUMN NAME ENDS
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const tableRef = useRef<{
@@ -98,6 +102,9 @@ export const CategoryManager = ({ category }: CategoryManagerProps) => {
             category={category}
             isEditing={isEditing}
             ref={tableRef}
+            // ATTEMPT TO RENDER NEW COLUMN NAME STARTS
+            refetchCategories={refetchCategories}
+            // ATTEMPT TO RENDER NEW COLUMN NAME ENDS
           />
         </Paper>
       </Stack>

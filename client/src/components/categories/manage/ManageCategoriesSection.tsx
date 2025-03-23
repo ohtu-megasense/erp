@@ -3,7 +3,8 @@ import { CategoryManager } from "./CategoryManager";
 import { useGetCategoriesQuery } from "../../../features/apiSlice";
 
 export const ManageCategoriesSection = () => {
-	const { data: categoriesData = [] } = useGetCategoriesQuery();
+	// ATTEMPT TO RENDER NEW COLUMN NAME STARTS
+	const { data: categoriesData = [], refetch } = useGetCategoriesQuery();
 	console.log(categoriesData);
 	return (
 		<Stack gap={4}>
@@ -15,7 +16,7 @@ export const ManageCategoriesSection = () => {
 							p: 2,
 						}}
 					>
-						<CategoryManager category={category} />
+						<CategoryManager category={category} refetchCategories={refetch} />
 					</Paper>
 				);
 			})}
