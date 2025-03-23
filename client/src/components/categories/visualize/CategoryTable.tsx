@@ -24,7 +24,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface CategoryTableProps {
   category: Category;
   isEditing: boolean;
-  refetchCategories: () => void;
+  refetchCategories?: () => void;
 }
 
 export const CategoryTable = forwardRef(
@@ -98,7 +98,7 @@ export const CategoryTable = forwardRef(
           columnName: newKey
         }).unwrap();
         console.log(`Column "${newKey}" added successfully`);
-        refetchCategories(); // rendering the new column name
+        refetchCategories?.(); // rendering the new column name
       } catch (error) {
         console.error('Failed to add column:', error);
       }
