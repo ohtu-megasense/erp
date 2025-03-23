@@ -31,3 +31,13 @@ export interface Item {
   id: number;
   data: Record<string, string>;
 }
+
+export interface AddColumnRequest {
+  categoryId: number;
+  columnName: string;
+}
+
+export interface AddColumnResponse {
+  success: boolean;
+  updatedCategory: Category;
+}

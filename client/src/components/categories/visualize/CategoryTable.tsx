@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import { Category } from '../../../features/categoryDataSlice';
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { Delete as DeleteIcon } from '@mui/icons-material';
-import { useDeleteItemMutation } from '../../../features/apiSlice';
+import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
+import { useDeleteItemMutation, useAddColumnMutation } from '../../../features/apiSlice';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -24,10 +24,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface CategoryTableProps {
   category: Category;
   isEditing: boolean;
+  refetchCategories?: () => void;
 }
 
 export const CategoryTable = forwardRef(
-  ({ category, isEditing }: CategoryTableProps, ref) => {
+  ({ category, isEditing, refetchCategories }: CategoryTableProps, ref) => {
     const [page, setPage] = useState(1);
     const [formValues, setFormValues] = useState<
       Record<number, Record<string, string>>
@@ -40,6 +41,8 @@ export const CategoryTable = forwardRef(
     const [deleteItemMutation] = useDeleteItemMutation();
 
     const [openDialogs, setOpenDialogs] = useState<Record<number, boolean>>({});
+
+    const [addColumn] = useAddColumnMutation();
 
     useEffect(() => {
       if (isEditing) {
@@ -81,6 +84,24 @@ export const CategoryTable = forwardRef(
         ...prev,
         [id]: false
       }));
+    };
+
+    const handleAddColumn = async () => {
+      const newKey = prompt('Enter name for new column:');
+      if (!newKey) return;
+    
+      console.log('New column name:', newKey);
+      
+      try {
+        await addColumn({
+          categoryId: category.id,
+          columnName: newKey
+        }).unwrap();
+        console.log(`Column "${newKey}" added successfully`);
+        refetchCategories?.(); // rendering the new column name
+      } catch (error) {
+        console.error('Failed to add column:', error);
+      }
     };
 
     useImperativeHandle(ref, () => ({
@@ -134,11 +155,26 @@ export const CategoryTable = forwardRef(
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontSize: '0.8125rem' }}>ID</TableCell>
+              
               {Object.keys(category.itemShape).map((key) => (
                 <TableCell key={key} sx={{ fontSize: '0.8125rem' }}>
                   {key}
                 </TableCell>
               ))}
+
+              {isEditing && (
+                <TableCell sx={{ fontSize: '0.8125rem' }}>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={handleAddColumn}
+                    aria-label="Add column"
+                  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                </TableCell>
+              )}
+
             </TableRow>
           </TableHead>
           <TableBody>

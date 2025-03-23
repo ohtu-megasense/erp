@@ -13,9 +13,10 @@ import { Category } from '../../../../../shared/types';
 
 interface CategoryManagerProps {
   category: Category;
+  refetchCategories: () => void;
 }
 
-export const CategoryManager = ({ category }: CategoryManagerProps) => {
+export const CategoryManager = ({ category, refetchCategories }: CategoryManagerProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const tableRef = useRef<{
@@ -98,6 +99,7 @@ export const CategoryManager = ({ category }: CategoryManagerProps) => {
             category={category}
             isEditing={isEditing}
             ref={tableRef}
+            refetchCategories={refetchCategories}
           />
         </Paper>
       </Stack>

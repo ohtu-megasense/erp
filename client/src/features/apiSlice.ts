@@ -5,7 +5,11 @@ import {
   Category,
   Item,
   AddItemResponse,
-  PingResponse
+  PingResponse,
+  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
+  AddColumnRequest,
+  AddColumnResponse
+  //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
 } from '../../../shared/types';
 import { addNotification } from './notificationSlice';
 
@@ -45,11 +49,12 @@ export const apiSlice = createApi({
             })
           );
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
+        }  catch (error: unknown) {
+          const err = error as { error?: { data?: { error?: string } } };
           mutationLifeCycleApi.dispatch(
             addNotification({
               id: crypto.randomUUID(),
-              message: `Failed to add category: ${error.error.data.error}.`,
+              message: `Failed to add category: ${err.error?.data?.error ?? 'Unknown error'}.`,
               severity: 'error'
             })
           );
@@ -71,6 +76,35 @@ export const apiSlice = createApi({
         body: id
       }),
       invalidatesTags: ['Item', 'Category']
+    }),
+    addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
+      query: ({ categoryId, columnName }) => ({
+        url: `manage/categories/${categoryId}/columns`, 
+        method: 'POST', 
+        body: { columnName }
+      }),
+      invalidatesTags: ['Category'],
+      async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Column "${columnName}" added successfully`,
+              severity: 'info'
+            })
+          );
+        } catch (error: unknown) {
+          const err = error as { error?: { data?: { error?: string } } };
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Failed to add column: ${err.error?.data?.error ?? 'Unknown error'}`,
+              severity: 'error'
+            })
+          );
+        }
+      }
     })
   })
 });
@@ -80,5 +114,6 @@ export const {
   useGetCategoriesQuery,
   useAddCategoryMutation,
   useAddItemMutation,
-  useDeleteItemMutation
+  useDeleteItemMutation,
+  useAddColumnMutation
 } = apiSlice;
