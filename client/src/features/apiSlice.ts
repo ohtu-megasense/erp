@@ -49,11 +49,12 @@ export const apiSlice = createApi({
             })
           );
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
+        }  catch (error: unknown) {
+          const err = error as { error?: { data?: { error?: string } } };
           mutationLifeCycleApi.dispatch(
             addNotification({
               id: crypto.randomUUID(),
-              message: `Failed to add category: ${error.error.data.error}.`,
+              message: `Failed to add category: ${err.error?.data?.error ?? 'Unknown error'}.`,
               severity: 'error'
             })
           );
@@ -93,11 +94,12 @@ export const apiSlice = createApi({
               severity: 'info'
             })
           );
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const err = error as { error?: { data?: { error?: string } } };
           dispatch(
             addNotification({
               id: crypto.randomUUID(),
-              message: `Failed to add column: ${error.error.data.error}`,
+              message: `Failed to add column: ${err.error?.data?.error ?? 'Unknown error'}`,
               severity: 'error'
             })
           );
