@@ -130,4 +130,12 @@ describe('Items API - Delete Item', () => {
     const itemExists = categoryAfterDelete.items.some((item: Item) => item.id === itemId);
     assert.strictEqual(itemExists, false, 'Item should be deleted');
   });
+
+  test('returns error when ID does not exist', async () => {
+    const invalideItemId = 9999
+    const response = await api.delete(`${itemsUrl}/${invalideItemId}`)
+    
+    assert.strictEqual(response.statusCode, 404)
+    assert.strictEqual(response.body.error, 'Item with ID 9999 not found')
+  })
 });

@@ -27,8 +27,17 @@ router.delete("/:id", async (req, res) => {
 	const id = req.params.id;
 
   try {
-    await DeleteItem(id)
-    res.json({ message: `Item with ID ${id} deleted successfully`})
+    const deleteItemResponse = await DeleteItem(id)
+    if (deleteItemResponse.rowsDeleted === 1) {
+      res.json({ message: `Item with ID ${id} deleted successfully`})
+    }
+    else if (deleteItemResponse?.rowsDeleted === 0) {
+      res.status(404).json({ error: `Item with ID ${id} not found`})
+    }
+    else {
+      logger.error('Multiple items with same ID deleted')
+      res.json({ message: `${deleteItemResponse.rowsDeleted} items with ID ${id} deleted` });
+    }
   } catch (error) {
     logger.error(`Error deleting item with ID ${id}:`, error)
     res.status(500).json({ error: "Internal server error"})

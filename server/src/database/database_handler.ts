@@ -96,7 +96,7 @@ export async function AddItem(category_id: string, item_data: JSON) {
     await pool.query(query);
 
     logger.info(
-      'category "${category_id}" with item data "${item_data}" added'
+      `category ${category_id} with item data ${item_data}" added`
     );
   } catch (error) {
     logger.error('Error adding item:', error);
@@ -114,11 +114,19 @@ export async function DeleteItem(item_id: string) {
     logger.info(item_id);
 
     const query = format(sql_text, item_id);
-    await pool.query(query);
+    const result = await pool.query(query);
 
-    logger.info('item with item_id "${item_id}" deleted');
+    logger.info(`item with item_id "${item_id}" deleted`);
+    return {
+      success: true,
+      rowsDeleted: result.rowCount
+    }
   } catch (error) {
     logger.error('Error deleting item:', error);
+    return {
+      success: false,
+      rowsDeleted: 0
+    }
   }
 }
 
