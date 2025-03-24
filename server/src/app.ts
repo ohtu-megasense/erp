@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import pingRouter from './routers/pingRouter';
-import inventoryRouter from './routers/inventoryRouter';
 import categoryRouter from './routers/categoryRouter';
 import itemRouter from './routers/itemRouter';
 import { requestLogger } from './utils/middleware';
@@ -15,7 +14,6 @@ app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
 app.use('/api/ping', pingRouter);
-app.use('/api/reports/inventory', inventoryRouter);
 app.use('/api/manage/categories', categoryRouter);
 app.use('/api/items', itemRouter);
 
