@@ -75,7 +75,28 @@ export const apiSlice = createApi({
         method: 'DELETE',
         body: id
       }),
-      invalidatesTags: ['Item', 'Category']
+      invalidatesTags: ['Item', 'Category'],
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Item #${id} successfully deleted`,
+              severity: 'success'
+            })
+          )
+        } catch (error: unknown) {
+          const err = error as { error?: { data?: {error?: string}}}
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Failed to delete item: ${err.error?.data?.error ?? 'Unknown error'}`,
+              severity: 'error'
+            })
+          )
+        }
+      }
     }),
     addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
       query: ({ categoryId, columnName }) => ({
