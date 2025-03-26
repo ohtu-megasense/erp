@@ -4,7 +4,6 @@ import {
   Edit as EditIcon,
   Save as SaveIcon,
   Add as AddIcon,
-  Delete as DeleteIcon
 } from '@mui/icons-material';
 import { updateItem } from '../../../features/categoryDataSlice';
 import { useRenameCategoryMutation } from '../../../features/apiSlice';
@@ -56,15 +55,28 @@ export const CategoryManager = ({
     const dirtyFormValues = tableRef.current.getFormValues();
     const updateCount = Object.keys(dirtyFormValues).length;
     const isOpenNecessary = updateCount > 0;
+    const titleChanged = title !== category.name
 
-    if (isOpenNecessary === false) {
+    if (isOpenNecessary === false && !titleChanged) {
       setIsEditing(false);
       return;
     }
 
     const itemText = updateCount === 1 ? 'item' : 'items';
 
-    setDialogueText(`Do you want to update ${updateCount} ${itemText}?`);
+    let displayText: string =`Do you want to `;
+    
+    if (titleChanged) {
+      displayText += `update the title to ${title}`;
+    }
+    if (updateCount > 0 && titleChanged) {
+      displayText += `and`;
+    }
+    if (updateCount > 0 && titleChanged) {
+      displayText += `change ${updateCount} ${itemText}`;
+    }
+    displayText += `?`;
+    setDialogueText(displayText);
     setIsDialogOpen(true);
   };
 
@@ -115,7 +127,7 @@ export const CategoryManager = ({
         >
           <div style={{display: 'flex', alignItems: 'center'}}>
           {!isEditing && <Typography noWrap>{category.name}</Typography>}
-          {isEditing && <TextField nowrap sx={{ fontSize: '0.8125rem' }} defaultValue={category.name || ''} id="categoryName" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTitle(e.target.value)}}></TextField>}
+          {isEditing && <TextField sx={{ fontSize: '0.8125rem' }} defaultValue={category.name || ''} id="categoryName" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTitle(e.target.value)}}></TextField>}
         </div>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ display: 'flex', gap: 1 }}>
