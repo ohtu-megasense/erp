@@ -13,6 +13,11 @@ interface AddCategoryParams {
   itemShape: Record<string, string>;
 }
 
+interface renameCategoryParams {
+  id: number,
+  name: string
+}
+
 export const addCategory = async (
   params: AddCategoryParams
 ): Promise<{ id: number; name: string; itemShape: Record<string, string> }> => {
@@ -46,6 +51,25 @@ export const addCategory = async (
     itemShape: row.item_shape
   };
 };
+
+export const renameCategory = async (categoryName: string, categoryId: number): Promise<{name: string;}> => {
+  try {
+    const query = {
+    text: `
+    UPDATE category SET category_name = $1 WHERE id = $2 RETURNING category_name;
+    `,
+    values: [categoryName, categoryId]
+  };
+  console.log(query)
+  const result = await pool.query(query)
+
+  const row = result.rows[0]
+  
+  return {name: row.category_name};
+} catch(error) {
+  logger.error('error updating item', error)
+}
+}
 
 export const getCategories = async (): Promise<Category[]> => {
   const query = {

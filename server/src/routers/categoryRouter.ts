@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   AlterCategory,
+  renameCategory,
   addCategory,
   getCategories
 } from '../database/database_handler';
@@ -46,12 +47,21 @@ router.get('/', async (_, res) => {
 
 router.put('/:categoryId', (req, res) => {
   const { categoryId } = req.params;
-  const { itemShape } = req.body;
+  const { itemShape, categoryName } = req.body;
 
   if (!categoryId || !itemShape) {
     console.error('Category ID and new item shape are required');
     res.status(400).json({ error: 'Category ID and item shape are required' });
     return;
+  }
+
+  if (!categoryName) {
+    console.error('Category name required');
+    res.status(400).json({ error: 'Category name required'})
+    return
+  } else {
+    renameCategory(categoryName, Number(categoryId))
+    console.log("renamed")
   }
 
   AlterCategory(categoryId, itemShape)

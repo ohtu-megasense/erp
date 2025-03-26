@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react';
-import { Box, Paper, Typography, IconButton, Stack } from '@mui/material';
+import { Box, Paper, Typography, IconButton, Stack, TextField } from '@mui/material';
 import {
   Edit as EditIcon,
   Save as SaveIcon,
-  Add as AddIcon
+  Add as AddIcon,
 } from '@mui/icons-material';
 import { updateItem } from '../../../features/categoryDataSlice';
+import { useRenameCategoryMutation } from '../../../features/apiSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { AddCategoryItemForm } from './AddCategoryItemForm';
 import { CategoryTable } from '../visualize/CategoryTable';
@@ -25,6 +26,9 @@ export const CategoryManager = ({
   const [isAdding, setIsAdding] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogueText, setDialogueText] = useState('');
+
+  const [title, setTitle] = useState('');
+  const [RenameCategoryMutation] = useRenameCategoryMutation();
 
   const tableRef = useRef<{
     getFormValues: () => Record<number, Record<string, string>>;
@@ -51,15 +55,28 @@ export const CategoryManager = ({
     const dirtyFormValues = tableRef.current.getFormValues();
     const updateCount = Object.keys(dirtyFormValues).length;
     const isOpenNecessary = updateCount > 0;
+    const titleChanged = title !== category.name
 
-    if (isOpenNecessary === false) {
+    if (isOpenNecessary === false && !titleChanged) {
       setIsEditing(false);
       return;
     }
 
     const itemText = updateCount === 1 ? 'item' : 'items';
 
-    setDialogueText(`Do you want to update ${updateCount} ${itemText}?`);
+    let displayText: string =`Do you want to `;
+    
+    if (titleChanged) {
+      displayText += `update the title to ${title}`;
+    }
+    if (updateCount > 0 && titleChanged) {
+      displayText += `and`;
+    }
+    if (updateCount > 0 && titleChanged) {
+      displayText += `change ${updateCount} ${itemText}`;
+    }
+    displayText += `?`;
+    setDialogueText(displayText);
     setIsDialogOpen(true);
   };
 
@@ -68,6 +85,10 @@ export const CategoryManager = ({
     // and redux mock data is not used so
     // no visible changes happen atm
 
+    if (title !== '') {
+      console.log(title)
+      RenameCategoryMutation({categoryId: category.id, itemShape: category.itemShape, categoryName: title})
+    }
     if (tableRef.current) {
       const dirtyFormValues = tableRef.current.getFormValues();
       Object.entries(dirtyFormValues).forEach(([itemId, updatedItem]) => {
@@ -104,7 +125,10 @@ export const CategoryManager = ({
             gap: 2
           }}
         >
-          <Typography>{category.name}</Typography>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+          {!isEditing && <Typography noWrap>{category.name}</Typography>}
+          {isEditing && <TextField sx={{ fontSize: '0.8125rem' }} defaultValue={category.name || ''} id="categoryName" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTitle(e.target.value)}}></TextField>}
+        </div>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ display: 'flex', gap: 1 }}>
               {isEditing ? (
