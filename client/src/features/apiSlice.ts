@@ -87,16 +87,16 @@ export const apiSlice = createApi({
               message: `Item #${id} successfully deleted`,
               severity: 'success'
             })
-          )
+          );
         } catch (error: unknown) {
-          const err = error as { error?: { data?: { error?: string } } }
+          const err = error as { error?: { data?: { error?: string } } };
           dispatch(
             addNotification({
               id: crypto.randomUUID(),
               message: `Failed to delete item: ${err.error?.data?.error ?? 'Unknown error'}`,
               severity: 'error'
             })
-          )
+          );
         }
       }
     }),
@@ -109,58 +109,58 @@ export const apiSlice = createApi({
           data: updatedItem
         }
       }),
-        invalidatesTags: ['Item', 'Category'],
-          async onQueryStarted({ itemId }, { dispatch, queryFulfilled }) {
-  try {
-    await queryFulfilled;
-    dispatch(
-      addNotification({
-        id: crypto.randomUUID(),
-        message: `Item #${itemId} updated successfully`,
-        severity: 'success'
-      })
-    );
-  } catch (error: unknown) {
-    const err = error as { error?: { data?: { error?: string } } };
-    dispatch(
-      addNotification({
-        id: crypto.randomUUID(),
-        message: `Failed to update item: ${err.error?.data?.error ?? 'Unknown error'}`,
-        severity: 'error'
-      })
-    );
-  }
-}
-}),
-addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
-  query: ({ categoryId, columnName }) => ({
-    url: `manage/categories/${categoryId}/columns`,
-    method: 'POST',
-    body: { columnName }
-  }),
-  invalidatesTags: ['Category'],
-  async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
-    try {
-      await queryFulfilled;
-      dispatch(
-        addNotification({
-          id: crypto.randomUUID(),
-          message: `Column "${columnName}" added successfully`,
-          severity: 'info'
-        })
-      );
-    } catch (error: unknown) {
-      const err = error as { error?: { data?: { error?: string } } };
-      dispatch(
-        addNotification({
-          id: crypto.randomUUID(),
-          message: `Failed to add column: ${err.error?.data?.error ?? 'Unknown error'}`,
-          severity: 'error'
-        })
-      );
-    }
-  }
-})
+      invalidatesTags: ['Item', 'Category'],
+      async onQueryStarted({ itemId }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Item #${itemId} updated successfully`,
+              severity: 'success'
+            })
+          );
+        } catch (error: unknown) {
+          const err = error as { error?: { data?: { error?: string } } };
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Failed to update item: ${err.error?.data?.error ?? 'Unknown error'}`,
+              severity: 'error'
+            })
+          );
+        }
+      }
+    }),
+    addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
+      query: ({ categoryId, columnName }) => ({
+        url: `manage/categories/${categoryId}/columns`,
+        method: 'POST',
+        body: { columnName }
+      }),
+      invalidatesTags: ['Category'],
+      async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Column "${columnName}" added successfully`,
+              severity: 'info'
+            })
+          );
+        } catch (error: unknown) {
+          const err = error as { error?: { data?: { error?: string } } };
+          dispatch(
+            addNotification({
+              id: crypto.randomUUID(),
+              message: `Failed to add column: ${err.error?.data?.error ?? 'Unknown error'}`,
+              severity: 'error'
+            })
+          );
+        }
+      }
+    })
   })
 });
 
