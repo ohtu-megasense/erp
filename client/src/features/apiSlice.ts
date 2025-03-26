@@ -8,8 +8,10 @@ import {
   PingResponse,
   //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
   AddColumnRequest,
-  AddColumnResponse
+  AddColumnResponse,
   //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
+  UpdateItemRequest,
+  UpdateItemResponse
 } from '../../../shared/types';
 import { addNotification } from './notificationSlice';
 
@@ -49,7 +51,7 @@ export const apiSlice = createApi({
             })
           );
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        }  catch (error: unknown) {
+        } catch (error: unknown) {
           const err = error as { error?: { data?: { error?: string } } };
           mutationLifeCycleApi.dispatch(
             addNotification({
@@ -87,7 +89,7 @@ export const apiSlice = createApi({
             })
           )
         } catch (error: unknown) {
-          const err = error as { error?: { data?: {error?: string}}}
+          const err = error as { error?: { data?: { error?: string } } }
           dispatch(
             addNotification({
               id: crypto.randomUUID(),
@@ -98,35 +100,67 @@ export const apiSlice = createApi({
         }
       }
     }),
-    addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
-      query: ({ categoryId, columnName }) => ({
-        url: `manage/categories/${categoryId}/columns`, 
-        method: 'POST', 
-        body: { columnName }
-      }),
-      invalidatesTags: ['Category'],
-      async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(
-            addNotification({
-              id: crypto.randomUUID(),
-              message: `Column "${columnName}" added successfully`,
-              severity: 'info'
-            })
-          );
-        } catch (error: unknown) {
-          const err = error as { error?: { data?: { error?: string } } };
-          dispatch(
-            addNotification({
-              id: crypto.randomUUID(),
-              message: `Failed to add column: ${err.error?.data?.error ?? 'Unknown error'}`,
-              severity: 'error'
-            })
-          );
+    updateItem: builder.mutation<UpdateItemResponse, UpdateItemRequest>({
+      query: ({ categoryId, itemId, updatedItem }) => ({
+        url: `items/${itemId}`,
+        method: 'PUT',
+        body: {
+          categoryId,
+          data: updatedItem
         }
-      }
-    })
+      }),
+        invalidatesTags: ['Item', 'Category'],
+          async onQueryStarted({ itemId }, { dispatch, queryFulfilled }) {
+  try {
+    await queryFulfilled;
+    dispatch(
+      addNotification({
+        id: crypto.randomUUID(),
+        message: `Item #${itemId} updated successfully`,
+        severity: 'success'
+      })
+    );
+  } catch (error: unknown) {
+    const err = error as { error?: { data?: { error?: string } } };
+    dispatch(
+      addNotification({
+        id: crypto.randomUUID(),
+        message: `Failed to update item: ${err.error?.data?.error ?? 'Unknown error'}`,
+        severity: 'error'
+      })
+    );
+  }
+}
+}),
+addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
+  query: ({ categoryId, columnName }) => ({
+    url: `manage/categories/${categoryId}/columns`,
+    method: 'POST',
+    body: { columnName }
+  }),
+  invalidatesTags: ['Category'],
+  async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
+    try {
+      await queryFulfilled;
+      dispatch(
+        addNotification({
+          id: crypto.randomUUID(),
+          message: `Column "${columnName}" added successfully`,
+          severity: 'info'
+        })
+      );
+    } catch (error: unknown) {
+      const err = error as { error?: { data?: { error?: string } } };
+      dispatch(
+        addNotification({
+          id: crypto.randomUUID(),
+          message: `Failed to add column: ${err.error?.data?.error ?? 'Unknown error'}`,
+          severity: 'error'
+        })
+      );
+    }
+  }
+})
   })
 });
 
@@ -136,5 +170,6 @@ export const {
   useAddCategoryMutation,
   useAddItemMutation,
   useDeleteItemMutation,
-  useAddColumnMutation
+  useAddColumnMutation,
+  useUpdateItemMutation
 } = apiSlice;
