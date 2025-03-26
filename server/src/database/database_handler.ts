@@ -105,6 +105,28 @@ export async function AddItem(category_id: string, item_data: JSON) {
   }
 }
 
+export async function UpdateItem(item_id: string, item_data: JSON) {
+  try {
+    const sql_text: string = 'UPDATE item SET item_data (item_data) VALUES (%L) WHERE id=%L';
+
+    logger.info("SQL text: ", sql_text);
+    logger.info("item_id: ", item_id);
+    logger.info("item_data: ", item_data);
+
+    const query = format(sql_text, item_data, item_id);
+    await pool.query(query);
+
+    logger.info(
+      `Updated item with ID ${item_id} with data ${item_data}"`
+    );
+  } catch (error) {
+    logger.error('Error updating item:', error);
+  } finally {
+    logger.info('Disconnected from the database');
+  }
+}
+
+
 export async function DeleteItem(item_id: string) {
   try {
     let sql_text: string = 'DELETE FROM item WHERE id=';

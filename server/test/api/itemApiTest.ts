@@ -139,3 +139,58 @@ describe('Items API - Delete Item', () => {
     assert.strictEqual(response.body.error, 'Item with ID 9999 not found')
   })
 });
+
+describe('Items API - Update Item', () => {
+  test('item can be updated using its ID', async () => {
+    const categoryId = await createTestCategory();
+    await createTestItem(categoryId);
+
+    const categoriesResponse = await api.get(categoriesUrl);
+    const category = categoriesResponse.body.find((c: Category) => c.id === categoryId);
+    const itemId = category.items[0].id;
+
+    const updatedData = {
+      data: {
+        name: 'Updated Horse',
+        age: '10',
+        wins: '42'
+      }
+    };
+
+    const updateResponse = await api.put(`${itemsUrl}/${itemId}`).send(updatedData);
+
+    assert.strictEqual(updateResponse.statusCode, 200);
+    assert.match(updateResponse.body.message, /updated successfully/i);
+
+    const verifyResponse = await api.get(categoriesUrl);
+    const updatedCategory = verifyResponse.body.find((c: Category) => c.id === categoryId);
+    const updatedItem = updatedCategory.items.find((item: Item) => item.id === itemId);
+
+    assert.strictEqual(updatedItem.name, 'Updated Horse');
+    assert.strictEqual(updatedItem.age, '10');
+    assert.strictEqual(updatedItem.wins, '42');
+  });
+
+  test('returns 400 if data is missing in update', async () => {
+    const categoryId = await createTestCategory();
+    await createTestItem(categoryId);
+
+    const categoriesResponse = await api.get(categoriesUrl);
+    const category = categoriesResponse.body.find((c: Category) => c.id === categoryId);
+    const itemId = category.items[0].id;
+
+    const response = await api.put(`${itemsUrl}/${itemId}`).send({});
+    assert.strictEqual(response.statusCode, 400);
+    assert.strictEqual(response.body.error, 'Item data is required for update');
+  });
+
+  test('returns 404 if item does not exist', async () => {
+    const nonExistentId = 9999;
+    const response = await api.put(`${itemsUrl}/${nonExistentId}`).send({
+      data: { name: 'Ghost', age: '0', wins: '0' }
+    });
+
+    assert.strictEqual(response.statusCode, 404);
+    assert.strictEqual(response.body.error, `Item with ID ${nonExistentId} not found`);
+  });
+});

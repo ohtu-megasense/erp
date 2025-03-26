@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AddItem, DeleteItem } from "../database/database_handler";
+import { AddItem, DeleteItem, UpdateItem } from "../database/database_handler";
 import logger from "../utils/logger"
 
 const router = Router();
@@ -41,6 +41,35 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     logger.error(`Error deleting item with ID ${id}:`, error)
     res.status(500).json({ error: "Internal server error"})
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  const id = req.params.id;
+  const { data } = req.body;
+
+  console.log("data", data);
+
+  if (!data) {
+    logger.error("Item update failed: missing item data");
+    res.status(400).json({ error: "Item data is required for update" });
+    return;
+  }
+
+  try {
+    const updatedItem = await UpdateItem(id, data);
+
+    if (updatedItem?.rowsUpdated === 1) {
+      res.json({ message: `Item with ID ${id} updated successfully`, updatedItem });
+    } else if (updatedItem?.rowsUpdated === 0) {
+      res.status(404).json({ error: `Item with ID ${id} not found` });
+    } else {
+      logger.error(`Unexpected update result for item ID ${id}`, updatedItem);
+      res.status(500).json({ error: "Unexpected error during item update" });
+    }
+  } catch (error) {
+    logger.error(`Error updating item with ID ${id}:`, error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
