@@ -12,15 +12,22 @@ import { useAppDispatch } from '../../../app/hooks';
 import { AddCategoryItemForm } from './AddCategoryItemForm';
 import { CategoryTable } from '../visualize/CategoryTable';
 import { Category } from '../../../../../shared/types';
+import { UpdateConfirmationDialog } from './UpdateConfirmationDialog';
 
 interface CategoryManagerProps {
   category: Category;
   refetchCategories: () => void;
 }
 
-export const CategoryManager = ({ category, refetchCategories }: CategoryManagerProps) => {
+export const CategoryManager = ({
+  category,
+  refetchCategories
+}: CategoryManagerProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogueText, setDialogueText] = useState('');
+
   const [title, setTitle] = useState('');
   const [RenameCategoryMutation] = useRenameCategoryMutation();
 
@@ -37,7 +44,35 @@ export const CategoryManager = ({ category, refetchCategories }: CategoryManager
     setIsAdding((prev) => !prev);
   };
 
+  const handleClickSaveIcon = () => {
+    if (tableRef.current == null) {
+      setIsEditing(false);
+      return;
+    }
+
+    // if there are no 'dirty items' ie. no changes
+    // no need to open confirmation dialog.
+
+    const dirtyFormValues = tableRef.current.getFormValues();
+    const updateCount = Object.keys(dirtyFormValues).length;
+    const isOpenNecessary = updateCount > 0;
+
+    if (isOpenNecessary === false) {
+      setIsEditing(false);
+      return;
+    }
+
+    const itemText = updateCount === 1 ? 'item' : 'items';
+
+    setDialogueText(`Do you want to update ${updateCount} ${itemText}?`);
+    setIsDialogOpen(true);
+  };
+
   const handleSave = () => {
+    // the update is not going to backend
+    // and redux mock data is not used so
+    // no visible changes happen atm
+
     if (title !== '') {
       console.log(title)
       RenameCategoryMutation({categoryId: category.id, itemShape: category.itemShape, categoryName: title})
@@ -54,67 +89,82 @@ export const CategoryManager = ({ category, refetchCategories }: CategoryManager
         );
       });
     }
+
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setIsDialogOpen(false);
     setIsEditing(false);
   };
 
   return (
-    <Box>
-      <Stack
-        sx={{
-          gap: 2
-        }}
-      >
-        <div style={{display: 'flex', alignItems: 'center'}}>
+    <>
+      <UpdateConfirmationDialog
+        text={dialogueText}
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        onCancel={handleCancel}
+        onSave={handleSave}
+      />
+      <Box>
+        <Stack
+          sx={{
+            gap: 2
+          }}
+        >
+          <div style={{display: 'flex', alignItems: 'center'}}>
           {!isEditing && <Typography noWrap>{category.name}</Typography>}
           {isEditing && <TextField nowrap sx={{ fontSize: '0.8125rem' }} defaultValue={category.name || ''} id="categoryName" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTitle(e.target.value)}}></TextField>}
         </div>
-        <Box sx={{ display: 'flex' }}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            {isEditing ? (
+          <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {isEditing ? (
+                <IconButton
+                  color="primary"
+                  size="small"
+                  onClick={handleClickSaveIcon}
+                  aria-label="Save changes"
+                >
+                  <SaveIcon fontSize="small" />
+                </IconButton>
+              ) : (
+                <IconButton
+                  color="primary"
+                  size="small"
+                  onClick={handleEditToggle}
+                  aria-label="Edit category"
+                >
+                  <EditIcon fontSize="small" />
+                </IconButton>
+              )}
               <IconButton
                 color="primary"
                 size="small"
-                onClick={handleSave}
-                aria-label="Save changes"
+                onClick={handleAddToggle}
+                aria-label={isAdding ? 'Hide add form' : 'Show add form'}
+                data-testid="add-item-button"
               >
-                <SaveIcon fontSize="small" />
+                <AddIcon fontSize="small" />
               </IconButton>
-            ) : (
-              <IconButton
-                color="primary"
-                size="small"
-                onClick={handleEditToggle}
-                aria-label="Edit category"
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
-            )}
-            <IconButton
-              color="primary"
-              size="small"
-              onClick={handleAddToggle}
-              aria-label={isAdding ? 'Hide add form' : 'Show add form'}
-              data-testid="add-item-button"
-            >
-              <AddIcon fontSize="small" />
-            </IconButton>
+            </Box>
           </Box>
-        </Box>
 
-        {isAdding && (
+          {isAdding && (
+            <Paper sx={{ p: 2 }}>
+              <AddCategoryItemForm category={category} />
+            </Paper>
+          )}
           <Paper sx={{ p: 2 }}>
-            <AddCategoryItemForm category={category} />
+            <CategoryTable
+              category={category}
+              isEditing={isEditing}
+              ref={tableRef}
+              refetchCategories={refetchCategories}
+            />
           </Paper>
-        )}
-        <Paper sx={{ p: 2 }}>
-          <CategoryTable
-            category={category}
-            isEditing={isEditing}
-            ref={tableRef}
-            refetchCategories={refetchCategories}
-          />
-        </Paper>
-      </Stack>
-    </Box>
+        </Stack>
+      </Box>
+    </>
   );
 };
