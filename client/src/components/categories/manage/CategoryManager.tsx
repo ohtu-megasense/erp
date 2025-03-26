@@ -82,8 +82,6 @@ export const CategoryManager = ({
 
     setDialogueText(`Do you want to update ${updateCount} ${itemText}?`);
     setIsDialogOpen(true);
-
-    setIsEditing(false);
   };
 
   const handleCancel = () => {
