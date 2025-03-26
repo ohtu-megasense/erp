@@ -61,7 +61,7 @@ export const getCategories = async (): Promise<Category[]> => {
           )
         ) as items 
       FROM category LEFT JOIN item ON item.category_id = category.id
-      GROUP BY category_name, category.id;
+      GROUP BY category_name, category.id ORDER BY category.id;
     `
   };
 
@@ -105,9 +105,9 @@ export async function AddItem(category_id: string, item_data: JSON) {
   }
 }
 
-export async function UpdateItem(item_id: string, item_data: JSON) {
+export async function UpdateItem(item_id: string, item_data: Record<string, any>) {
   try {
-    const sql_text: string = 'UPDATE item SET item_data (item_data) VALUES (%L) WHERE id=%L';
+    const sql_text: string = 'UPDATE item SET item_data = (%L) WHERE id=%L';
 
     logger.info("SQL text: ", sql_text);
     logger.info("item_id: ", item_id);
@@ -125,7 +125,6 @@ export async function UpdateItem(item_id: string, item_data: JSON) {
     logger.info('Disconnected from the database');
   }
 }
-
 
 export async function DeleteItem(item_id: string) {
   try {
