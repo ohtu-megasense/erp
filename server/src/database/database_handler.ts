@@ -53,7 +53,8 @@ export const addCategory = async (
 };
 
 export const renameCategory = async (categoryName: string, categoryId: number): Promise<{name: string;}> => {
-  const query = {
+  try {
+    const query = {
     text: `
     UPDATE category SET category_name = $1 WHERE id = $2 RETURNING category_name;
     `,
@@ -65,6 +66,9 @@ export const renameCategory = async (categoryName: string, categoryId: number): 
   const row = result.rows[0]
   
   return {name: row.category_name};
+} catch(error) {
+  logger.error('error updating item', error)
+}
 }
 
 export const getCategories = async (): Promise<Category[]> => {

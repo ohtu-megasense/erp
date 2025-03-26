@@ -60,7 +60,7 @@ router.put('/:categoryId', (req, res) => {
     res.status(400).json({ error: 'Category name required'})
     return
   } else {
-    renameCategory(categoryName, categoryId)
+    renameCategory(categoryName, Number(categoryId))
     console.log("renamed")
   }
 

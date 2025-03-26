@@ -9,7 +9,7 @@ const url = "/api/manage/categories";
 describe("Category API - Update Category", () => {
     test("Updating a category returns confirmation message", async () => {
         const categoryId = "123"; // Example category ID
-        const updateData = { itemShape: JSON.stringify({ shape: "NewShape" }) };
+        const updateData = { itemShape: JSON.stringify({ shape: "NewShape" }), categoryName: 'name'};
 
         const response = await api.put(`${url}/${categoryId}`).send(updateData);
 
