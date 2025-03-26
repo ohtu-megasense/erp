@@ -9,6 +9,9 @@ import {
   //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
   AddColumnRequest,
   AddColumnResponse,
+  renameCategoryRequest,
+  renameCategoryResponse,
+
   //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
   UpdateItemRequest,
   UpdateItemResponse
@@ -63,6 +66,17 @@ export const apiSlice = createApi({
         }
       }
     }),
+    renameCategory: builder.mutation<
+      renameCategoryResponse,
+      renameCategoryRequest
+    >({
+      query: ({ categoryId, itemShape, categoryName }) => ({
+        url: `manage/categories/${categoryId}`,
+        method: 'PUT',
+        body: { itemShape, categoryName }
+      }),
+      invalidatesTags: ['Category']
+    }),
     addItem: builder.mutation<AddItemResponse, Item>({
       query: (item) => ({
         url: 'items',
@@ -97,6 +111,7 @@ export const apiSlice = createApi({
               severity: 'error'
             })
           );
+
         }
       }
     }),
@@ -133,10 +148,12 @@ export const apiSlice = createApi({
       }
     }),
     addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
+
       query: ({ categoryId, columnName }) => ({
         url: `manage/categories/${categoryId}/columns`,
         method: 'POST',
         body: { columnName }
+
       }),
       invalidatesTags: ['Category'],
       async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
@@ -171,5 +188,6 @@ export const {
   useAddItemMutation,
   useDeleteItemMutation,
   useAddColumnMutation,
-  useUpdateItemMutation
+  useUpdateItemMutation,
+  useRenameCategoryMutation
 } = apiSlice;

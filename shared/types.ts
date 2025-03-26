@@ -9,6 +9,17 @@ export interface AddCategoryResponse {
   itemShape: Record<string, string>;
 }
 
+export interface renameCategoryRequest {
+  categoryId: number;
+  itemShape: Record<string, string>;
+  categoryName: string;
+}
+
+export interface renameCategoryResponse {
+  success: boolean;
+  name: string;
+}
+
 export interface AddItemResponse {
   success: boolean;
   data: Item;
@@ -35,6 +46,7 @@ export interface Item {
 export interface AddColumnRequest {
   categoryId: number;
   columnName: string;
+  categoryName: string;
 }
 
 export interface AddColumnResponse {

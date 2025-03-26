@@ -95,7 +95,8 @@ export const CategoryTable = forwardRef(
       try {
         await addColumn({
           categoryId: category.id,
-          columnName: newKey
+          columnName: newKey,
+          categoryName: category.name
         }).unwrap();
         console.log(`Column "${newKey}" added successfully`);
         refetchCategories?.(); // rendering the new column name
