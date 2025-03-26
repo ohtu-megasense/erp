@@ -1,12 +1,24 @@
 export interface AddCategoryRequest {
   name: string;
   itemShape: Record<string, string>;
+  categoryName: string;
 }
 
 export interface AddCategoryResponse {
   id: number;
   name: string;
   itemShape: Record<string, string>;
+}
+
+export interface renameCategoryRequest {
+  categoryId: number;
+  itemShape: Record<string, string>;
+  categoryName: string;
+}
+
+export interface renameCategoryResponse {
+  success: boolean;
+  name: string;
 }
 
 export interface AddItemResponse {
@@ -35,6 +47,7 @@ export interface Item {
 export interface AddColumnRequest {
   categoryId: number;
   columnName: string;
+  categoryName: string;
 }
 
 export interface AddColumnResponse {

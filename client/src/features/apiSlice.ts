@@ -63,8 +63,11 @@ export const apiSlice = createApi({
         }
       }
     }),
-    renameCategory: builder.mutation<renameCategoryResponse, renameCategoryRequest>({
-      query: ({categoryId,itemShape, categoryName }) => ({
+    renameCategory: builder.mutation<
+      renameCategoryResponse,
+      renameCategoryRequest
+    >({
+      query: ({ categoryId, itemShape, categoryName }) => ({
         url: `manage/categories/${categoryId}`,
         method: 'PUT',
         body: { itemShape, categoryName }
