@@ -1,7 +1,6 @@
 export interface AddCategoryRequest {
   name: string;
   itemShape: Record<string, string>;
-  categoryName: string;
 }
 
 export interface AddCategoryResponse {
