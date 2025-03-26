@@ -51,7 +51,7 @@ router.put('/:id', async (req, res) => {
 
   if (!data) {
     logger.error('Item update failed: missing item data');
-    res.status(400).json({ error: 'Item data is required for update' });
+    res.status(400).json({ error: 'Item ID and updated data are required' });
     return;
   }
   try {

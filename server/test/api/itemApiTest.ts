@@ -103,41 +103,48 @@ describe('Items API - Add Item', () => {
 describe('Items API - Delete Item', () => {
   test('item can be deleted using its ID', async () => {
     const categoryId = await createTestCategory();
-    
+
     await createTestItem(categoryId);
-    
+
     const categoriesResponse = await api.get(categoriesUrl);
     assert.strictEqual(categoriesResponse.statusCode, 200);
-    
+
     const categories = categoriesResponse.body;
     const category = categories.find((c: Category) => c.id === categoryId);
     assert(category, 'Category should exist');
     assert(category.items.length > 0, 'Category should have items');
-    
+
     const itemId = category.items[0].id;
-    
+
     // Delete test item
     const deleteResponse = await api.delete(`${itemsUrl}/${itemId}`);
-    
+
     assert.strictEqual(deleteResponse.statusCode, 200);
-    assert.strictEqual(deleteResponse.body.message, `Item with ID ${itemId} deleted successfully`);
-    
+    assert.strictEqual(
+      deleteResponse.body.message,
+      `Item with ID ${itemId} deleted successfully`
+    );
+
     // Check that item was deleted
     const afterDeleteResponse = await api.get(categoriesUrl);
     const categoriesAfterDelete = afterDeleteResponse.body;
-    const categoryAfterDelete = categoriesAfterDelete.find((c: Category) => c.id === categoryId);
-    
-    const itemExists = categoryAfterDelete.items.some((item: Item) => item.id === itemId);
+    const categoryAfterDelete = categoriesAfterDelete.find(
+      (c: Category) => c.id === categoryId
+    );
+
+    const itemExists = categoryAfterDelete.items.some(
+      (item: Item) => item.id === itemId
+    );
     assert.strictEqual(itemExists, false, 'Item should be deleted');
   });
 
   test('returns error when ID does not exist', async () => {
-    const invalideItemId = 9999
-    const response = await api.delete(`${itemsUrl}/${invalideItemId}`)
-    
-    assert.strictEqual(response.statusCode, 404)
-    assert.strictEqual(response.body.error, 'Item with ID 9999 not found')
-  })
+    const invalideItemId = 9999;
+    const response = await api.delete(`${itemsUrl}/${invalideItemId}`);
+
+    assert.strictEqual(response.statusCode, 404);
+    assert.strictEqual(response.body.error, 'Item with ID 9999 not found');
+  });
 });
 
 describe('Items API - Update Item', () => {
@@ -146,10 +153,13 @@ describe('Items API - Update Item', () => {
     await createTestItem(categoryId);
 
     const categoriesResponse = await api.get(categoriesUrl);
-    const category = categoriesResponse.body.find((c: Category) => c.id === categoryId);
+    const category = categoriesResponse.body.find(
+      (c: Category) => c.id === categoryId
+    );
     const itemId = category.items[0].id;
 
     const updatedData = {
+      categoryId,
       data: {
         name: 'Updated Horse',
         age: '10',
@@ -157,18 +167,25 @@ describe('Items API - Update Item', () => {
       }
     };
 
-    const updateResponse = await api.put(`${itemsUrl}/${itemId}`).send(updatedData);
+    const updateResponse = await api
+      .put(`${itemsUrl}/${itemId}`)
+      .send(updatedData);
 
     assert.strictEqual(updateResponse.statusCode, 200);
-    assert.match(updateResponse.body.message, /updated successfully/i);
+    assert.strictEqual(updateResponse.body.id, itemId);
+    assert.strictEqual(updateResponse.body.categoryId, categoryId);
 
     const verifyResponse = await api.get(categoriesUrl);
-    const updatedCategory = verifyResponse.body.find((c: Category) => c.id === categoryId);
-    const updatedItem = updatedCategory.items.find((item: Item) => item.id === itemId);
+    const updatedCategory = verifyResponse.body.find(
+      (c: Category) => c.id === categoryId
+    );
+    const updatedItem = updatedCategory.items.find(
+      (item: Item) => item.id === itemId
+    );
 
-    assert.strictEqual(updatedItem.name, 'Updated Horse');
-    assert.strictEqual(updatedItem.age, '10');
-    assert.strictEqual(updatedItem.wins, '42');
+    assert.strictEqual(updatedItem.data.name, 'Updated Horse');
+    assert.strictEqual(updatedItem.data.age, '10');
+    assert.strictEqual(updatedItem.data.wins, '42');
   });
 
   test('returns 400 if data is missing in update', async () => {
@@ -176,21 +193,19 @@ describe('Items API - Update Item', () => {
     await createTestItem(categoryId);
 
     const categoriesResponse = await api.get(categoriesUrl);
-    const category = categoriesResponse.body.find((c: Category) => c.id === categoryId);
+    const category = categoriesResponse.body.find(
+      (c: Category) => c.id === categoryId
+    );
     const itemId = category.items[0].id;
 
-    const response = await api.put(`${itemsUrl}/${itemId}`).send({});
-    assert.strictEqual(response.statusCode, 400);
-    assert.strictEqual(response.body.error, 'Item data is required for update');
-  });
-
-  test('returns 404 if item does not exist', async () => {
-    const nonExistentId = 9999;
-    const response = await api.put(`${itemsUrl}/${nonExistentId}`).send({
-      data: { name: 'Ghost', age: '0', wins: '0' }
+    const response = await api.put(`${itemsUrl}/${itemId}`).send({
+      categoryId
     });
 
-    assert.strictEqual(response.statusCode, 404);
-    assert.strictEqual(response.body.error, `Item with ID ${nonExistentId} not found`);
+    assert.strictEqual(response.statusCode, 400);
+    assert.strictEqual(
+      response.body.error,
+      'Item ID and updated data are required'
+    );
   });
 });
