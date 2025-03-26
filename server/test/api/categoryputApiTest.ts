@@ -7,16 +7,16 @@ const api = supertest(app);
 const url = "/api/manage/categories";
 
 describe("Category API - Update Category", () => {
-    //test("Updating a category returns confirmation message", async () => {
-        //const categoryId = "123"; // Example category ID
-        //const updateData = { itemShape: JSON.stringify({ shape: "NewShape" }) };
+    test("Updating a category returns confirmation message", async () => {
+        const categoryId = "123"; // Example category ID
+        const updateData = { itemShape: JSON.stringify({ shape: "NewShape" }) };
 
-        //const response = await api.put(`${url}/${categoryId}`).send(updateData);
+        const response = await api.put(`${url}/${categoryId}`).send(updateData);
 
-        //assert.strictEqual(response.statusCode, 200);
-        //assert.ok(response.body.message, "Response body should contain a success message");
-        //assert.strictEqual(response.body.message, `Category ${categoryId} updated successfully`);
-    //});
+        assert.strictEqual(response.statusCode, 200);
+        assert.ok(response.body.message, "Response body should contain a success message");
+        assert.strictEqual(response.body.message, `Category ${categoryId} updated successfully`);
+    });
 
     test("Updating a category with missing itemShape returns error", async () => {
         const categoryId = "123";
