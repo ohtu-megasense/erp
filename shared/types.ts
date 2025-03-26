@@ -41,3 +41,15 @@ export interface AddColumnResponse {
   success: boolean;
   updatedCategory: Category;
 }
+
+export interface UpdateItemRequest {
+  categoryId: number;
+  itemId: number;
+  updatedItem: Record<string, string>;
+}
+
+export interface UpdateItemResponse {
+  id: number;
+  categoryId: number;
+  data: Record<string, string>;
+}
