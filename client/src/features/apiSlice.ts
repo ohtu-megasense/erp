@@ -8,7 +8,9 @@ import {
   PingResponse,
   //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
   AddColumnRequest,
-  AddColumnResponse
+  AddColumnResponse,
+  renameCategoryRequest,
+  renameCategoryResponse
   //ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
 } from '../../../shared/types';
 import { addNotification } from './notificationSlice';
@@ -49,7 +51,7 @@ export const apiSlice = createApi({
             })
           );
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        }  catch (error: unknown) {
+        } catch (error: unknown) {
           const err = error as { error?: { data?: { error?: string } } };
           mutationLifeCycleApi.dispatch(
             addNotification({
@@ -60,6 +62,14 @@ export const apiSlice = createApi({
           );
         }
       }
+    }),
+    renameCategory: builder.mutation<renameCategoryResponse, renameCategoryRequest>({
+      query: ({categoryId,itemShape, categoryName }) => ({
+        url: `manage/categories/${categoryId}`,
+        method: 'PUT',
+        body: { itemShape, categoryName }
+      }),
+      invalidatesTags: ['Category']
     }),
     addItem: builder.mutation<AddItemResponse, Item>({
       query: (item) => ({
@@ -85,24 +95,24 @@ export const apiSlice = createApi({
               message: `Item #${id} successfully deleted`,
               severity: 'success'
             })
-          )
+          );
         } catch (error: unknown) {
-          const err = error as { error?: { data?: {error?: string}}}
+          const err = error as { error?: { data?: { error?: string } } };
           dispatch(
             addNotification({
               id: crypto.randomUUID(),
               message: `Failed to delete item: ${err.error?.data?.error ?? 'Unknown error'}`,
               severity: 'error'
             })
-          )
+          );
         }
       }
     }),
     addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
-      query: ({ categoryId, columnName }) => ({
-        url: `manage/categories/${categoryId}/columns`, 
-        method: 'POST', 
-        body: { columnName }
+      query: ({ categoryId, columnName, categoryName }) => ({
+        url: `manage/categories/${categoryId}/columns`,
+        method: 'POST',
+        body: { columnName, categoryName }
       }),
       invalidatesTags: ['Category'],
       async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
@@ -136,5 +146,6 @@ export const {
   useAddCategoryMutation,
   useAddItemMutation,
   useDeleteItemMutation,
-  useAddColumnMutation
+  useAddColumnMutation,
+  useRenameCategoryMutation
 } = apiSlice;

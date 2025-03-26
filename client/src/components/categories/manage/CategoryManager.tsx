@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react';
-import { Box, Paper, Typography, IconButton, Stack } from '@mui/material';
+import { Box, Paper, Typography, IconButton, Stack, TextField } from '@mui/material';
 import {
   Edit as EditIcon,
   Save as SaveIcon,
-  Add as AddIcon
+  Add as AddIcon,
+  Delete as DeleteIcon
 } from '@mui/icons-material';
 import { updateItem } from '../../../features/categoryDataSlice';
+import { useRenameCategoryMutation } from '../../../features/apiSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { AddCategoryItemForm } from './AddCategoryItemForm';
 import { CategoryTable } from '../visualize/CategoryTable';
@@ -19,6 +21,9 @@ interface CategoryManagerProps {
 export const CategoryManager = ({ category, refetchCategories }: CategoryManagerProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [title, setTitle] = useState('');
+  const [RenameCategoryMutation] = useRenameCategoryMutation();
+
   const tableRef = useRef<{
     getFormValues: () => Record<number, Record<string, string>>;
   }>(null);
@@ -33,6 +38,10 @@ export const CategoryManager = ({ category, refetchCategories }: CategoryManager
   };
 
   const handleSave = () => {
+    if (title !== '') {
+      console.log(title)
+      RenameCategoryMutation({categoryId: category.id, itemShape: category.itemShape, categoryName: title})
+    }
     if (tableRef.current) {
       const dirtyFormValues = tableRef.current.getFormValues();
       Object.entries(dirtyFormValues).forEach(([itemId, updatedItem]) => {
@@ -55,7 +64,10 @@ export const CategoryManager = ({ category, refetchCategories }: CategoryManager
           gap: 2
         }}
       >
-        <Typography>{category.name}</Typography>
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          {!isEditing && <Typography noWrap>{category.name}</Typography>}
+          {isEditing && <TextField nowrap sx={{ fontSize: '0.8125rem' }} defaultValue={category.name || ''} id="categoryName" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTitle(e.target.value)}}></TextField>}
+        </div>
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ display: 'flex', gap: 1 }}>
             {isEditing ? (
