@@ -13,6 +13,7 @@ import {
 	Add as AddIcon,
 } from "@mui/icons-material";
 import { useUpdateItemMutation } from "../../../features/apiSlice";
+import { useRenameCategoryMutation } from "../../../features/apiSlice";
 import { AddCategoryItemForm } from "./AddCategoryItemForm";
 import { CategoryTable } from "../visualize/CategoryTable";
 import { Category } from "../../../../../shared/types";
@@ -33,7 +34,7 @@ export const CategoryManager = ({
 	const [dialogueText, setDialogueText] = useState("");
 
 	const [title, setTitle] = useState("");
-
+	const [RenameCategoryMutation] = useRenameCategoryMutation();
 	const tableRef = useRef<{
 		getFormValues: () => Record<number, Record<string, string>>;
 	}>(null);
@@ -49,6 +50,14 @@ export const CategoryManager = ({
 	};
 
 	const handleSave = () => {
+		if (title !== "") {
+			console.log(title);
+			RenameCategoryMutation({
+				categoryId: category.id,
+				itemShape: category.itemShape,
+				categoryName: title,
+			});
+		}
 		if (tableRef.current) {
 			const dirtyFormValues = tableRef.current.getFormValues();
 
@@ -98,9 +107,10 @@ export const CategoryManager = ({
 		if (updateCount > 0 && titleChanged) {
 			displayText += `and`;
 		}
-		if (updateCount > 0 && titleChanged) {
+		if (updateCount > 0 && !titleChanged) {
 			displayText += `change ${updateCount} ${itemText}`;
 		}
+
 		displayText += `?`;
 		setDialogueText(displayText);
 		setIsDialogOpen(true);
