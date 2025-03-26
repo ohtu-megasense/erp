@@ -57,7 +57,9 @@ export const CategoryManager = ({
       return;
     }
 
-    setDialogueText(`Do you want to update ${updateCount} items?`);
+    const itemText = updateCount === 1 ? 'item' : 'items';
+
+    setDialogueText(`Do you want to update ${updateCount} ${itemText}?`);
     setIsDialogOpen(true);
   };
 
