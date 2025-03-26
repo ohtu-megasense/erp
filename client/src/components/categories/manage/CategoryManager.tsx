@@ -99,16 +99,16 @@ export const CategoryManager = ({
 
 		const itemText = updateCount === 1 ? "item" : "items";
 
-		let displayText: string = `Do you want to `;
+		let displayText: string = `Do you want to`;
 
 		if (titleChanged) {
-			displayText += `update the title to ${title}`;
+			displayText += ` update the title to ${title}`;
 		}
 		if (updateCount > 0 && titleChanged) {
-			displayText += `and`;
+			displayText += ` and ${updateCount} ${itemText}`;
 		}
 		if (updateCount > 0 && !titleChanged) {
-			displayText += `change ${updateCount} ${itemText}`;
+			displayText += ` change ${updateCount} ${itemText}`;
 		}
 
 		displayText += `?`;
