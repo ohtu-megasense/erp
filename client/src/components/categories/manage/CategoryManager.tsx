@@ -5,8 +5,7 @@ import {
   Save as SaveIcon,
   Add as AddIcon
 } from '@mui/icons-material';
-import { updateItem } from '../../../features/categoryDataSlice';
-import { useAppDispatch } from '../../../app/hooks';
+import { useUpdateItemMutation } from '../../../features/apiSlice';
 import { AddCategoryItemForm } from './AddCategoryItemForm';
 import { CategoryTable } from '../visualize/CategoryTable';
 import { Category } from '../../../../../shared/types';
@@ -22,7 +21,8 @@ export const CategoryManager = ({ category, refetchCategories }: CategoryManager
   const tableRef = useRef<{
     getFormValues: () => Record<number, Record<string, string>>;
   }>(null);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
+  const [updateItem] = useUpdateItemMutation();
 
   const handleEditToggle = () => {
     setIsEditing((prev) => !prev);
@@ -32,21 +32,25 @@ export const CategoryManager = ({ category, refetchCategories }: CategoryManager
     setIsAdding((prev) => !prev);
   };
 
-  const handleSave = () => {
-    if (tableRef.current) {
-      const dirtyFormValues = tableRef.current.getFormValues();
-      Object.entries(dirtyFormValues).forEach(([itemId, updatedItem]) => {
-        dispatch(
-          updateItem({
-            categoryId: category.id,
-            itemId: Number(itemId),
-            updatedItem
-          })
-        );
+const handleSave = () => {
+  if (tableRef.current) {
+    const dirtyFormValues = tableRef.current.getFormValues();
+    
+    const updatePromises = Object.entries(dirtyFormValues).map(([itemId, updatedItem]) => {
+      return updateItem({
+        categoryId: category.id,
+        itemId: Number(itemId),
+        updatedItem
+      }).unwrap();
+    });
+    
+    Promise.all(updatePromises)
+      .catch(error => {
+        console.error('Error updating items:', error);
       });
-    }
-    setIsEditing(false);
-  };
+  }
+  setIsEditing(false);
+};
 
   return (
     <Box>
