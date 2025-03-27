@@ -66,7 +66,7 @@ router.put('/:categoryId', (req, res) => {
 
   AlterCategory(categoryId, itemShape)
     .then(() =>
-      res.json({ message: `Category ${categoryId} updated successfully` })
+      res.status(200).json({ message: `Category ${categoryId} updated successfully` })
     )
     .catch((error) => {
       console.error('Error updating category:', error);
