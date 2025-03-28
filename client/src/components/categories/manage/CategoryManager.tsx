@@ -71,10 +71,13 @@ export const CategoryManager = ({
 				},
 			);
 
-			Promise.all(updatePromises).catch((error) => {
+			try {
+				Promise.all(updatePromises);
+			} catch (error) {
 				console.error("Error updating items:", error);
-			});
+			}
 		}
+
 		setIsEditing(false);
 	};
 

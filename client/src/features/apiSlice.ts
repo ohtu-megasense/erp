@@ -145,19 +145,19 @@ export const apiSlice = createApi({
 			},
 		}),
 		addColumn: builder.mutation<AddColumnResponse, AddColumnRequest>({
-			query: ({ categoryId, columnName }) => ({
-				url: `manage/categories/${categoryId}/columns`,
-				method: "POST",
-				body: { columnName },
+			query: ({ categoryId, itemShape, categoryName }) => ({
+				url: `manage/categories/${categoryId}`,
+				method: "PUT",
+				body: { itemShape, categoryName },
 			}),
 			invalidatesTags: ["Category"],
-			async onQueryStarted({ columnName }, { dispatch, queryFulfilled }) {
+			async onQueryStarted({ itemShape }, { dispatch, queryFulfilled }) {
 				try {
 					await queryFulfilled;
 					dispatch(
 						addNotification({
 							id: crypto.randomUUID(),
-							message: `Column "${columnName}" added successfully`,
+							message: `Column "${Object.keys(itemShape)[Object.keys(itemShape).length - 1]}" added successfully`,
 							severity: "info",
 						}),
 					);
