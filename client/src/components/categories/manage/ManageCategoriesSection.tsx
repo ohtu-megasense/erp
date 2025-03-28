@@ -4,7 +4,6 @@ import { useGetCategoriesQuery } from "../../../features/apiSlice";
 
 export const ManageCategoriesSection = () => {
 	const { data: categoriesData = [], refetch } = useGetCategoriesQuery();
-	console.log(categoriesData);
 	return (
 		<Stack gap={4}>
 			{categoriesData.map((category) => {

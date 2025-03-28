@@ -13,10 +13,10 @@ interface AddCategoryParams {
   itemShape: Record<string, string>;
 }
 
-interface renameCategoryParams {
-  id: number,
-  name: string
-}
+// interface renameCategoryParams {
+//   id: number;
+//   name: string;
+// }
 
 export const addCategory = async (
   params: AddCategoryParams
@@ -52,25 +52,31 @@ export const addCategory = async (
   };
 };
 
-export const renameCategory = async (categoryName: string, categoryId: number): Promise<{name: string;}> => {
+export const renameCategory = async (
+  categoryName: string,
+  categoryId: number
+): Promise<{ name: string }> => {
   try {
     const query = {
-    text: `
-    UPDATE category SET category_name = $1 WHERE id = $2 RETURNING category_name;
-    `,
-    values: [categoryName, categoryId]
-  };
-  console.log(query)
-  const result = await pool.query(query)
+      text: `
+      UPDATE category SET category_name = $1 WHERE id = $2 RETURNING category_name;
+      `,
+      values: [categoryName, categoryId]
+    };
 
-  const row = result.rows[0]
-  
-  return {name: row.category_name};
-} catch(error) {
-  logger.error('error updating item', error)
-}
-}
+    const result = await pool.query(query);
+    const row = result.rows[0];
 
+    if (!row) {
+      throw new Error(`Category with ID ${categoryId} not found`);
+    }
+
+    return { name: row.category_name };
+  } catch (error) {
+    logger.error('Error updating category name', error);
+    throw error;
+  }
+};
 export const getCategories = async (): Promise<Category[]> => {
   const query = {
     text: `
@@ -85,7 +91,7 @@ export const getCategories = async (): Promise<Category[]> => {
           )
         ) as items 
       FROM category LEFT JOIN item ON item.category_id = category.id
-      GROUP BY category_name, category.id;
+      GROUP BY category_name, category.id ORDER BY category.id;
     `
   };
 
@@ -119,11 +125,31 @@ export async function AddItem(category_id: string, item_data: JSON) {
     const query = format(sql_text, category_id, item_data);
     await pool.query(query);
 
-    logger.info(
-      `category ${category_id} with item data ${item_data}" added`
-    );
+    logger.info(`category ${category_id} with item data ${item_data}" added`);
   } catch (error) {
     logger.error('Error adding item:', error);
+  } finally {
+    logger.info('Disconnected from the database');
+  }
+}
+
+export async function UpdateItem(
+  item_id: string,
+  item_data: Record<string, string>
+) {
+  try {
+    const sql_text: string = 'UPDATE item SET item_data = (%L) WHERE id=%L';
+
+    logger.info('SQL text: ', sql_text);
+    logger.info('item_id: ', item_id);
+    logger.info('item_data: ', item_data);
+
+    const query = format(sql_text, item_data, item_id);
+    await pool.query(query);
+
+    logger.info(`Updated item with ID ${item_id} with data ${item_data}"`);
+  } catch (error) {
+    logger.error('Error updating item:', error);
   } finally {
     logger.info('Disconnected from the database');
   }
@@ -144,13 +170,13 @@ export async function DeleteItem(item_id: string) {
     return {
       success: true,
       rowsDeleted: result.rowCount
-    }
+    };
   } catch (error) {
     logger.error('Error deleting item:', error);
     return {
       success: false,
       rowsDeleted: 0
-    }
+    };
   }
 }
 
