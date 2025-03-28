@@ -34,7 +34,7 @@ COPY ./server/package*.json .
 
 RUN npm ci --production
 
-COPY --from=front-build /usr/src/app/dist ./dist
+COPY --from=front-build /usr/src/app/dist ./app/dist
 
 COPY --from=back-build /usr/src/app/build .
 
