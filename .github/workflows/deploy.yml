@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - dev
-      - ci/fix-dockerimage
   workflow_dispatch:
 
 jobs:
