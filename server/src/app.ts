@@ -8,7 +8,8 @@ import path from 'path';
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../dist')));
+const distPath = path.join(__dirname, '../dist');
+app.use(express.static(distPath));
 
 app.use(cors());
 app.use(express.json());
@@ -27,7 +28,13 @@ if (env === 'test' || env === 'development') {
 }
 
 app.get('/*', (req, res) => {
-  res.status(404).json({ message: 'Unknown endpoint!' });
+  if (req.originalUrl.startsWith('/api')) {
+    res.status(404).json({ message: 'Unknown endpoint!' });
+    return;
+  }
+
+  const filePath = `${distPath}/index.html`;
+  res.sendFile(filePath);
 });
 
 export default app;
