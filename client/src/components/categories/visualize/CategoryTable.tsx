@@ -125,7 +125,8 @@ export const CategoryTable = forwardRef(
 
 		const startIndex = (page - 1) * itemsPerPage;
 		const endIndex = startIndex + itemsPerPage;
-		const paginatedItems = category.items.slice(startIndex, endIndex);
+		const sortedItems = [...category.items].sort((a, b) => a.id - b.id);
+		const paginatedItems = sortedItems.slice(startIndex, endIndex);
 		const totalPages = Math.ceil(category.items.length / itemsPerPage);
 		const inputFieldMinWidth = 80;
 
