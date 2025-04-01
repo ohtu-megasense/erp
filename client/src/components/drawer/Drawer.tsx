@@ -53,8 +53,17 @@ export const Drawer = () => {
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
-          <NavigationAccordion title="Categories" isPlaceholder={false}>
-            <DrawerNavigationLink href="/categories/manage" text="Manage" />
+          <NavigationAccordion title="Modules" isPlaceholder={false}>
+            <NavigationAccordion title="Inventory" isPlaceholder={false}>
+              <NavigationAccordion title="Categories" isPlaceholder={false}>
+                <DrawerNavigationLink href="/categories/manage" text="Manage" />
+              </NavigationAccordion>
+            </NavigationAccordion>
+            <NavigationAccordion title="CRM" isPlaceholder={false}>
+              <NavigationAccordion title="Categories" isPlaceholder={false}>
+                <DrawerNavigationLink href="/categories/CRM" text="Manage" />
+              </NavigationAccordion>
+            </NavigationAccordion>
           </NavigationAccordion>
         </List>
       </Box>
