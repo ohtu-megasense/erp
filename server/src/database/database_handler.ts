@@ -20,22 +20,20 @@ interface AddCategoryParams {
 
 export const addCategory = async (
   params: AddCategoryParams
-): Promise<{ id: number; name: string; itemShape: Record<string, string> }> => {
-  const query = {
-    text: `
-			INSERT INTO categories (
+): Promise<{ id: number, name: string; itemShape: Record<string, string> }> => {
+  const query = format(`
+			INSERT INTO categories 
+      (
 				category_name,
 				item_shape
-			) VALUES (
-				$1,
-				$2
-			) RETURNING
-			 	id,
+			) 
+      VALUES (%L, %L)
+      RETURNING
+        id,
 				category_name,
 				item_shape;
-		`,
-    values: [params.name, params.itemShape]
-  };
+      `,
+      params.name, params.itemShape);
 
   const result = await pool.query<{
     id: number;
@@ -47,6 +45,7 @@ export const addCategory = async (
 
   return {
     id: row.id,
+    module_id: row.module_id,
     name: row.category_name,
     // module: row.module_name tms
     itemShape: row.item_shape
@@ -99,7 +98,8 @@ export const getCategories = async (module: string|undefined): Promise<Category[
     WHERE modules.module_name = %L
     GROUP BY categories.category_name, categories.id
     ORDER BY categories.id;
-`, module);
+    `, module
+    );
 
   const result = await pool.query(query);
 
