@@ -145,6 +145,7 @@ export const getCategories = async (module: string|undefined): Promise<Category[
   const categories: Category[] = result.rows.map((row) => {
     return {
       id: row.id,
+      module_id: row.module_id,
       name: row.category_name,
       itemShape: row.item_shape,
       items: row.items.filter((item: { id: number | null }) => item.id)
