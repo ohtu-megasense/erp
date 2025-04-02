@@ -5,7 +5,7 @@ import {
 	addCategory,
 	getCategories,
 } from "../database/database_handler";
-import { toAddCategoryRequest } from "../utils/parsers";
+import { toAddCategoryRequest, isValidModule } from "../utils/parsers";
 import logger from "../utils/logger";
 import {
 	AddCategoryResponse,
@@ -31,18 +31,21 @@ router.post("/", async (req, res) => {
 		}
 
 		logger.error(error);
-		res.status(500).json({ error: "Something went wrong" });
+		res.status(500).json({ error: "Something went wrong_post" });
 	}
 });
 
-router.get("/", async (req, res) => {
+router.get("/:module", async (req, res) => {
 	try {
-    const module = req.query.module as string | undefined;
+		const module = req.params.module;
+		if (!isValidModule(module)) {
+			return res.status(400).json({ error: "Invalid module parameter" });
+		}
 		const categories: GetCategoriesResponse = await getCategories(module);
 		res.status(200).json(categories);
 	} catch (error) {
 		logger.error(error);
-		res.status(500).json({ error: "Something went wrong" });
+		res.status(500).json({ error: "Something went wrong_get" });
 	}
 });
 

@@ -6,6 +6,7 @@ import { DefaultPageLayout } from './components/pages/layout/DefaultPageLayout';
 import { Redirect } from './components/redirect/Redirect';
 import { VisualizeCategoriesPage } from './components/pages/categories/visualize/VisualizeCategoriesPage';
 import { ManageCategoriesPage } from './components/pages/categories/manage/ManageCategoriesPage';
+import { CRMpage } from './components/pages/categories/CRM/CRMpage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
 
 export const App = () => {
@@ -20,7 +21,8 @@ export const App = () => {
             path="/categories/visualize"
             element={<VisualizeCategoriesPage />}
           />
-          <Route path="/categories/manage" element={<ManageCategoriesPage />} />
+          <Route path="/categories/inventory" element={<ManageCategoriesPage />} />
+          <Route path="/categories/CRM" element={<CRMpage />} />
         </Route>
         <Route path="*" element={<Redirect to="/" />} />
       </Routes>

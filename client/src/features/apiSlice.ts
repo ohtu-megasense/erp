@@ -28,17 +28,19 @@ export const apiSlice = createApi({
 			query: () => "ping",
 		}),
 		getCategories: builder.query<Category[], void>({
-			query: () => "manage/categories",
+			query: (module) => ({
+				url: `manage/categories/${module}`,
+			}),
 			providesTags: ["Category"],
 		}),
 		//mutation used for POST requests to server/backend.
 		//CategoryResponse = expected response from server/backend
 		//Category = category_name to be sent to server/backend
 		addCategory: builder.mutation<AddCategoryResponse, AddCategoryRequest>({
-			query: (category) => ({
+			query: ({ name, itemShape, module }) => ({
 				url: "manage/categories",
 				method: "POST",
-				body: category,
+				body: { name, module, itemShape },
 			}),
 			invalidatesTags: ["Category"],
 			async onQueryStarted(_, mutationLifeCycleApi) {
