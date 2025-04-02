@@ -10,7 +10,7 @@ export const CRMpage = () => {
 				<HeadingSection />
 			</Box>
 			<Box mt={4}>
-				<AddCategorySection />
+				<AddCategorySection module="crm" />
 			</Box>
 			<Box mt={4}>
 				<ManageCategoriesSection module="crm" />
