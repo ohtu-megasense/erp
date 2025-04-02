@@ -228,7 +228,7 @@ export const CategoryTable = forwardRef(
 											size="small"
 											color="error"
 										>
-											<DeleteIcon />
+											<DeleteIcon fontSize="small"/>
 										</IconButton>
 										<Dialog
 											open={openDialogs[item.id] || false}

@@ -11,9 +11,10 @@ import {
 	Edit as EditIcon,
 	Save as SaveIcon,
 	Add as AddIcon,
+	Delete as DeleteIcon
 } from "@mui/icons-material";
 import { useUpdateItemMutation } from "../../../features/apiSlice";
-import { useRenameCategoryMutation } from "../../../features/apiSlice";
+import { useRenameCategoryMutation, useDeleteCategoryMutation } from "../../../features/apiSlice";
 import { AddCategoryItemForm } from "./AddCategoryItemForm";
 import { CategoryTable } from "../visualize/CategoryTable";
 import { Category } from "../../../../../shared/types";
@@ -35,6 +36,8 @@ export const CategoryManager = ({
 
 	const [title, setTitle] = useState("");
 	const [RenameCategoryMutation] = useRenameCategoryMutation();
+	const [DeleteCategoryMutation] = useDeleteCategoryMutation();
+
 	const tableRef = useRef<{
 		getFormValues: () => Record<number, Record<string, string>>;
 	}>(null);
@@ -48,6 +51,10 @@ export const CategoryManager = ({
 	const handleAddToggle = () => {
 		setIsAdding((prev) => !prev);
 	};
+
+	const handleDelete = () => {
+		DeleteCategoryMutation({categoryId: category.id})
+	}
 
 	const handleSave = () => {
 		if (title !== "") {
@@ -142,6 +149,7 @@ export const CategoryManager = ({
 					<div style={{ display: "flex", alignItems: "center" }}>
 						{!isEditing && <Typography noWrap>{category.name}</Typography>}
 						{isEditing && (
+							<>
 							<TextField
 								sx={{ fontSize: "0.8125rem" }}
 								defaultValue={category.name || ""}
@@ -150,6 +158,8 @@ export const CategoryManager = ({
 									setTitle(e.target.value);
 								}}
 							></TextField>
+							<IconButton size="medium" color="error" onClick={handleDelete}><DeleteIcon fontSize="medium"></DeleteIcon></IconButton>
+							</>
 						)}
 					</div>
 					<Box sx={{ display: "flex" }}>
