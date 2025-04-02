@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 	}
 });
 
-router.get("/", async (_, res) => {
+router.get("/", async (req, res) => {
 	try {
     const module = req.query.module as string | undefined;
 		const categories: GetCategoriesResponse = await getCategories(module);

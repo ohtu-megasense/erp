@@ -23,7 +23,7 @@ export const addCategory = async (
 ): Promise<{ id: number; name: string; itemShape: Record<string, string> }> => {
   const query = {
     text: `
-			INSERT INTO category (
+			INSERT INTO categories (
 				category_name,
 				item_shape
 			) VALUES (
@@ -60,7 +60,7 @@ export const renameCategory = async (
   try {
     const query = {
       text: `
-      UPDATE category SET category_name = $1 WHERE id = $2 RETURNING category_name;
+      UPDATE categories SET category_name = $1 WHERE id = $2 RETURNING category_name;
       `,
       values: [categoryName, categoryId]
     };
@@ -90,11 +90,11 @@ export const getCategories = async (): Promise<Category[]> => {
         item_shape, 
         ARRAY_AGG(
           json_build_object(
-            'id', item.id, 
-            'data', item.item_data  
+            'id', items.id, 
+            'data', items.item_data  
           )
-        ) as items 
-      FROM category LEFT JOIN item ON item.category_id = category.id
+        ) as query_items 
+      FROM categories LEFT JOIN items ON items.category_id = category.id
       GROUP BY category_name, category.id ORDER BY category.id;
     `
   };
@@ -119,8 +119,7 @@ export const getCategories = async (): Promise<Category[]> => {
 
 export async function AddItem(category_id: string, item_data: JSON) {
   try {
-    let sql_text: string = 'INSERT INTO item (category_id, item_data) VALUES (';
-    sql_text += '%L, %L);';
+    let sql_text: string = 'INSERT INTO items (category_id, item_data) VALUES (%L, %L)';
 
     logger.info(sql_text);
     logger.info(category_id);
@@ -142,7 +141,7 @@ export async function UpdateItem(
   item_data: Record<string, string>
 ) {
   try {
-    const sql_text: string = 'UPDATE item SET item_data = (%L) WHERE id=%L';
+    const sql_text: string = 'UPDATE items SET item_data = (%L) WHERE id=%L';
 
     logger.info('SQL text: ', sql_text);
     logger.info('item_id: ', item_id);
@@ -161,8 +160,7 @@ export async function UpdateItem(
 
 export async function DeleteItem(item_id: string) {
   try {
-    let sql_text: string = 'DELETE FROM item WHERE id=';
-    sql_text += '%L;';
+    let sql_text: string = 'DELETE FROM items WHERE id=%L;';
 
     logger.info(sql_text);
     logger.info(item_id);
@@ -186,8 +184,7 @@ export async function DeleteItem(item_id: string) {
 
 export async function CheckItemIdFound(item_id: string): Promise<boolean> {
   try {
-    let sql_text: string = 'SELECT * FROM item WHERE id=';
-    sql_text += '%L;';
+    let sql_text: string = 'SELECT * FROM items WHERE id=%L;';
 
     logger.info(sql_text);
     logger.info('printing item id:', item_id);
@@ -208,7 +205,7 @@ export async function CheckItemIdFound(item_id: string): Promise<boolean> {
 }
 
 export const testLogCategories = async () => {
-  const sqlText = `SELECT id, category_name, item_shape FROM category;`;
+  const sqlText = `SELECT id, category_name, item_shape FROM categories;`;
   const result = await pool.query(sqlText);
   logger.info('Categories from database', result.rows);
 };
@@ -220,7 +217,7 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 
     //updating the item_shape JSON of a category, replacing it with a new JSON structure
     const sql_text: string =
-      'UPDATE category SET item_shape = %L WHERE id = %L;';
+      'UPDATE categories SET item_shape = %L WHERE id = %L;';
     const query = format(sql_text, item_shape, category_id);
     await client.query(query);
     logger.info(
