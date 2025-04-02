@@ -1,10 +1,12 @@
 export interface AddCategoryRequest {
+	module: string;
 	name: string;
 	itemShape: Record<string, string>;
 }
 
 export interface AddCategoryResponse {
 	id: number;
+	module: string;
 	name: string;
 	itemShape: Record<string, string>;
 }

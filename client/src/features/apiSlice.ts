@@ -28,7 +28,11 @@ export const apiSlice = createApi({
 			query: () => "ping",
 		}),
 		getCategories: builder.query<Category[], void>({
-			query: () => "manage/categories",
+			query: (module) => ({
+				url: "manage/categories",
+				method: "GET",
+				body: module,
+			}),
 			providesTags: ["Category"],
 		}),
 		//mutation used for POST requests to server/backend.
