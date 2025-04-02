@@ -31,6 +31,7 @@ export const CategoryManager = ({
 }: CategoryManagerProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [dialogueText, setDialogueText] = useState("");
 
@@ -51,6 +52,13 @@ export const CategoryManager = ({
 	const handleAddToggle = () => {
 		setIsAdding((prev) => !prev);
 	};
+
+	const handleClickDeleteIcon = () => {
+		setIsDeleting(true);
+		setDialogueText(`Do you want to delete category ${category.name}`);
+		setIsDialogOpen(true);
+
+	}
 
 	const handleDelete = () => {
 		DeleteCategoryMutation({categoryId: category.id})
@@ -129,6 +137,7 @@ export const CategoryManager = ({
 	const handleCancel = () => {
 		setIsDialogOpen(false);
 		setIsEditing(false);
+		setIsDeleting(false);
 	};
 
 	return (
@@ -138,7 +147,7 @@ export const CategoryManager = ({
 				isOpen={isDialogOpen}
 				setIsOpen={setIsDialogOpen}
 				onCancel={handleCancel}
-				onSave={handleSave}
+				onSave={isDeleting ? handleDelete : handleSave}
 			/>
 			<Box>
 				<Stack
@@ -158,7 +167,7 @@ export const CategoryManager = ({
 									setTitle(e.target.value);
 								}}
 							></TextField>
-							<IconButton size="medium" color="error" onClick={handleDelete}><DeleteIcon fontSize="medium"></DeleteIcon></IconButton>
+							<IconButton size="medium" color="error" onClick={handleClickDeleteIcon}><DeleteIcon fontSize="medium"></DeleteIcon></IconButton>
 							</>
 						)}
 					</div>
