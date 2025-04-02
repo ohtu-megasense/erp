@@ -19,3 +19,6 @@ CREATE TABLE IF NOT EXISTS items (
     category_id INT REFERENCES categories (id),
     item_data JSONB
 );
+
+INSERT INTO modules (module_name) VALUES ('crm');
+INSERT INTO modules (module_name) VALUES ('inventory');

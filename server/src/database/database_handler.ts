@@ -23,14 +23,14 @@ export const getModuleIdByName = async(module_name: string): Promise<string|null
   try {
     let sql_text: string = 'SELECT id FROM modules WHERE module_name=%L;';
 
-    console.log("printing SQL text:", sql_text);
     console.log("printing module_name:", module_name);
 
     const query = format(sql_text, module_name);
+    console.log("printing SQL text:", query);
     const result = await pool.query(query);
 
-    console.log("printing result:", result);
-    console.log("printing result.rows[0].id", result.rows[0].id);
+    //console.log("printing result:", result);
+    console.log("printing result.rows[0]", result.rows[0]);
 
     return result.rows.length > 0 ? result.rows[0].id : null;
 
@@ -44,10 +44,10 @@ export const addCategory = async (
   params: AddCategoryParams
 ): Promise<{ id: number, module_id: number, name: string; itemShape: Record<string, string> }> => {
 
-  console.log(params);
-  console.log("##########################################");
-  console.log("printing module name: ", params.module);
-  const module_id = await getModuleIdByName(params.module);
+  let moduleName = params.module.toLowerCase();
+  console.log(params)
+  console.log("printing module name: ", moduleName);
+  let module_id = await getModuleIdByName(moduleName);
   console.log("module ID: ", module_id);
 
   const query = format(`
