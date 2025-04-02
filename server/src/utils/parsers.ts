@@ -20,6 +20,16 @@ const isStringRecord = (obj: unknown): obj is Record<string, string> => {
   return true;
 };
 
+export const isValidModule = (module: string) => {
+  if (!module || typeof module !== 'string') {
+    return false
+  }
+  if (module !== 'inventory' && module !== 'crm') {
+    return false
+  }
+  return true;
+}
+
 // NOTE: Currently only 'TEXT' value is allowed.
 const isValidItemShape = (itemShape: Record<string, string>): boolean => {
   const values = Object.values(itemShape);
