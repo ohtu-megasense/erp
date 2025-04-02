@@ -48,6 +48,7 @@ export const addCategory = async (
   return {
     id: row.id,
     name: row.category_name,
+    // module: row.module_name tms
     itemShape: row.item_shape
   };
 };
@@ -77,6 +78,9 @@ export const renameCategory = async (
     throw error;
   }
 };
+
+// export const getCategories = async (module): etc.
+// jos halutaan hakea moduulin kategoriat
 export const getCategories = async (): Promise<Category[]> => {
   const query = {
     text: `

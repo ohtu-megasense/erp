@@ -37,7 +37,8 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (_, res) => {
 	try {
-		const categories: GetCategoriesResponse = await getCategories();
+    const module = req.query.module as string | undefined;
+		const categories: GetCategoriesResponse = await getCategories(module);
 		res.status(200).json(categories);
 	} catch (error) {
 		logger.error(error);
