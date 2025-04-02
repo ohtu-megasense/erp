@@ -22,6 +22,14 @@ export interface renameCategoryResponse {
 	name: string;
 }
 
+export interface DeleteCategoryRequest {
+	categoryId: number;
+}
+
+export interface DeleteCategoryResponse {
+	categoryName: string;
+}
+
 export interface AddItemResponse {
 	success: boolean;
 	data: Item;

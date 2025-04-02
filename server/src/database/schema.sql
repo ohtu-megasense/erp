@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 CREATE TABLE IF NOT EXISTS items (
     id SERIAL PRIMARY KEY,
-    category_id INT REFERENCES categories (id),
+    category_id INT REFERENCES category (id) ON DELETE CASCADE,
     item_data JSONB
 );
 

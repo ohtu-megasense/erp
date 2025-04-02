@@ -14,6 +14,8 @@ import {
 	//ATTEMPT TO ADD ENDPOINT FOR ADDING COLUMN STARTS
 	UpdateItemRequest,
 	UpdateItemResponse,
+	DeleteCategoryResponse,
+	DeleteCategoryRequest,
 } from "../../../shared/types";
 import { addNotification } from "./notificationSlice";
 
@@ -76,6 +78,14 @@ export const apiSlice = createApi({
 				body: { itemShape, categoryName },
 			}),
 			invalidatesTags: ["Category"],
+		}),
+		deleteCategory: builder.mutation<DeleteCategoryResponse, DeleteCategoryRequest>({
+			query: ({categoryId}) => ({
+				url: `manage/categories/${categoryId}`,
+				method: "DELETE",
+				body: {}
+			}),
+			invalidatesTags: ["Category"]
 		}),
 		addItem: builder.mutation<AddItemResponse, Item>({
 			query: (item) => ({
@@ -187,4 +197,5 @@ export const {
 	useAddColumnMutation,
 	useUpdateItemMutation,
 	useRenameCategoryMutation,
+	useDeleteCategoryMutation
 } = apiSlice;
