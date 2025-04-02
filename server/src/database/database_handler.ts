@@ -10,6 +10,7 @@ import { Category } from '../../../shared/types';
 
 interface AddCategoryParams {
   name: string;
+  module: string;
   itemShape: Record<string, string>;
 }
 
@@ -18,25 +19,56 @@ interface AddCategoryParams {
 //   name: string;
 // }
 
+export const getModuleIdByName = async(module_name: string): Promise<string|null> => {
+  try {
+    let sql_text: string = 'SELECT id FROM modules WHERE module_name=%L;';
+
+    console.log("printing SQL text:", sql_text);
+    console.log("printing module_name:", module_name);
+
+    const query = format(sql_text, module_name);
+    const result = await pool.query(query);
+
+    console.log("printing result:", result);
+    console.log("printing result.rows[0].id", result.rows[0].id);
+
+    return result.rows.length > 0 ? result.rows[0].id : null;
+
+  } catch (error) {
+    logger.error('Error finding the module by name:', error);
+    throw error;
+  }
+};
+
 export const addCategory = async (
   params: AddCategoryParams
-): Promise<{ id: number, name: string; itemShape: Record<string, string> }> => {
+): Promise<{ id: number, module_id: number, name: string; itemShape: Record<string, string> }> => {
+
+  console.log(params);
+  console.log("##########################################");
+  console.log("printing module name: ", params.module);
+  const module_id = await getModuleIdByName(params.module);
+  console.log("module ID: ", module_id);
+
   const query = format(`
 			INSERT INTO categories 
       (
+        module_id,
 				category_name,
 				item_shape
 			) 
-      VALUES (%L, %L)
+      VALUES (%L, %L, %L)
       RETURNING
         id,
+        module_id,
 				category_name,
 				item_shape;
       `,
-      params.name, params.itemShape);
+      module_id, params.name, params.itemShape);
 
   const result = await pool.query<{
     id: number;
+    module_id: number;
     category_name: string;
     item_shape: Record<string, string>;
   }>(query);
