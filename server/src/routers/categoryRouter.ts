@@ -5,7 +5,7 @@ import {
 	addCategory,
 	getCategories,
 } from "../database/database_handler";
-import { toAddCategoryRequest } from "../utils/parsers";
+import { toAddCategoryRequest, isValidModule } from "../utils/parsers";
 import logger from "../utils/logger";
 import {
 	AddCategoryResponse,
@@ -35,9 +35,12 @@ router.post("/", async (req, res) => {
 	}
 });
 
-router.get("/", async (_, res) => {
+router.get("/:module", async (req, res) => {
 	try {
-    const module = req.query.module as string | undefined;
+    const module =req.params.module
+    if (!isValidModule(module)) {
+      return res.status(400).json({ error: "Invalid module parameter" });
+    }
 		const categories: GetCategoriesResponse = await getCategories(module);
 		res.status(200).json(categories);
 	} catch (error) {
