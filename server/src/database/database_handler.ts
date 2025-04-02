@@ -81,25 +81,30 @@ export const renameCategory = async (
 
 // export const getCategories = async (module): etc.
 // jos halutaan hakea moduulin kategoriat
-export const getCategories = async (): Promise<Category[]> => {
-  const query = {
-    text: `
-      SELECT 
-        category.id, 
-        category_name, 
-        item_shape, 
+export const getCategories = async (module: string|undefined): Promise<Category[]> => {
+  const query = format(`
+    SELECT 
+        categories.id, 
+        categories.category_name, 
+        categories.item_shape, 
         ARRAY_AGG(
-          json_build_object(
-            'id', items.id, 
-            'data', items.item_data  
-          )
-        ) as query_items 
-      FROM categories LEFT JOIN items ON items.category_id = category.id
-      GROUP BY category_name, category.id ORDER BY category.id;
-    `
-  };
+            json_build_object(
+                'id', items.id, 
+                'data', items.item_data  
+            )
+        ) AS query_items 
+    FROM categories
+    LEFT JOIN items ON items.category_id = categories.id
+    LEFT JOIN modules ON modules.id = categories.module_id
+    WHERE modules.module_name = %L
+    GROUP BY categories.category_name, categories.id
+    ORDER BY categories.id;
+`, module);
 
   const result = await pool.query(query);
+
+
+  console.log(result);
 
   // NOTE: The filtering is done to items because
   // the query can return items array with an object
