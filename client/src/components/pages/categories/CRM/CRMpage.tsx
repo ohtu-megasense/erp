@@ -4,7 +4,7 @@ import { ManageCategoriesSection } from "../../../categories/manage/ManageCatego
 import { AddCategorySection } from "../../../categories/manage/AddCategorySection";
 
 export const CRMpage = () => {
-	const moduleName: string = "CRM";
+	const moduleName = "CRM";
 	return (
 		<>
 			<Box mt={2}>
