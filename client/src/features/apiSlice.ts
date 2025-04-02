@@ -40,7 +40,7 @@ export const apiSlice = createApi({
 			query: ({ name, itemShape, module }) => ({
 				url: "manage/categories",
 				method: "POST",
-				body: { name, itemShape, module },
+				body: { name, module, itemShape },
 			}),
 			invalidatesTags: ["Category"],
 			async onQueryStarted(_, mutationLifeCycleApi) {
