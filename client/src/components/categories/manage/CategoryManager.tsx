@@ -11,9 +11,10 @@ import {
 	Edit as EditIcon,
 	Save as SaveIcon,
 	Add as AddIcon,
+	Delete as DeleteIcon
 } from "@mui/icons-material";
 import { useUpdateItemMutation } from "../../../features/apiSlice";
-import { useRenameCategoryMutation } from "../../../features/apiSlice";
+import { useRenameCategoryMutation, useDeleteCategoryMutation } from "../../../features/apiSlice";
 import { AddCategoryItemForm } from "./AddCategoryItemForm";
 import { CategoryTable } from "../visualize/CategoryTable";
 import { Category } from "../../../../../shared/types";
@@ -30,11 +31,14 @@ export const CategoryManager = ({
 }: CategoryManagerProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [dialogueText, setDialogueText] = useState("");
 
 	const [title, setTitle] = useState("");
 	const [RenameCategoryMutation] = useRenameCategoryMutation();
+	const [DeleteCategoryMutation] = useDeleteCategoryMutation();
+
 	const tableRef = useRef<{
 		getFormValues: () => Record<number, Record<string, string>>;
 	}>(null);
@@ -48,6 +52,17 @@ export const CategoryManager = ({
 	const handleAddToggle = () => {
 		setIsAdding((prev) => !prev);
 	};
+
+	const handleClickDeleteIcon = () => {
+		setIsDeleting(true);
+		setDialogueText(`Do you want to delete category ${category.name}`);
+		setIsDialogOpen(true);
+
+	}
+
+	const handleDelete = () => {
+		DeleteCategoryMutation({categoryId: category.id})
+	}
 
 	const handleSave = () => {
 		if (title !== "") {
@@ -122,6 +137,7 @@ export const CategoryManager = ({
 	const handleCancel = () => {
 		setIsDialogOpen(false);
 		setIsEditing(false);
+		setIsDeleting(false);
 	};
 
 	return (
@@ -131,7 +147,7 @@ export const CategoryManager = ({
 				isOpen={isDialogOpen}
 				setIsOpen={setIsDialogOpen}
 				onCancel={handleCancel}
-				onSave={handleSave}
+				onSave={isDeleting ? handleDelete : handleSave}
 			/>
 			<Box>
 				<Stack
@@ -142,6 +158,7 @@ export const CategoryManager = ({
 					<div style={{ display: "flex", alignItems: "center" }}>
 						{!isEditing && <Typography noWrap>{category.name}</Typography>}
 						{isEditing && (
+							<>
 							<TextField
 								sx={{ fontSize: "0.8125rem" }}
 								defaultValue={category.name || ""}
@@ -150,6 +167,8 @@ export const CategoryManager = ({
 									setTitle(e.target.value);
 								}}
 							></TextField>
+							<IconButton size="medium" color="error" onClick={handleClickDeleteIcon}><DeleteIcon fontSize="medium"></DeleteIcon></IconButton>
+							</>
 						)}
 					</div>
 					<Box sx={{ display: "flex" }}>

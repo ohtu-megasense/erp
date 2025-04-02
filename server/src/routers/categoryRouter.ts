@@ -4,12 +4,14 @@ import {
 	renameCategory,
 	addCategory,
 	getCategories,
+	deleteCategory
 } from "../database/database_handler";
 import { toAddCategoryRequest } from "../utils/parsers";
 import logger from "../utils/logger";
 import {
 	AddCategoryResponse,
 	GetCategoriesResponse,
+	DeleteCategoryResponse
 } from "../../../shared/types";
 
 const router = Router();
@@ -44,6 +46,21 @@ router.get("/", async (_, res) => {
 		res.status(500).json({ error: "Something went wrong" });
 	}
 });
+
+router.delete("/:categoryId", async (req, res) => {
+	const { categoryId } = req.params
+
+	if (!categoryId) {
+		console.error("Category ID required for deletion")
+		res.status(400).json({ error:"Category ID required for deletion"})
+		return;
+	} else {
+		const deleted_category: DeleteCategoryResponse = await deleteCategory(categoryId);
+			res.status(200).json(deleted_category)
+	}
+
+
+})
 
 router.put("/:categoryId", (req, res) => {
 	const { categoryId } = req.params;

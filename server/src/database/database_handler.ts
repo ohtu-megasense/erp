@@ -113,6 +113,29 @@ export const getCategories = async (): Promise<Category[]> => {
   return categories;
 };
 
+export async function deleteCategory(category_id: string) {
+  try {
+    const query = {
+      text: `
+      DELETE FROM category WHERE id = $1 RETURNING category_name
+      `,
+      values: [category_id]
+    }
+
+    const result = await pool.query(query);
+    const row = result.rows[0];
+    
+    if (!row) {
+      throw new Error(`Category with ID ${category_id} not found`);
+    }
+
+    return row
+  } catch (error) {
+    logger.error('Error deleting category', error);
+    throw error;
+  }
+}
+
 export async function AddItem(category_id: string, item_data: JSON) {
   try {
     let sql_text: string = 'INSERT INTO item (category_id, item_data) VALUES (';
