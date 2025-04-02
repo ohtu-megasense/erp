@@ -13,7 +13,7 @@ export const CRMpage = () => {
 				<AddCategorySection />
 			</Box>
 			<Box mt={4}>
-				<ManageCategoriesSection module="CRM" />
+				<ManageCategoriesSection module="crm" />
 			</Box>
 		</>
 	);
