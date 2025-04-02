@@ -31,7 +31,7 @@ export const apiSlice = createApi({
 			query: (module) => ({
 				url: "manage/categories",
 				method: "GET",
-				body: module,
+				module: module,
 			}),
 			providesTags: ["Category"],
 		}),
@@ -39,10 +39,10 @@ export const apiSlice = createApi({
 		//CategoryResponse = expected response from server/backend
 		//Category = category_name to be sent to server/backend
 		addCategory: builder.mutation<AddCategoryResponse, AddCategoryRequest>({
-			query: (category) => ({
+			query: ({name, itemShape, module}) => ({
 				url: "manage/categories",
 				method: "POST",
-				body: category,
+				body: {name, itemShape, module},
 			}),
 			invalidatesTags: ["Category"],
 			async onQueryStarted(_, mutationLifeCycleApi) {
