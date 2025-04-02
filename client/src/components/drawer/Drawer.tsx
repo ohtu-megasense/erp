@@ -56,7 +56,7 @@ export const Drawer = () => {
           <NavigationAccordion title="Modules" isPlaceholder={false}>
             <NavigationAccordion title="Inventory" isPlaceholder={false}>
               <NavigationAccordion title="Categories" isPlaceholder={false}>
-                <DrawerNavigationLink href="/categories/manage" text="Manage" />
+                <DrawerNavigationLink href="/categories/inventory" text="Manage" />
               </NavigationAccordion>
             </NavigationAccordion>
             <NavigationAccordion title="CRM" isPlaceholder={false}>

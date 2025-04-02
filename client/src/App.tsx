@@ -21,7 +21,7 @@ export const App = () => {
             path="/categories/visualize"
             element={<VisualizeCategoriesPage />}
           />
-          <Route path="/categories/manage" element={<ManageCategoriesPage />} />
+          <Route path="/categories/inventory" element={<ManageCategoriesPage />} />
           <Route path="/categories/CRM" element={<CRMpage />} />
         </Route>
         <Route path="*" element={<Redirect to="/" />} />
