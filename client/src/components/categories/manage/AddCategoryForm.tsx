@@ -15,8 +15,9 @@ import {
 } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import { useAddCategoryMutation } from "../../../features/apiSlice";
+import { Module } from "../../../../../shared/types";
 
-export const AddCategoryForm = ({ module }) => {
+export const AddCategoryForm = ({ module }: Module) => {
 	const [isOpen, setIsOpen] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [formValues, setFormValues] = useState<Record<string, string>>({

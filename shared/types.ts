@@ -11,6 +11,10 @@ export interface AddCategoryResponse {
 	itemShape: Record<string, string>;
 }
 
+export interface Module {
+	module: string;
+}
+
 export interface renameCategoryRequest {
 	categoryId: number;
 	itemShape: Record<string, string>;
