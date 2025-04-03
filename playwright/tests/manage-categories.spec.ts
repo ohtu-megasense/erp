@@ -6,12 +6,12 @@ test.beforeEach(async ({ request }) => {
 });
 
 test("dummy test", async ({ page }) => {
-	await page.goto("/categories/manage");
+	await page.goto("/categories/inventory");
 	await expect(page.getByText("Megasense")).toBeVisible();
 });
 
 test("category with 2 properties can be created", async ({ page }) => {
-	await page.goto("/categories/manage");
+	await page.goto("/categories/inventory");
 
 	await page.locator("input").first().fill("New category");
 
@@ -29,7 +29,7 @@ test("category with 2 properties can be created", async ({ page }) => {
 });
 
 test("items can be added to a category", async ({ page }) => {
-	await page.goto("/categories/manage");
+	await page.goto("/categories/inventory");
 
 	await page.getByTestId("category-name-input").fill("Test Category 1234");
 
@@ -65,7 +65,7 @@ test("items can be added to a category", async ({ page }) => {
 });
 
 test("test", async ({ page }) => {
-	await page.goto("/categories/manage");
+	await page.goto("/categories/inventory");
 	await page.getByTestId("category-name-input").click();
 	await page.getByTestId("category-name-input").fill("Example 1");
 	await page.getByTestId("add-property-button").click();
