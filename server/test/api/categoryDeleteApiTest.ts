@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import { describe, test, beforeEach, only } from "node:test";
+import { describe, test, beforeEach } from "node:test";
 import assert from "node:assert";
 import app from "../../src/app";
 import { AddCategoryRequest } from "../../../shared/types";

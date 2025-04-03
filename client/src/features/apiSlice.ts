@@ -29,7 +29,7 @@ export const apiSlice = createApi({
 		getPing: builder.query<PingResponse, void>({
 			query: () => "ping",
 		}),
-		getCategories: builder.query<Category[], void>({
+		getCategories: builder.query<Category[], string>({
 			query: (module) => ({
 				url: `manage/categories/${module}`,
 			}),
@@ -79,13 +79,16 @@ export const apiSlice = createApi({
 			}),
 			invalidatesTags: ["Category"],
 		}),
-		deleteCategory: builder.mutation<DeleteCategoryResponse, DeleteCategoryRequest>({
-			query: ({categoryId}) => ({
+		deleteCategory: builder.mutation<
+			DeleteCategoryResponse,
+			DeleteCategoryRequest
+		>({
+			query: ({ categoryId }) => ({
 				url: `manage/categories/${categoryId}`,
 				method: "DELETE",
-				body: {}
+				body: {},
 			}),
-			invalidatesTags: ["Category"]
+			invalidatesTags: ["Category"],
 		}),
 		addItem: builder.mutation<AddItemResponse, Item>({
 			query: (item) => ({
@@ -197,5 +200,5 @@ export const {
 	useAddColumnMutation,
 	useUpdateItemMutation,
 	useRenameCategoryMutation,
-	useDeleteCategoryMutation
+	useDeleteCategoryMutation,
 } = apiSlice;

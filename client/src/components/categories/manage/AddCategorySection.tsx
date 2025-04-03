@@ -1,7 +1,8 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { AddCategoryForm } from "./AddCategoryForm";
+import { Module } from "../../../../../shared/types";
 
-export const AddCategorySection = ({ module }) => {
+export const AddCategorySection = ({ module }: Module) => {
 	return (
 		<Paper
 			sx={{
