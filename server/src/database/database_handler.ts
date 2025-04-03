@@ -166,7 +166,7 @@ export async function deleteCategory(category_id: string) {
   try {
     const query = {
       text: `
-      DELETE FROM category WHERE id = $1 RETURNING category_name
+      DELETE FROM categories WHERE id = $1 RETURNING category_name
       `,
       values: [category_id]
     }
