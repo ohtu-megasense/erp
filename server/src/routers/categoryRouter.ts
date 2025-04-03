@@ -1,17 +1,17 @@
-import { Router } from "express";
+import { Router, Response, Request } from "express";
 import {
 	AlterCategory,
 	renameCategory,
 	addCategory,
 	getCategories,
-	deleteCategory
+	deleteCategory,
 } from "../database/database_handler";
 import { toAddCategoryRequest, isValidModule } from "../utils/parsers";
 import logger from "../utils/logger";
 import {
 	AddCategoryResponse,
 	GetCategoriesResponse,
-	DeleteCategoryResponse
+	DeleteCategoryResponse,
 } from "../../../shared/types";
 
 const router = Router();
@@ -37,34 +37,37 @@ router.post("/", async (req, res) => {
 	}
 });
 
-router.get("/:module", async (req, res) => {
-	try {
-		const module = req.params.module;
-		if (!isValidModule(module)) {
-			return res.status(400).json({ error: "Invalid module parameter" });
+router.get(
+	"/:module",
+	async (req: Request<{ module: string }>, res: Response): Promise<void> => {
+		try {
+			const module = req.params.module;
+			if (!isValidModule(module)) {
+				res.status(400).json({ error: "Invalid module parameter" });
+				return;
+			}
+			const categories: GetCategoriesResponse = await getCategories(module);
+			res.status(200).json(categories);
+		} catch (error) {
+			logger.error(error);
+			res.status(500).json({ error: "Something went wrong_get" });
 		}
-		const categories: GetCategoriesResponse = await getCategories(module);
-		res.status(200).json(categories);
-	} catch (error) {
-		logger.error(error);
-		res.status(500).json({ error: "Something went wrong_get" });
-	}
-});
+	},
+);
 
 router.delete("/:categoryId", async (req, res) => {
-	const { categoryId } = req.params
+	const { categoryId } = req.params;
 
 	if (!categoryId) {
-		console.error("Category ID required for deletion")
-		res.status(400).json({ error:"Category ID required for deletion"})
+		console.error("Category ID required for deletion");
+		res.status(400).json({ error: "Category ID required for deletion" });
 		return;
 	} else {
-		const deleted_category: DeleteCategoryResponse = await deleteCategory(categoryId);
-			res.status(200).json(deleted_category)
+		const deleted_category: DeleteCategoryResponse =
+			await deleteCategory(categoryId);
+		res.status(200).json(deleted_category);
 	}
-
-
-})
+});
 
 router.put("/:categoryId", (req, res) => {
 	const { categoryId } = req.params;
