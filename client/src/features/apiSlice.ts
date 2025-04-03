@@ -29,18 +29,20 @@ export const apiSlice = createApi({
 		getPing: builder.query<PingResponse, void>({
 			query: () => "ping",
 		}),
-		getCategories: builder.query<Category[], void>({
-			query: () => "manage/categories",
+		getCategories: builder.query<Category[], string | void>({
+			query: (module) => ({
+				url: `manage/categories/${module}`,
+			}),
 			providesTags: ["Category"],
 		}),
 		//mutation used for POST requests to server/backend.
 		//CategoryResponse = expected response from server/backend
 		//Category = category_name to be sent to server/backend
 		addCategory: builder.mutation<AddCategoryResponse, AddCategoryRequest>({
-			query: (category) => ({
+			query: ({ name, itemShape, module }) => ({
 				url: "manage/categories",
 				method: "POST",
-				body: category,
+				body: { name, module, itemShape },
 			}),
 			invalidatesTags: ["Category"],
 			async onQueryStarted(_, mutationLifeCycleApi) {
@@ -77,13 +79,16 @@ export const apiSlice = createApi({
 			}),
 			invalidatesTags: ["Category"],
 		}),
-		deleteCategory: builder.mutation<DeleteCategoryResponse, DeleteCategoryRequest>({
-			query: ({categoryId}) => ({
+		deleteCategory: builder.mutation<
+			DeleteCategoryResponse,
+			DeleteCategoryRequest
+		>({
+			query: ({ categoryId }) => ({
 				url: `manage/categories/${categoryId}`,
 				method: "DELETE",
-				body: {}
+				body: {},
 			}),
-			invalidatesTags: ["Category"]
+			invalidatesTags: ["Category"],
 		}),
 		addItem: builder.mutation<AddItemResponse, Item>({
 			query: (item) => ({
@@ -195,5 +200,5 @@ export const {
 	useAddColumnMutation,
 	useUpdateItemMutation,
 	useRenameCategoryMutation,
-	useDeleteCategoryMutation
+	useDeleteCategoryMutation,
 } = apiSlice;

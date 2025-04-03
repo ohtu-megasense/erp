@@ -20,6 +20,16 @@ const isStringRecord = (obj: unknown): obj is Record<string, string> => {
   return true;
 };
 
+export const isValidModule = (module: string) => {
+  if (!module || typeof module !== 'string') {
+    return false
+  }
+  if (module !== 'inventory' && module !== 'crm') {
+    return false
+  }
+  return true;
+}
+
 // NOTE: Currently only 'TEXT' value is allowed.
 const isValidItemShape = (itemShape: Record<string, string>): boolean => {
   const values = Object.values(itemShape);
@@ -56,6 +66,12 @@ export const toAddCategoryRequest = (body: unknown): AddCategoryRequest => {
     throw error;
   }
 
+  if (!('module' in body) || typeof body.module !== 'string') {
+    const error = new Error('Property "module" must be a string');
+    error.name = 'PARSING_ERROR';
+    throw error;
+  }
+
   if (!isStringRecord(body.itemShape)) {
     const error = new Error(
       'Item shape must be of type Record<string, string>'
@@ -78,6 +94,7 @@ export const toAddCategoryRequest = (body: unknown): AddCategoryRequest => {
 
   return {
     name: body.name,
+    module: body.module,
     itemShape: body.itemShape
   };
 };

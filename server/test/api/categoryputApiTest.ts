@@ -12,6 +12,7 @@ const categoriesUrl = "/api/manage/categories";
 const createTestCategory = async (): Promise<number> => {
 	const categoryRequest: AddCategoryRequest = {
 		name: "Joonaksen salimaksimit",
+		module: "inventory",
 		itemShape: {
 			movement: "TEXT",
 			date: "TEXT",
