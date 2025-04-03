@@ -107,8 +107,8 @@ export const testDatabaseConnection = async (): Promise<{
 export const resetDatabase = async () => {
 	const query = {
 		text: `
-      DELETE FROM item;
-      DELETE FROM category;
+      DELETE FROM items;
+      DELETE FROM categories;
     `,
 	};
 

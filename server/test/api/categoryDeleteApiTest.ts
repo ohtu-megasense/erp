@@ -29,7 +29,9 @@ beforeEach(async () => {
 describe("Category API - Delete category", () => {
 	test("Deleting a category works", async () => {
 		const categoryId = await createTestCategory();
-		const getCategoriesResponse = await api.get("/api/manage/categories");
+		const getCategoriesResponse = await api.get(
+			"/api/manage/categories/inventory",
+		);
 		assert(getCategoriesResponse.body.length === 1);
 		const deleteCategoryResponse = await api.delete(
 			`/api/manage/categories/${categoryId}`,
@@ -38,7 +40,9 @@ describe("Category API - Delete category", () => {
 			deleteCategoryResponse.body.category_name,
 			"Joonaksen salimaksimit",
 		);
-		const getCategoriesResponse2 = await api.get("/api/manage/categories");
+		const getCategoriesResponse2 = await api.get(
+			"/api/manage/categories/inventory",
+		);
 		assert(getCategoriesResponse2.body.length === 0);
 	});
 });
