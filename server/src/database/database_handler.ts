@@ -121,10 +121,13 @@ export const renameCategory = async (
 
 // export const getCategories = async (module): etc.
 // jos halutaan hakea moduulin kategoriat
-export const getCategories = async (moduleName: string): Promise<Category[]> => {
-  const module_id = await getModuleIdByName(moduleName);
-  console.log("module ID:", module_id);
-  const query = format(`
+export const getCategories = async (
+	moduleName: string,
+): Promise<Category[]> => {
+	const module_id = await getModuleIdByName(moduleName);
+	console.log("module ID:", module_id);
+	const query = format(
+		`
       SELECT 
         categories.id, 
         category_name, 
@@ -140,49 +143,49 @@ export const getCategories = async (moduleName: string): Promise<Category[]> => 
       WHERE categories.module_id=%L
       GROUP BY category_name, categories.id
       ORDER BY categories.id;
-    `, module_id
-  );
+    `,
+		module_id,
+	);
 
-  const result = await pool.query(query);
+	const result = await pool.query(query);
 
-  // NOTE: The filtering is done to items because
-  // the query can return items array with an object
-  // like { id: null, data: null }
+	// NOTE: The filtering is done to items because
+	// the query can return items array with an object
+	// like { id: null, data: null }
 
-  const categories: Category[] = result.rows.map((row) => {
-    return {
-      id: row.id,
-      name: row.category_name,
-      itemShape: row.item_shape,
-      items: row.items.filter((item: { id: number | null }) => item.id)
-    };
-  });
+	const categories: Category[] = result.rows.map((row) => {
+		return {
+			id: row.id,
+			name: row.category_name,
+			itemShape: row.item_shape,
+			items: row.items.filter((item: { id: number | null }) => item.id),
+		};
+	});
 
-  return categories;
+	return categories;
 };
 
-
 export async function deleteCategory(category_id: string) {
-  try {
-    const query = {
-      text: `
+	try {
+		const query = {
+			text: `
       DELETE FROM categories WHERE id = $1 RETURNING category_name
       `,
-      values: [category_id]
-    }
+			values: [category_id],
+		};
 
-    const result = await pool.query(query);
-    const row = result.rows[0];
-    
-    if (!row) {
-      throw new Error(`Category with ID ${category_id} not found`);
-    }
+		const result = await pool.query(query);
+		const row = result.rows[0];
 
-    return row
-  } catch (error) {
-    logger.error('Error deleting category', error);
-    throw error;
-  }
+		if (!row) {
+			throw new Error(`Category with ID ${category_id} not found`);
+		}
+
+		return row;
+	} catch (error) {
+		logger.error("Error deleting category", error);
+		throw error;
+	}
 }
 
 export async function AddItem(category_id: string, item_data: JSON) {

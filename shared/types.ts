@@ -47,13 +47,13 @@ export type GetCategoriesResponse = Category[];
 export interface Category {
 	id: number;
 	name: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 	items: Item[];
 }
 
 export interface Item {
 	id: number;
-	data: Record<string, string>;
+	data: Record<string, string | number>;
 }
 
 export interface AddColumnRequest {
