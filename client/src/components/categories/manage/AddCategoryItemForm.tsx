@@ -135,7 +135,7 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 						{shapeKeys.map((key) => (
 							<TextField
 								key={key}
-								label={key}
+								label={key + " " + category.itemShape[key]}
 								error={!!error}
 								helperText={error || ""}
 								value={formValues[key] || ""}
