@@ -196,7 +196,7 @@ async function getCategoryById(category_id: string) {
 
 		const query = format(sql_text, category_id);
 		logger.info("SQL text: ", query);
-		
+
 		const result = await pool.query(query);
 
 		// for later: add some other return if not found
@@ -208,49 +208,55 @@ async function getCategoryById(category_id: string) {
 	}
 }
 
-
-async function validateAddItem(category_id: string, item_data: { [key: string]: string }) {
+async function validateAddItem(
+	category_id: string,
+	item_data: { [key: string]: string },
+) {
 	try {
-	  const category = await getCategoryById(category_id);
-	  let columns = category["item_shape"];
-	  console.log("[validateAddItem] item_shape: ", columns);
-	  console.log("[validateAddItem] item_data: ", item_data);
-  
-	  for (let key in columns) {
-		if (key in item_data) {
-		  if (columns[key] === "INTEGER") {
-			// Convert the value to a number first
-			const realType = typeof item_data[key];
-			if (realType !== "number"){
-				console.log("[validateAddItem] invalid value for Integer");
-				return false;
+		const category = await getCategoryById(category_id);
+		const columns = category["item_shape"];
+		console.log("[validateAddItem] item_shape: ", columns);
+		console.log("[validateAddItem] item_data: ", item_data);
+
+		for (const key in columns) {
+			if (key in item_data) {
+				if (columns[key] === "INTEGER") {
+					// Convert the value to a number first
+					const realType = typeof item_data[key];
+					if (realType !== "number") {
+						console.log("[validateAddItem] invalid value for Integer");
+						return false;
+					}
+				} else if (columns[key] === "FLOAT") {
+					const realType = typeof item_data[key];
+					if (realType !== "number") {
+						console.log("[validateAddItem] invalid value for Float");
+						return false;
+					}
+				}
+				console.log(
+					`[validateAddItem] ${key}: ${columns[key]} - ${item_data[key]}`,
+				);
 			}
-		  } else if (columns[key] === "FLOAT"){
-			const realType = typeof item_data[key];
-			if (realType !== "number" || columns[key]%1 !== columns[key]){
-				console.log("[validateAddItem] invalid value for Integer");
-				return false;
-			}
-		  }
-		  console.log(`[validateAddItem] ${key}: ${columns[key]} - ${item_data[key]}`);
 		}
-	  }
-  
-	return true;
 
+		return true;
 	} catch (error) {
-	  logger.error("Error adding item:", error);
+		logger.error("Error adding item:", error);
 	} finally {
-	  logger.info("Disconnected from the database");
+		logger.info("Disconnected from the database");
 	}
-  }
+}
 
-
-export async function AddItem(category_id: string, item_data: { [key: string]: string }) {
+export async function AddItem(
+	category_id: string,
+	item_data: { [key: string]: string },
+) {
 	try {
 		const isValid = await validateAddItem(category_id, item_data);
 		if (isValid) {
-			const sql_text: string = "INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
+			const sql_text: string =
+				"INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
 
 			logger.info(sql_text);
 			logger.info(category_id);
@@ -259,7 +265,9 @@ export async function AddItem(category_id: string, item_data: { [key: string]: s
 			const query = format(sql_text, category_id, item_data);
 			await pool.query(query);
 
-			logger.info(`[addItem] category ${category_id} with item data ${item_data}" added`);
+			logger.info(
+				`[addItem] category ${category_id} with item data ${item_data}" added`,
+			);
 		} else {
 			console.log("[addItem] invalid input");
 		}

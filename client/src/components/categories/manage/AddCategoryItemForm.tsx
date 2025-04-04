@@ -15,9 +15,9 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 	const [addItem] = useAddItemMutation();
 	const shapeKeys = Object.keys(category.itemShape);
 
-	const handleInputChange = (key: string, value: string) => {
+	const handleInputChange = (key: string, value: string): void => {
 		const type = category.itemShape[key];
-		let parsed: string | number = value;
+
 		if (type === "FLOAT") {
 			// Salli vain numerot, piste ja pilkku
 			const valid = /^[0-9]*[.,]?[0-9]*$/.test(value);
@@ -28,17 +28,28 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 				[key]: value,
 			}));
 			return;
-		} else if (type === "INTEGER") {
-			parsed = parseInt(value, 10);
 		}
 
+		if (type === "INTEGER") {
+			// Salli vain kokonaisluvut
+			const valid = /^[0-9]*$/.test(value);
+			if (!valid) return;
+
+			setFormValues((prev) => ({
+				...prev,
+				[key]: value,
+			}));
+			return;
+		}
+
+		// TEXT tai muu
 		setFormValues((prev) => ({
 			...prev,
-			[key]: parsed,
+			[key]: value,
 		}));
 	};
 
-	const validateInputs = (key: string): boolean => {
+	const validateInputs = (key: string | number): boolean => {
 		const type = category.itemShape[key]; // "TEXT", "INTEGER", "FLOAT"
 		const value = formValues[key] ?? "";
 
@@ -62,9 +73,9 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 
 		const newItem = shapeKeys.reduce(
 			(acc, key) => {
-				if (!validateInputs(key)) {
+				/*if (!validateInputs(key)) {
 					return;
-				}
+				}*/
 				const raw = formValues[key] ?? "";
 				const type = category.itemShape[key];
 
@@ -85,7 +96,7 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 			{} as Record<string, string | number>,
 		);
 		try {
-			console.log(newItem);
+			console.log("item", newItem);
 			await addItem({
 				id: category.id,
 				data: newItem,
