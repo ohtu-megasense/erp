@@ -247,7 +247,7 @@ export async function AddItem(category_id: string, item_data: { [key: string]: s
 	try {
 		const isValid = await validateAddItem(category_id, item_data);
 		if (isValid) {
-			const sql_text: string = "[addItem] INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
+			const sql_text: string = "INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
 
 			logger.info(sql_text);
 			logger.info(category_id);
