@@ -84,7 +84,7 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 						acc[key] = parseInt(String(raw), 10);
 						break;
 					case "FLOAT":
-						acc[key] = parseFloat(String(raw));
+						acc[key] = parseFloat(String(raw).replace(",", "."));
 						break;
 					case "TEXT":
 					default:
