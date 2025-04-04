@@ -2,6 +2,7 @@ import format from "pg-format";
 import logger from "../utils/logger";
 import { pool } from "./database";
 import { Category } from "../../../shared/types";
+import { promiseHooks } from "v8";
 
 // TODO: In getCategories sql query if a category has
 // no items the items array will contain a single object
@@ -188,23 +189,84 @@ export async function deleteCategory(category_id: string) {
 	}
 }
 
-export async function AddItem(category_id: string, item_data: JSON) {
+async function getCategoryById(category_id: string) {
 	try {
-		const sql_text: string =
-			"INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
+		console.log("category_id: ", category_id);
+		const sql_text: string = "SELECT * FROM categories WHERE id=%L";
 
-		logger.info(sql_text);
-		logger.info(category_id);
-		logger.info(item_data);
+		const query = format(sql_text, category_id);
+		logger.info("SQL text: ", query);
+		
+		const result = await pool.query(query);
 
-		const query = format(sql_text, category_id, item_data);
-		await pool.query(query);
-
-		logger.info(`category ${category_id} with item data ${item_data}" added`);
+		// for later: add some other return if not found
+		return result.rows[0];
 	} catch (error) {
-		logger.error("Error adding item:", error);
+		logger.error("Error finding category by ID:", error);
 	} finally {
 		logger.info("Disconnected from the database");
+	}
+}
+
+
+async function validateAddItem(category_id: string, item_data: { [key: string]: string }) {
+	try {
+	  const category = await getCategoryById(category_id);
+	  let columns = category["item_shape"];
+	  console.log("[validateAddItem] item_shape: ", columns);
+	  console.log("[validateAddItem] item_data: ", item_data);
+  
+	  for (let key in columns) {
+		if (key in item_data) {
+		  if (columns[key] === "INTEGER") {
+			// Convert the value to a number first
+			const realType = typeof item_data[key];
+			if (realType !== "number"){
+				console.log("[validateAddItem] invalid value for Integer");
+				return false;
+			}
+		  } else if (columns[key] === "FLOAT"){
+			const realType = typeof item_data[key];
+			if (realType !== "number" || columns[key]%1 !== columns[key]){
+				console.log("[validateAddItem] invalid value for Integer");
+				return false;
+			}
+		  }
+		  console.log(`[validateAddItem] ${key}: ${columns[key]} - ${item_data[key]}`);
+		}
+	  }
+  
+	return true;
+
+	} catch (error) {
+	  logger.error("Error adding item:", error);
+	} finally {
+	  logger.info("Disconnected from the database");
+	}
+  }
+
+
+export async function AddItem(category_id: string, item_data: { [key: string]: string }) {
+	try {
+		const isValid = await validateAddItem(category_id, item_data);
+		if (isValid) {
+			const sql_text: string = "[addItem] INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
+
+			logger.info(sql_text);
+			logger.info(category_id);
+			logger.info(item_data);
+
+			const query = format(sql_text, category_id, item_data);
+			await pool.query(query);
+
+			logger.info(`[addItem] category ${category_id} with item data ${item_data}" added`);
+		} else {
+			console.log("[addItem] invalid input");
+		}
+	} catch (error) {
+		logger.error("[addItem] Error adding item:", error);
+	} finally {
+		logger.info("[addItem] Disconnected from the database");
 	}
 }
 
