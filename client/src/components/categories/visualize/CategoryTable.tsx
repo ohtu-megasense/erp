@@ -94,7 +94,7 @@ export const CategoryTable = forwardRef(
 			if (!newKey) return;
 			const newItemShape = {
 				...category.itemShape,
-				[newKey]: "string",
+				[newKey]: "TEXT",
 			};
 			console.log("New column name:", newKey);
 
@@ -228,7 +228,7 @@ export const CategoryTable = forwardRef(
 											size="small"
 											color="error"
 										>
-											<DeleteIcon fontSize="small"/>
+											<DeleteIcon fontSize="small" />
 										</IconButton>
 										<Dialog
 											open={openDialogs[item.id] || false}

@@ -18,8 +18,19 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 	const handleInputChange = (key: string, value: string) => {
 		const type = category.itemShape[key];
 		let parsed: string | number = value;
-		if (type === "INTEGER") parsed = parseInt(value, 10);
-		else if (type === "FLOAT") parsed = parseFloat(value);
+		if (type === "FLOAT") {
+			// Salli vain numerot, piste ja pilkku
+			const valid = /^[0-9]*[.,]?[0-9]*$/.test(value);
+			if (!valid) return; // älä päivitä tilaa
+
+			setFormValues((prev) => ({
+				...prev,
+				[key]: value,
+			}));
+			return;
+		} else if (type === "INTEGER") {
+			parsed = parseInt(value, 10);
+		}
 
 		setFormValues((prev) => ({
 			...prev,
@@ -74,10 +85,13 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 			{} as Record<string, string | number>,
 		);
 		try {
+			console.log(newItem);
 			await addItem({
 				id: category.id,
 				data: newItem,
 			}).unwrap();
+
+			setError(null);
 		} catch (error) {
 			console.log("error: ", error);
 		}
