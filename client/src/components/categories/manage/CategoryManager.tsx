@@ -11,10 +11,13 @@ import {
 	Edit as EditIcon,
 	Save as SaveIcon,
 	Add as AddIcon,
-	Delete as DeleteIcon
+	Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { useUpdateItemMutation } from "../../../features/apiSlice";
-import { useRenameCategoryMutation, useDeleteCategoryMutation } from "../../../features/apiSlice";
+import {
+	useRenameCategoryMutation,
+	useDeleteCategoryMutation,
+} from "../../../features/apiSlice";
 import { AddCategoryItemForm } from "./AddCategoryItemForm";
 import { CategoryTable } from "../visualize/CategoryTable";
 import { Category } from "../../../../../shared/types";
@@ -57,12 +60,11 @@ export const CategoryManager = ({
 		setIsDeleting(true);
 		setDialogueText(`Do you want to delete category ${category.name}`);
 		setIsDialogOpen(true);
-
-	}
+	};
 
 	const handleDelete = () => {
-		DeleteCategoryMutation({categoryId: category.id})
-	}
+		DeleteCategoryMutation({ categoryId: category.id });
+	};
 
 	const handleSave = () => {
 		if (title !== "") {
@@ -159,15 +161,21 @@ export const CategoryManager = ({
 						{!isEditing && <Typography noWrap>{category.name}</Typography>}
 						{isEditing && (
 							<>
-							<TextField
-								sx={{ fontSize: "0.8125rem" }}
-								defaultValue={category.name || ""}
-								id="categoryName"
-								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-									setTitle(e.target.value);
-								}}
-							></TextField>
-							<IconButton size="medium" color="error" onClick={handleClickDeleteIcon}><DeleteIcon fontSize="medium"></DeleteIcon></IconButton>
+								<TextField
+									sx={{ fontSize: "0.8125rem" }}
+									defaultValue={category.name || ""}
+									id="categoryName"
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+										setTitle(e.target.value);
+									}}
+								></TextField>
+								<IconButton
+									size="medium"
+									color="error"
+									onClick={handleClickDeleteIcon}
+								>
+									<DeleteIcon fontSize="medium"></DeleteIcon>
+								</IconButton>
 							</>
 						)}
 					</div>

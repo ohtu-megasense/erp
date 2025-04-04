@@ -91,10 +91,11 @@ export const CategoryTable = forwardRef(
 
 		const handleAddColumn = async () => {
 			const newKey = prompt("Enter name for new column:");
+			const newValue = prompt("TEXT, INTEGER or FLOAT?");
 			if (!newKey) return;
 			const newItemShape = {
 				...category.itemShape,
-				[newKey]: "TEXT",
+				[newKey]: newValue,
 			};
 			console.log("New column name:", newKey);
 
