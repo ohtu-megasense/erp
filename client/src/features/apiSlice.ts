@@ -29,7 +29,7 @@ export const apiSlice = createApi({
 		getPing: builder.query<PingResponse, void>({
 			query: () => "ping",
 		}),
-		getCategories: builder.query<Category[], string | void>({
+		getCategories: builder.query<Category[], string | number | void>({
 			query: (module) => ({
 				url: `manage/categories/${module}`,
 			}),

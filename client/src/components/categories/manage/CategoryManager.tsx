@@ -43,7 +43,7 @@ export const CategoryManager = ({
 	const [DeleteCategoryMutation] = useDeleteCategoryMutation();
 
 	const tableRef = useRef<{
-		getFormValues: () => Record<number, Record<string, string>>;
+		getFormValues: () => Record<number, Record<string, string | number>>;
 	}>(null);
 	// const dispatch = useAppDispatch();
 	const [updateItem] = useUpdateItemMutation();

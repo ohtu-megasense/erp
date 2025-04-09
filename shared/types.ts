@@ -1,13 +1,13 @@
 export interface AddCategoryRequest {
 	name: string;
 	module: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 }
 
 export interface AddCategoryResponse {
 	id: number;
 	name: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 }
 
 export interface Module {
@@ -16,7 +16,7 @@ export interface Module {
 
 export interface renameCategoryRequest {
 	categoryId: number;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 	categoryName: string;
 }
 
@@ -58,7 +58,7 @@ export interface Item {
 
 export interface AddColumnRequest {
 	categoryId: number;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 	categoryName: string;
 }
 
@@ -70,11 +70,11 @@ export interface AddColumnResponse {
 export interface UpdateItemRequest {
 	categoryId: number;
 	itemId: number;
-	updatedItem: Record<string, string>;
+	updatedItem: Record<string, string | number>;
 }
 
 export interface UpdateItemResponse {
 	id: number;
 	categoryId: number;
-	data: Record<string, string>;
+	data: Record<string, string | number>;
 }
