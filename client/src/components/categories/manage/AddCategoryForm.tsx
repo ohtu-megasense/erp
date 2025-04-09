@@ -62,8 +62,8 @@ export const AddCategoryForm = ({ module }: Module) => {
 			(_, i) => formValues[`property-${i}`]?.trim() || "",
 		).filter((name) => name !== "");
 
-		const itemShape: Record<string, string | number> = propertyNames.reduce(
-			(acc: Record<string, string | number>, _, i) => {
+		const itemShape: Record<string, string> = propertyNames.reduce(
+			(acc: Record<string, string>, _, i) => {
 				const key = formValues[`property-${i}`]?.trim();
 				const type = formValues[`propertyType-${i}`];
 				if (key && type) {
