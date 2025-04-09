@@ -34,7 +34,7 @@ export const CategoryTable = forwardRef(
 	({ category, isEditing, refetchCategories }: CategoryTableProps, ref) => {
 		const [page, setPage] = useState(1);
 		const [formValues, setFormValues] = useState<
-			Record<number, Record<string, string>>
+			Record<number, Record<string, string | number>>
 		>({});
 		const [dirtyItems, setDirtyItems] = useState<Set<number>>(new Set());
 		const itemsPerPage = 10;
@@ -54,7 +54,7 @@ export const CategoryTable = forwardRef(
 						acc[item.id] = { ...item.data };
 						return acc;
 					},
-					{} as Record<number, Record<string, string>>,
+					{} as Record<number, Record<string, string | number>>,
 				);
 				setFormValues(initialValues);
 				setDirtyItems(new Set());
@@ -91,10 +91,11 @@ export const CategoryTable = forwardRef(
 
 		const handleAddColumn = async () => {
 			const newKey = prompt("Enter name for new column:");
-			if (!newKey) return;
+			const newValue = prompt("TEXT, INTEGER or FLOAT?");
+			if (!newKey || !newValue) return;
 			const newItemShape = {
 				...category.itemShape,
-				[newKey]: "string",
+				[newKey]: newValue,
 			};
 			console.log("New column name:", newKey);
 
@@ -113,7 +114,10 @@ export const CategoryTable = forwardRef(
 
 		useImperativeHandle(ref, () => ({
 			getFormValues: () => {
-				const dirtyFormValues: Record<number, Record<string, string>> = {};
+				const dirtyFormValues: Record<
+					number,
+					Record<string, string | number>
+				> = {};
 				dirtyItems.forEach((itemId) => {
 					if (formValues[itemId]) {
 						dirtyFormValues[itemId] = formValues[itemId];
@@ -228,7 +232,7 @@ export const CategoryTable = forwardRef(
 											size="small"
 											color="error"
 										>
-											<DeleteIcon fontSize="small"/>
+											<DeleteIcon fontSize="small" />
 										</IconButton>
 										<Dialog
 											open={openDialogs[item.id] || false}

@@ -25,18 +25,21 @@ export const getModuleIdByName = async (
 	try {
 		const sql_text: string = "SELECT id FROM modules WHERE module_name=%L;";
 
-		console.log("printing module_name:", module_name);
+		console.log("[getModuleIdByName] printing module_name:", module_name);
 
 		const query = format(sql_text, module_name);
-		console.log("printing SQL text:", query);
+		console.log("[getModuleIdByName] printing SQL text:", query);
 		const result = await pool.query(query);
 
 		//console.log("printing result:", result);
-		console.log("printing result.rows[0]", result.rows[0]);
+		console.log("[getModuleIdByName] printing result.rows[0]", result.rows[0]);
 
 		return result.rows.length > 0 ? result.rows[0].id : null;
 	} catch (error) {
-		logger.error("Error finding the module by name:", error);
+		logger.error(
+			"[getModuleIdByName] Error finding the module by name:",
+			error,
+		);
 		throw error;
 	}
 };
@@ -51,9 +54,9 @@ export const addCategory = async (
 }> => {
 	const moduleName = params.module.toLowerCase();
 	console.log(params);
-	console.log("printing module name: ", moduleName);
+	console.log("[addCategory] printing module name: ", moduleName);
 	const module_id = await getModuleIdByName(moduleName);
-	console.log("module ID: ", module_id);
+	console.log("[addCategory] module ID: ", module_id);
 
 	const query = format(
 		`
@@ -109,22 +112,27 @@ export const renameCategory = async (
 		const row = result.rows[0];
 
 		if (!row) {
-			throw new Error(`Category with ID ${categoryId} not found`);
+			throw new Error(
+				`[renameCategory] Category with ID ${categoryId} not found`,
+			);
 		}
 
 		return { name: row.category_name };
 	} catch (error) {
-		logger.error("Error updating category name", error);
+		logger.error("[renameCategory] Error updating category name", error);
 		throw error;
 	}
 };
 
 // export const getCategories = async (module): etc.
 // jos halutaan hakea moduulin kategoriat
-export const getCategories = async (moduleName: string): Promise<Category[]> => {
-  const module_id = await getModuleIdByName(moduleName);
-  console.log("module ID:", module_id);
-  const query = format(`
+export const getCategories = async (
+	moduleName: string,
+): Promise<Category[]> => {
+	const module_id = await getModuleIdByName(moduleName);
+	console.log("[getCategories] module ID:", module_id);
+	const query = format(
+		`
       SELECT 
         categories.id, 
         category_name, 
@@ -140,68 +148,139 @@ export const getCategories = async (moduleName: string): Promise<Category[]> => 
       WHERE categories.module_id=%L
       GROUP BY category_name, categories.id
       ORDER BY categories.id;
-    `, module_id
-  );
+    `,
+		module_id,
+	);
 
-  const result = await pool.query(query);
+	const result = await pool.query(query);
 
-  // NOTE: The filtering is done to items because
-  // the query can return items array with an object
-  // like { id: null, data: null }
+	// NOTE: The filtering is done to items because
+	// the query can return items array with an object
+	// like { id: null, data: null }
 
-  const categories: Category[] = result.rows.map((row) => {
-    return {
-      id: row.id,
-      name: row.category_name,
-      itemShape: row.item_shape,
-      items: row.items.filter((item: { id: number | null }) => item.id)
-    };
-  });
+	const categories: Category[] = result.rows.map((row) => {
+		return {
+			id: row.id,
+			name: row.category_name,
+			itemShape: row.item_shape,
+			items: row.items.filter((item: { id: number | null }) => item.id),
+		};
+	});
 
-  return categories;
+	return categories;
 };
 
-
 export async function deleteCategory(category_id: string) {
-  try {
-    const query = {
-      text: `
+	try {
+		const query = {
+			text: `
       DELETE FROM categories WHERE id = $1 RETURNING category_name
       `,
-      values: [category_id]
-    }
+			values: [category_id],
+		};
 
-    const result = await pool.query(query);
-    const row = result.rows[0];
-    
-    if (!row) {
-      throw new Error(`Category with ID ${category_id} not found`);
-    }
+		const result = await pool.query(query);
+		const row = result.rows[0];
 
-    return row
-  } catch (error) {
-    logger.error('Error deleting category', error);
-    throw error;
-  }
+		if (!row) {
+			throw new Error(
+				`[deleteCategory] Category with ID ${category_id} not found`,
+			);
+		}
+
+		return row;
+	} catch (error) {
+		logger.error("[deleteCategory] Error deleting category", error);
+		throw error;
+	}
 }
 
-export async function AddItem(category_id: string, item_data: JSON) {
+async function getCategoryById(category_id: string) {
 	try {
-		const sql_text: string =
-			"INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
+		console.log("[getCategoryById] category_id: ", category_id);
+		const sql_text: string = "SELECT * FROM categories WHERE id=%L";
 
-		logger.info(sql_text);
-		logger.info(category_id);
-		logger.info(item_data);
+		const query = format(sql_text, category_id);
+		logger.info("[getCategoryById] SQL text: ", query);
 
-		const query = format(sql_text, category_id, item_data);
-		await pool.query(query);
+		const result = await pool.query(query);
 
-		logger.info(`category ${category_id} with item data ${item_data}" added`);
+		// for later: add some other return if not found
+		return result.rows[0];
 	} catch (error) {
-		logger.error("Error adding item:", error);
+		logger.error("[getCategoryById] Error finding category by ID:", error);
 	} finally {
-		logger.info("Disconnected from the database");
+		logger.info("[getCategoryById] Disconnected from the database");
+	}
+}
+
+async function validateAddItem(
+	category_id: string,
+	item_data: { [key: string]: string },
+) {
+	try {
+		const category = await getCategoryById(category_id);
+		const columns = category["item_shape"];
+		console.log("[validateAddItem] item_shape: ", columns);
+		console.log("[validateAddItem] item_data: ", item_data);
+
+		for (const key in columns) {
+			if (key in item_data) {
+				if (columns[key] === "INTEGER") {
+					// Convert the value to a number first
+					const realType = typeof item_data[key];
+					if (realType !== "number") {
+						console.log("[validateAddItem] invalid value for Integer");
+						return false;
+					}
+				} else if (columns[key] === "FLOAT") {
+					const realType = typeof item_data[key];
+					if (realType !== "number") {
+						console.log("[validateAddItem] invalid value for Float");
+						return false;
+					}
+				}
+				console.log(
+					`[validateAddItem] ${key}: ${columns[key]} - ${item_data[key]}`,
+				);
+			}
+		}
+
+		return true;
+	} catch (error) {
+		logger.error("[validateAddItem] Error adding item:", error);
+	} finally {
+		logger.info("[validateAddItem] Disconnected from the database");
+	}
+}
+
+export async function AddItem(
+	category_id: string,
+	item_data: { [key: string]: string },
+) {
+	try {
+		const isValid = await validateAddItem(category_id, item_data);
+		if (isValid) {
+			const sql_text: string =
+				"INSERT INTO items (category_id, item_data) VALUES (%L, %L)";
+
+			logger.info(sql_text);
+			logger.info(category_id);
+			logger.info(item_data);
+
+			const query = format(sql_text, category_id, item_data);
+			await pool.query(query);
+
+			logger.info(
+				`[addItem] category ${category_id} with item data ${item_data}" added`,
+			);
+		} else {
+			console.log("[addItem] invalid input");
+		}
+	} catch (error) {
+		logger.error("[addItem] Error adding item:", error);
+	} finally {
+		logger.info("[addItem] Disconnected from the database");
 	}
 }
 
@@ -212,18 +291,20 @@ export async function UpdateItem(
 	try {
 		const sql_text: string = "UPDATE items SET item_data = (%L) WHERE id=%L";
 
-		logger.info("SQL text: ", sql_text);
-		logger.info("item_id: ", item_id);
-		logger.info("item_data: ", item_data);
+		logger.info("[updateItem] SQL text: ", sql_text);
+		logger.info("[updateItem] item_id: ", item_id);
+		logger.info("[updateItem] item_data: ", item_data);
 
 		const query = format(sql_text, item_data, item_id);
 		await pool.query(query);
 
-		logger.info(`Updated item with ID ${item_id} with data ${item_data}"`);
+		logger.info(
+			`[updateItem] Updated item with ID ${item_id} with data ${item_data}"`,
+		);
 	} catch (error) {
-		logger.error("Error updating item:", error);
+		logger.error("[updateItem] Error updating item:", error);
 	} finally {
-		logger.info("Disconnected from the database");
+		logger.info("[updateItem] Disconnected from the database");
 	}
 }
 
@@ -237,13 +318,13 @@ export async function DeleteItem(item_id: string) {
 		const query = format(sql_text, item_id);
 		const result = await pool.query(query);
 
-		logger.info(`item with item_id "${item_id}" deleted`);
+		logger.info(`[deleteItem] item with item_id "${item_id}" deleted`);
 		return {
 			success: true,
 			rowsDeleted: result.rowCount,
 		};
 	} catch (error) {
-		logger.error("Error deleting item:", error);
+		logger.error("[deleteItem] Error deleting item:", error);
 		return {
 			success: false,
 			rowsDeleted: 0,
@@ -256,7 +337,7 @@ export async function CheckItemIdFound(item_id: string): Promise<boolean> {
 		const sql_text: string = "SELECT * FROM items WHERE id=%L;";
 
 		logger.info(sql_text);
-		logger.info("printing item id:", item_id);
+		logger.info("[checkItemIdFound] printing item id:", item_id);
 
 		const query = format(sql_text, item_id);
 		const result = await pool.query(query);
@@ -268,7 +349,7 @@ export async function CheckItemIdFound(item_id: string): Promise<boolean> {
 			return false;
 		}
 	} catch (error) {
-		logger.error("Error finding the item by ID:", error);
+		logger.error("[checkItemIdFound] Error finding the item by ID:", error);
 		return false;
 	}
 }
@@ -282,7 +363,7 @@ export const testLogCategories = async () => {
 export async function AlterCategory(category_id: string, item_shape: JSON) {
 	const client = await pool.connect();
 	try {
-		logger.info("Connected to database AlterCategory");
+		logger.info("[alterCategory] Connected to database AlterCategory");
 
 		//updating the item_shape JSON of a category, replacing it with a new JSON structure
 		const sql_text: string =
@@ -290,13 +371,13 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 		const query = format(sql_text, item_shape, category_id);
 		await client.query(query);
 		logger.info(
-			'category "${category_id}" updated with item shape "${item_shape}"',
+			'[alterCategory] category "${category_id}" updated with item shape "${item_shape}"',
 		);
 	} catch (error) {
-		logger.error("Error updating category:", error);
+		logger.error("[alterCategory] Error updating category:", error);
 	} finally {
 		client.release();
-		logger.info("Disconnected from database AlterCategory");
+		logger.info("[alterCategory] Disconnected from database AlterCategory");
 	}
 }
 
