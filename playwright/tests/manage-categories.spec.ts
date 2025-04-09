@@ -64,6 +64,80 @@ test("items can be added to a category", async ({ page }) => {
 	).toBeVisible();
 });
 
+test("category can be renamed", async ({ page }) => {
+	await page.goto("/categories/inventory");
+	await page.getByTestId("category-name-input").fill("Example 1");
+	await page.getByTestId("add-property-button").click();
+	await page.getByTestId("add-property-input-1").click();
+	await page.getByTestId("add-property-input-1").fill("Ex 1");
+	await page.getByTestId("create-category-button").click();
+	await page.getByTestId("edit-category-button").click();
+	await page.getByRole("textbox").fill("Renamed Example");
+	await page.getByTestId("save-category-button").click();
+	await page.getByText("Save").click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Renamed ExampleNo items added$/ })
+			.nth(2),
+	).toBeVisible();
+})
+
+test("cancelling rename doesnt change name", async ({ page }) => {
+	await page.goto("/categories/inventory");
+	await page.getByTestId("category-name-input").fill("Example 1");
+	await page.getByTestId("add-property-button").click();
+	await page.getByTestId("add-property-input-1").click();
+	await page.getByTestId("add-property-input-1").fill("Ex 1");
+	await page.getByTestId("create-category-button").click();
+	await page.getByTestId("edit-category-button").click();
+	await page.getByRole("textbox").fill("Renamed Example");
+	await page.getByTestId("save-category-button").click();
+	await page.getByRole('button', { name: 'Cancel' }).click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Example 1No items added$/ })
+			.nth(2),
+	).toBeVisible();
+})
+
+test("deleting category deletes category", async ({ page }) => {
+	await page.goto("/categories/inventory");
+	await page.getByTestId("category-name-input").fill("Example 1");
+	await page.getByTestId("add-property-button").click();
+	await page.getByTestId("add-property-input-1").click();
+	await page.getByTestId("add-property-input-1").fill("Ex 1");
+	await page.getByTestId("create-category-button").click();
+	await page.getByTestId("edit-category-button").click();
+	await page.getByTestId("delete-category-button").click();
+	await page.getByRole('button', { name: 'Save' }).click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Example 1No items added$/ })
+			.nth(2),
+	).toHaveCount(0)
+})
+
+test("cancelling category deletion doesnt delete", async ({ page }) => {
+	await page.goto("/categories/inventory");
+	await page.getByTestId("category-name-input").fill("Example 1");
+	await page.getByTestId("add-property-button").click();
+	await page.getByTestId("add-property-input-1").click();
+	await page.getByTestId("add-property-input-1").fill("Ex 1");
+	await page.getByTestId("create-category-button").click();
+	await page.getByTestId("edit-category-button").click();
+	await page.getByTestId("delete-category-button").click();
+	await page.getByRole('button', { name: 'Cancel' }).click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Example 1No items added$/ })
+			.nth(2),
+	).toBeVisible();
+})
+
 test("test", async ({ page }) => {
 	await page.goto("/categories/inventory");
 	await page.getByTestId("category-name-input").click();
