@@ -8,7 +8,8 @@
     "dev": "cross-env NODE_ENV=development DEBUG=express:* ts-node-dev --respawn --transpile-only --watch ./src ./src/index.ts",
     "build": "tsc",
     "lint": "eslint .",
-    "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "import-excel": "cross-env NODE_ENV=development ts-node src/database/excel_to_database.ts"
   },
   "author": "",
   "license": "ISC",
@@ -37,6 +38,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "pg": "^8.13.2",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "xlsx": "^0.18.5"
   }
 }
