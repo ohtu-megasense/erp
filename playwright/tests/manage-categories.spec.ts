@@ -81,9 +81,11 @@ test("items can be added to a category", async ({ page }) => {
 	).toBeVisible();
 });
 
+
 test("multiple categories can be created and items can be deleted", async ({
 	page,
 }) => {
+
 	await page.goto("/categories/inventory");
 	await page.getByTestId("category-name-input").click();
 	await page.getByTestId("category-name-input").fill("Ex1");

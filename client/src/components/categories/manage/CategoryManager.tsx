@@ -161,6 +161,7 @@ export const CategoryManager = ({
 						{!isEditing && <Typography noWrap>{category.name}</Typography>}
 						{isEditing && (
 							<>
+
 								<TextField
 									sx={{ fontSize: "0.8125rem" }}
 									defaultValue={category.name || ""}
@@ -187,6 +188,7 @@ export const CategoryManager = ({
 									size="small"
 									onClick={handleClickSaveIcon}
 									aria-label="Save changes"
+									data-testid="save-category-button"
 								>
 									<SaveIcon fontSize="small" />
 								</IconButton>
@@ -197,7 +199,7 @@ export const CategoryManager = ({
 									onClick={handleEditToggle}
 									aria-label="Edit category"
 								>
-									<EditIcon fontSize="small" />
+									<EditIcon fontSize="small" data-testid="edit-category-button"/>
 								</IconButton>
 							)}
 							<IconButton
