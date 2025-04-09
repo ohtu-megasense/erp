@@ -2,7 +2,6 @@ import format from "pg-format";
 import logger from "../utils/logger";
 import { pool } from "./database";
 import { Category } from "../../../shared/types";
-import { promiseHooks } from "v8";
 
 // TODO: In getCategories sql query if a category has
 // no items the items array will contain a single object
@@ -37,7 +36,10 @@ export const getModuleIdByName = async (
 
 		return result.rows.length > 0 ? result.rows[0].id : null;
 	} catch (error) {
-		logger.error("[getModuleIdByName] Error finding the module by name:", error);
+		logger.error(
+			"[getModuleIdByName] Error finding the module by name:",
+			error,
+		);
 		throw error;
 	}
 };
@@ -110,7 +112,9 @@ export const renameCategory = async (
 		const row = result.rows[0];
 
 		if (!row) {
-			throw new Error(`[renameCategory] Category with ID ${categoryId} not found`);
+			throw new Error(
+				`[renameCategory] Category with ID ${categoryId} not found`,
+			);
 		}
 
 		return { name: row.category_name };
@@ -166,7 +170,6 @@ export const getCategories = async (
 	return categories;
 };
 
-
 export async function deleteCategory(category_id: string) {
 	try {
 		const query = {
@@ -180,7 +183,9 @@ export async function deleteCategory(category_id: string) {
 		const row = result.rows[0];
 
 		if (!row) {
-			throw new Error(`[deleteCategory] Category with ID ${category_id} not found`);
+			throw new Error(
+				`[deleteCategory] Category with ID ${category_id} not found`,
+			);
 		}
 
 		return row;
@@ -293,7 +298,9 @@ export async function UpdateItem(
 		const query = format(sql_text, item_data, item_id);
 		await pool.query(query);
 
-		logger.info(`[updateItem] Updated item with ID ${item_id} with data ${item_data}"`);
+		logger.info(
+			`[updateItem] Updated item with ID ${item_id} with data ${item_data}"`,
+		);
 	} catch (error) {
 		logger.error("[updateItem] Error updating item:", error);
 	} finally {

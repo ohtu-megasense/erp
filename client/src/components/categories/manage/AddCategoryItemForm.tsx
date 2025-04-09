@@ -49,7 +49,8 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 		}));
 	};
 
-	const validateInputs = (key: string | number): boolean => {
+	/* BROKEN
+  * const validateInputs = (key: string | number): boolean => {
 		const type = category.itemShape[key]; // "TEXT", "INTEGER", "FLOAT"
 		const value = formValues[key] ?? "";
 
@@ -67,7 +68,7 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
 
 		return true;
 	};
-
+*/
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
 
