@@ -166,8 +166,10 @@ export const CategoryManager = ({
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 									setTitle(e.target.value);
 								}}
+
+								type="textbox"
 							></TextField>
-							<IconButton size="medium" color="error" onClick={handleClickDeleteIcon}><DeleteIcon fontSize="medium"></DeleteIcon></IconButton>
+							<IconButton size="medium" color="error" onClick={handleClickDeleteIcon}><DeleteIcon fontSize="medium" data-testid="delete-category-button"></DeleteIcon></IconButton>
 							</>
 						)}
 					</div>
@@ -179,6 +181,7 @@ export const CategoryManager = ({
 									size="small"
 									onClick={handleClickSaveIcon}
 									aria-label="Save changes"
+									data-testid="save-category-button"
 								>
 									<SaveIcon fontSize="small" />
 								</IconButton>
@@ -189,7 +192,7 @@ export const CategoryManager = ({
 									onClick={handleEditToggle}
 									aria-label="Edit category"
 								>
-									<EditIcon fontSize="small" />
+									<EditIcon fontSize="small" data-testid="edit-category-button"/>
 								</IconButton>
 							)}
 							<IconButton
