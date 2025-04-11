@@ -1,6 +1,6 @@
 interface Filter {
   apply(items: any[]): any[];
-  getDescription: string;
+  getDescription(): string;
 }
 
 class PropertyFilter implements Filter {
@@ -18,20 +18,20 @@ class PropertyFilter implements Filter {
   }
 
   getDescription(): string {
-    return `${this.property} is "${this.value}"`
+    return `${this.property} is "${this.value}"`;
   }
 }
 
 class AndFilter implements Filter {
-  constructor(
-    private filters: Filter[]
-  ) {}
+  constructor(private filters: Filter[]) {}
 
   apply(items: any[]): any[] {
-    return this.filters.reduce((result, filter) => filter.apply(result), items)
+    return this.filters.reduce((result, filter) => filter.apply(result), items);
   }
 
-  getDescriptio(): string {
-    return `${this.filters.map(filter => filter.getDescription()).join(' AND ')}`
+  getDescription(): string {
+    return `${this.filters.map((filter) => filter.getDescription()).join(' AND ')}`;
   }
 }
+
+export { Filter, PropertyFilter, AndFilter };
