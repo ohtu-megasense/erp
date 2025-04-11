@@ -23,7 +23,16 @@ export const SelectBarChartData = () => {
 
 const SelectBarChartXAxisData = () => {
   const { shape } = testDataset;
-  const fields = Object.keys(shape);
+  const fields: string[] = [];
+
+  // only string type fields are used
+  // for x-axis
+
+  for (const [key, value] of Object.entries(shape)) {
+    if (value === 'string') {
+      fields.push(key);
+    }
+  }
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const isMenuOpen = Boolean(menuAnchor);
@@ -83,7 +92,16 @@ const SelectBarChartXAxisData = () => {
 
 const SelectBarChartYAxisData = () => {
   const { shape } = testDataset;
-  const fields = Object.keys(shape);
+  const fields: string[] = [];
+
+  // only number type fields are used
+  // for y-axis
+
+  for (const [key, value] of Object.entries(shape)) {
+    if (value === 'number') {
+      fields.push(key);
+    }
+  }
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const isMenuOpen = Boolean(menuAnchor);
