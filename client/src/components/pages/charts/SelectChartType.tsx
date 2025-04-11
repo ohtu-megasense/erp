@@ -1,9 +1,8 @@
 import { Grid2, IconButton } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { chartOptions, ChartType } from './datasetFieldsSlice';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import PieChartIcon from '@mui/icons-material/PieChart';
-import { selectedChartType } from './chartTypeSlice';
+import { chartOptions, ChartType, selectedChartType } from './chartTypeSlice';
 
 export const ChartTypeSelection = () => {
   const chartType = useAppSelector((state) => state.chartType.chartType);

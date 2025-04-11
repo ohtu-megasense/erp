@@ -5,7 +5,6 @@ import categoryDataSlice from '../features/categoryDataSlice';
 import notificationSlice from '../features/notificationSlice';
 import { notificationMiddleware } from '../features/middleware/notificationMiddleware';
 import barChartBuilderSlice from '../components/pages/charts/barChartBuilderSlice';
-import datasetFieldsSlice from '../components/pages/charts/datasetFieldsSlice';
 import chartTypeSlice from '../components/pages/charts/chartTypeSlice';
 
 export const store = configureStore({
@@ -13,7 +12,6 @@ export const store = configureStore({
     drawer: drawerSlice,
     categoryData: categoryDataSlice,
     notification: notificationSlice,
-    datasetFields: datasetFieldsSlice,
     chartType: chartTypeSlice,
     barChartBuilder: barChartBuilderSlice,
     [apiSlice.reducerPath]: apiSlice.reducer

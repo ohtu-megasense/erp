@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Box, Button, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { addedXAxisField, addedYAxisField } from './barChartBuilderSlice';
 import { testDataset } from './dataset';
-import { addedField } from './datasetFieldsSlice';
+import CheckIcon from '@mui/icons-material/Check';
 
 export const SelectBarChartData = () => {
   return (
@@ -22,6 +22,10 @@ export const SelectBarChartData = () => {
 };
 
 const SelectBarChartXAxisData = () => {
+  const xAxisField = useAppSelector(
+    (state) => state.barChartBuilder.xAxisField
+  );
+
   const { shape } = testDataset;
   const fields: string[] = [];
 
@@ -49,8 +53,6 @@ const SelectBarChartXAxisData = () => {
 
   const addField = (field: string) => {
     dispatch(addedXAxisField({ field }));
-    dispatch(addedField({ field }));
-    closeMenu();
   };
 
   return (
@@ -80,7 +82,7 @@ const SelectBarChartXAxisData = () => {
           {fields.map((field) => {
             return (
               <MenuItem key={field} onClick={() => addField(field)}>
-                {field}
+                {field} {field === xAxisField && <CheckIcon sx={{ ml: 1 }} />}
               </MenuItem>
             );
           })}
@@ -91,6 +93,10 @@ const SelectBarChartXAxisData = () => {
 };
 
 const SelectBarChartYAxisData = () => {
+  const yAxisField = useAppSelector(
+    (state) => state.barChartBuilder.yAxisField
+  );
+
   const { shape } = testDataset;
   const fields: string[] = [];
 
@@ -118,8 +124,6 @@ const SelectBarChartYAxisData = () => {
 
   const addField = (field: string) => {
     dispatch(addedYAxisField({ field }));
-    dispatch(addedField({ field }));
-    closeMenu();
   };
 
   return (
@@ -149,7 +153,7 @@ const SelectBarChartYAxisData = () => {
           {fields.map((field) => {
             return (
               <MenuItem key={field} onClick={() => addField(field)}>
-                {field}
+                {field} {field === yAxisField && <CheckIcon sx={{ ml: 1 }} />}
               </MenuItem>
             );
           })}
