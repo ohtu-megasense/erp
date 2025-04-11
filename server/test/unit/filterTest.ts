@@ -42,6 +42,7 @@ describe('Property filter ', () => {
     const activeFilter = new PropertyFilter('status', 'active')
     const activeSensors = activeFilter.apply(items)
     assert.strictEqual(activeSensors.length, 3)
+    assert.notStrictEqual(activeSensors[2].status, 'not active')
   })
 
   test('with no matching values returns empty list', () => {
@@ -60,7 +61,7 @@ describe('Property filter ', () => {
 
 describe('AND filter ', () => {
 
-  test('returns correct list', () => {
+  test('returns correct list with proper filters', () => {
     const activeFilter = new PropertyFilter('status', 'active')
     const customerFilter = new PropertyFilter('customer', 'Aalto University')
 
