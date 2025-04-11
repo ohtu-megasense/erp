@@ -1,10 +1,11 @@
 import { Grid2, Typography } from '@mui/material';
 import { useAppSelector } from '../../../app/hooks';
 import { BarChart } from '@mui/x-charts';
-import { testDataset, validateDataset } from './dataset';
+import { validateDataset } from './dataset';
 
 import { PieChartPreview } from './PieChartPreview';
 import { BarChartPreview } from './BarChartPreview';
+import { DatasetLoader } from './DatasetLoader';
 
 const TheBarChart = () => {
   const xAxisField = useAppSelector(
@@ -15,13 +16,17 @@ const TheBarChart = () => {
     (state) => state.barChartBuilder.yAxisField
   );
 
-  const { dataset } = testDataset;
+  const datasetState = useAppSelector((state) => state.barChartBuilder.dataset);
 
-  if (!yAxisField || !xAxisField) {
+  if (!yAxisField || !xAxisField || !datasetState) {
     return <BarChartPreview />;
   }
 
-  const validation = validateDataset(dataset, xAxisField, yAxisField);
+  const validation = validateDataset(
+    datasetState.dataset,
+    xAxisField,
+    yAxisField
+  );
   if (!validation.isValid) {
     return <Typography>Error: {validation.error}</Typography>;
   }
@@ -31,7 +36,7 @@ const TheBarChart = () => {
 
   return (
     <BarChart
-      dataset={dataset}
+      dataset={datasetState.dataset}
       xAxis={[{ scaleType: 'band', dataKey: xAxisField }]}
       series={[
         {
@@ -52,11 +57,18 @@ export const TheBarChartPage = () => {
     return <PieChartPreview />;
   }
 
-  return (
-    <Grid2 container>
-      <Grid2 size={12}>
-        <TheBarChart />
-      </Grid2>
-    </Grid2>
-  );
+  if (chartType === 'bar') {
+    return (
+      <>
+        <DatasetLoader />
+        <Grid2 container>
+          <Grid2 size={12}>
+            <TheBarChart />
+          </Grid2>
+        </Grid2>
+      </>
+    );
+  }
+
+  return <Typography>Invalid chart type</Typography>;
 };

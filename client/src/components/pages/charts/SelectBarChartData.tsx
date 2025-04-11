@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Box, Button, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { addedXAxisField, addedYAxisField } from './barChartBuilderSlice';
-import { testDataset } from './dataset';
 import CheckIcon from '@mui/icons-material/Check';
 
 export const SelectBarChartData = () => {
@@ -26,17 +25,7 @@ const SelectBarChartXAxisData = () => {
     (state) => state.barChartBuilder.xAxisField
   );
 
-  const { shape } = testDataset;
-  const fields: string[] = [];
-
-  // only string type fields are used
-  // for x-axis
-
-  for (const [key, value] of Object.entries(shape)) {
-    if (value === 'string') {
-      fields.push(key);
-    }
-  }
+  const dataset = useAppSelector((state) => state.barChartBuilder.dataset);
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const isMenuOpen = Boolean(menuAnchor);
@@ -54,6 +43,22 @@ const SelectBarChartXAxisData = () => {
   const addField = (field: string) => {
     dispatch(addedXAxisField({ field }));
   };
+
+  if (dataset === null) {
+    return null;
+  }
+
+  const { shape } = dataset;
+  const fields: string[] = [];
+
+  // only string type fields are used
+  // for x-axis
+
+  for (const [key, value] of Object.entries(shape)) {
+    if (value === 'string') {
+      fields.push(key);
+    }
+  }
 
   return (
     <>
@@ -97,17 +102,7 @@ const SelectBarChartYAxisData = () => {
     (state) => state.barChartBuilder.yAxisField
   );
 
-  const { shape } = testDataset;
-  const fields: string[] = [];
-
-  // only number type fields are used
-  // for y-axis
-
-  for (const [key, value] of Object.entries(shape)) {
-    if (value === 'number') {
-      fields.push(key);
-    }
-  }
+  const dataset = useAppSelector((state) => state.barChartBuilder.dataset);
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const isMenuOpen = Boolean(menuAnchor);
@@ -125,6 +120,22 @@ const SelectBarChartYAxisData = () => {
   const addField = (field: string) => {
     dispatch(addedYAxisField({ field }));
   };
+
+  if (dataset === null) {
+    return null;
+  }
+
+  const { shape } = dataset;
+  const fields: string[] = [];
+
+  // only number type fields are used
+  // for y-axis
+
+  for (const [key, value] of Object.entries(shape)) {
+    if (value === 'number') {
+      fields.push(key);
+    }
+  }
 
   return (
     <>

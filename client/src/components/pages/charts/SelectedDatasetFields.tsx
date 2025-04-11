@@ -7,16 +7,27 @@ import {
   Typography
 } from '@mui/material';
 import GridOnIcon from '@mui/icons-material/GridOn';
-import { testDataset } from './dataset';
+import { useAppSelector } from '../../../app/hooks';
 
 export const SelectedDatasetFields = () => {
-  const { label, shape } = testDataset;
+  const dataset = useAppSelector((state) => state.barChartBuilder.dataset);
 
-  // idea is to show which fields are
-  // active in the chart, commented out
-  // for now because of prototyping stuff
+  if (dataset === null) {
+    return (
+      <Box
+        sx={{
+          bgcolor: '#bdbdd9'
+        }}
+      >
+        <Stack sx={{ flexDirection: 'row', gap: 1 }}>
+          <GridOnIcon />
+          <Typography>No dataset loaded</Typography>
+        </Stack>
+      </Box>
+    );
+  }
 
-  // const visualizeState = useAppSelector((state) => state.datasetFields.fields);
+  const { label, shape } = dataset;
 
   return (
     <Box
@@ -30,17 +41,8 @@ export const SelectedDatasetFields = () => {
       </Stack>
       <List dense disablePadding>
         {Object.entries(shape).map(([property], index) => {
-          // const isChecked = selectableFields.some((p) => p === property);
-
           return (
             <ListItem key={index}>
-              {/* <Checkbox
-                disableRipple
-                checked={isChecked}
-                sx={{
-                  cursor: 'default'
-                }}
-              /> */}
               <ListItemText primary={property} sx={{ ml: 2 }} />
             </ListItem>
           );
