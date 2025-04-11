@@ -56,7 +56,7 @@ const SelectBarChartXAxisData = () => {
   return (
     <>
       <Stack>
-        <Typography variant="body1">X-axis (often a label)</Typography>
+        <Typography variant="body1">X-axis</Typography>
         <Box>
           <Button onClick={openMenu} variant="outlined">
             + Add data
@@ -125,7 +125,7 @@ const SelectBarChartYAxisData = () => {
   return (
     <>
       <Stack>
-        <Typography variant="body1">Y-axis (value accumulation)</Typography>
+        <Typography variant="body1">Y-axis</Typography>
         <Box>
           <Button onClick={openMenu} variant="outlined">
             + Add data
