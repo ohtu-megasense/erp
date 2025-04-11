@@ -1,4 +1,6 @@
-interface Dataset {
+import { Category } from '../../../../../shared/types';
+
+export interface Dataset {
   label: string;
   shape: Record<string, string>;
   dataset: DatasetItem[];
@@ -83,7 +85,47 @@ export const groupAndSumByProperty = ({
   }));
 };
 
-// already processed dataset where
+// Not in use atm. thinking about data processing
+// for the charts...
+export const transformCategoriesToDataset = (
+  categories: Category[]
+): Dataset => {
+  // if no data return empty or smth.
+  if (categories.length === 0) {
+    const dataset: Dataset = {
+      label: 'Empty dataset from zero length category array',
+      shape: {},
+      dataset: []
+    };
+
+    return dataset;
+  }
+
+  const firstCategory = categories[0];
+
+  // THOUGHTS TO CONTINUE WORKING ON:
+
+  // categories are not processed
+  // but kind of "raw data" with single
+  // entries -> should process the data first
+
+  // for processing the field names are needed
+  // so 1st step would be to "load the raw data" (categories)
+  // 2nd step to select how some field is to be processed
+  // or automatically select default processing type
+  // for example a numerical field could be summarized
+  // and for any field we could count the total occurrence etc
+
+  const dataset: Dataset = {
+    label: 'TEST TRANSFORM DATASET',
+    shape: firstCategory.itemShape,
+    dataset: []
+  };
+
+  return dataset;
+};
+
+// an already processed dataset where
 // each entry represents total value
 // for single contactId
 // -> summarized/aggregated type dataset
