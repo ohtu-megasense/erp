@@ -124,8 +124,13 @@ export const renameCategory = async (
 	}
 };
 
-// export const getCategories = async (module): etc.
-// jos halutaan hakea moduulin kategoriat
+export const getAllItems = async () => {
+  const query = "SELECT * FROM items;"
+  const result = await pool.query(query)
+
+  return result
+}
+
 export const getCategories = async (
 	moduleName: string,
 ): Promise<Category[]> => {
