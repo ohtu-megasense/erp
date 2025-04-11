@@ -11,6 +11,7 @@ import { CompanyLinkFull } from '../company/CompanyLinkFull';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closedDrawer } from '../../features/drawerSlice';
 import { DrawerNavigationLink } from './DrawerNavigationLink';
+import { FadeMenu } from './FadeMenu';
 
 export const Drawer = () => {
   const isOpen = useAppSelector((state) => state.drawer.isOpen);
@@ -53,17 +54,15 @@ export const Drawer = () => {
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
-          <NavigationAccordion title="Modules" isPlaceholder={false}>
-            <NavigationAccordion title="Inventory" isPlaceholder={false}>
-              <NavigationAccordion title="Categories" isPlaceholder={false}>
-                <DrawerNavigationLink href="/categories/inventory" text="Manage" />
-              </NavigationAccordion>
-            </NavigationAccordion>
-            <NavigationAccordion title="CRM" isPlaceholder={false}>
-              <NavigationAccordion title="Categories" isPlaceholder={false}>
-                <DrawerNavigationLink href="/categories/CRM" text="Manage" />
-              </NavigationAccordion>
-            </NavigationAccordion>
+          <NavigationAccordion title="Modules" isPlaceholder={false} defaultExpanded>
+            <FadeMenu title="Inventory" items={[
+            { label: 'Manage', href: '/categories/inventory' }
+            ]} >
+            </FadeMenu>
+            <FadeMenu title="CRM" items={[
+            { label: 'Manage', href: '/categories/CRM' }
+            ]} >
+            </FadeMenu>
           </NavigationAccordion>
         </List>
       </Box>
