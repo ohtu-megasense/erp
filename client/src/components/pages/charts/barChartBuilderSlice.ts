@@ -1,13 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Dataset } from './dataset';
 
 interface IBarChartBuilder {
   xAxisField: string;
   yAxisField: string;
+  dataset: Dataset | null;
 }
 
 const initialState: IBarChartBuilder = {
   xAxisField: '',
-  yAxisField: ''
+  yAxisField: '',
+  dataset: null
 };
 
 const slice = createSlice({
@@ -25,6 +28,9 @@ const slice = createSlice({
     },
     removedYAxisField: (state) => {
       state.yAxisField = '';
+    },
+    setDataset: (state, action: PayloadAction<{ dataset: Dataset }>) => {
+      state.dataset = action.payload.dataset;
     }
   }
 });
@@ -34,5 +40,6 @@ export const {
   addedXAxisField,
   addedYAxisField,
   removedXAxisField,
-  removedYAxisField
+  removedYAxisField,
+  setDataset
 } = slice.actions;
