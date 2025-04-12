@@ -3,6 +3,8 @@ import logger from '../utils/logger';
 import format from 'pg-format';
 import { generateFilterFromConfig } from '../filters/filterGenerator';
 import { ItemFilterService } from './itemFilterService';
+import { ViewConfig } from '../../../shared/types';
+import { getModuleIdByName } from '../database/database_handler';
 
 const filterService = new ItemFilterService();
 
@@ -27,5 +29,22 @@ export class ViewsService {
     );
 
     return viewsWithFilteredItems;
+  }
+
+  async saveView(viewConfig: ViewConfig): Promise<object> {
+    const { name, module, filterConfig } = viewConfig;
+    const moduleId = await getModuleIdByName(module);
+    const filterConfigJson = typeof filterConfig === 'string'
+    ? filterConfig
+    : JSON.stringify(filterConfig)
+
+    const query = format(
+      `INSERT INTO views (name, module_id, filter_config) VALUES (%L, %L, %L) RETURNING id, name;`,
+      name,
+      moduleId,
+      filterConfigJson
+    );
+    const result = await pool.query(query);
+    return result.rows[0];
   }
 }

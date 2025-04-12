@@ -98,7 +98,7 @@ export interface AndFilterConfig extends BaseFilterConfig {
 
 type FilterConfig = PropertyFilterConfig | AndFilterConfig
 
-export interface viewConfig {
+export interface ViewConfig {
   name: string;
   module: string;
   filterConfig: FilterConfig
