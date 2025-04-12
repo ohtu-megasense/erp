@@ -1,4 +1,4 @@
-import { Filter } from '../filters/filters'
+import { Filter } from '../filters/filters';
 import { pool } from '../database/database';
 import logger from '../utils/logger';
 

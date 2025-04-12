@@ -2,7 +2,6 @@ import format from 'pg-format';
 import logger from '../utils/logger';
 import { pool } from './database';
 import { Category } from '../../../shared/types';
-import { Filter } from '../filters/filters';
 
 // TODO: In getCategories sql query if a category has
 // no items the items array will contain a single object
