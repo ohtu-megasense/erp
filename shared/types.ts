@@ -78,3 +78,28 @@ export interface UpdateItemResponse {
 	categoryId: number;
 	data: Record<string, string | number>;
 }
+
+// For Views and Filters:
+
+export interface BaseFilterConfig {
+  type: string;
+}
+
+export interface PropertyFilterConfig extends BaseFilterConfig {
+  type: 'equals';
+  property: string;
+  value: string;
+}
+
+export interface AndFilterConfig extends BaseFilterConfig {
+  type: 'and';
+  filters: FilterConfig[]
+}
+
+type FilterConfig = PropertyFilterConfig | AndFilterConfig
+
+export interface viewConfig {
+  name: string;
+  module: string;
+  filterConfig: FilterConfig
+}
