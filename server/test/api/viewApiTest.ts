@@ -49,26 +49,11 @@ const createTestItem = async (
   return await api.post(itemsUrl).send(itemData);
 };
 
-const testViewConfig: ViewConfig = {
-  
-  name: "Horses in Helsinki",
-  module: 'inventory',
-  filterConfig: {
-    type: 'equals',
-    property: 'location',
-    value: 'Helsinki'
-  }
-}
 
 
 beforeEach(async () => {
   const { statusCode } = await api.post('/api/testing/reset');
   assert.strictEqual(statusCode, 200);
-  const categoryId = await createTestCategory()
-  createTestItem("Hallavaharja", "8654", "42", "Helsinki", categoryId)
-  createTestItem("MyLittlePony", "4", "1", "Helsinki", categoryId)
-  createTestItem("Ringo", "28", "10", "Vantaa", categoryId)
-  createTestItem("ChatGPT", "2", "11010", "Helsinki", categoryId)
 
 });
 
@@ -79,15 +64,106 @@ after(async () => {
 
 describe('Saving a view ', () => {
   test('succeeds with valid configuration', async () => {
+    const categoryId = await createTestCategory()
+    await createTestItem("Hallavaharja", "8654", "42", "Helsinki", categoryId)
+    await createTestItem("MyLittlePony", "4", "1", "Helsinki", categoryId)
+    await createTestItem("Ringo", "28", "10", "Vantaa", categoryId)
+    await createTestItem("ChatGPT", "2", "11010", "Helsinki", categoryId)
+
+    const testViewConfig: ViewConfig = {
+
+      name: "Horses in Helsinki",
+      module: 'inventory',
+      filterConfig: {
+        type: 'equals',
+        property: 'location',
+        value: 'Helsinki'
+      }
+    }
     const response = await api.post(viewsUrl).send(testViewConfig)
     assert.strictEqual(response.status, 201)
+    assert.ok(response.body.id, "Response should contain the created view ID")
+    assert.strictEqual(response.body.name, testViewConfig.name)
   })
-})
+  test('fails with invalid module', async () => {
+    const invalidViewConfig = {
+      name: "Invalid View",
+      module: 'nonexistent-module',
+      filterConfig: {
+        type: 'equals',
+        property: 'location',
+        value: 'Helsinki'
+      }
+    };
+
+    const response = await api.post(viewsUrl).send(invalidViewConfig);
+    assert.strictEqual(response.status, 400);
+    assert.ok(response.body.error, "Response should contain an error message");
+  });
+
+  test('fails with invalid filter configuration', async () => {
+    const invalidFilterConfig = {
+      name: "Invalid Filter",
+      module: 'inventory',
+      filterConfig: {
+        type: 'unknown-filter-type',
+        property: 'location',
+        value: 'Helsinki'
+      }
+    };
+
+    const response = await api.post(viewsUrl).send(invalidFilterConfig);
+    assert.strictEqual(response.status, 400);
+    assert.ok(response.body.error, "Response should contain an error message");
+  });
+});
 
 describe('Getting views for a module ', () => {
-  test('succeeds with valide call', async () => {
-    await api.post(viewsUrl).send(testViewConfig)
-    const response = await api.get(`${viewsUrl}/inventory`)
-    assert.strictEqual(response.status, 200)
+  test('succeeds with valid module', async () => {
+    const categoryId = await createTestCategory();
+    await createTestItem("Hallavaharja", "8", "42", "Helsinki", categoryId);
+    await createTestItem("MyLittlePony", "4", "1", "Helsinki", categoryId);
+
+    const testViewConfig: ViewConfig = {
+      name: "Horses in Helsinki",
+      module: 'inventory',
+      filterConfig: {
+        type: 'equals',
+        property: 'location',
+        value: 'Helsinki'
+      }
+    };
+
+    await api.post(viewsUrl).send(testViewConfig);
+
+    const response = await api.get(`${viewsUrl}/inventory`);
+
+    assert.strictEqual(response.status, 200);
+    assert.ok(Array.isArray(response.body), "Response should be an array");
+
+    if (response.body.length > 0) {
+      const firstView = response.body[0];
+      assert.strictEqual(firstView.name, testViewConfig.name);
+      assert.ok(Array.isArray(firstView.items), "View should contain items array");
+
+      firstView.items.forEach(item => {
+        assert.strictEqual(item.item_data.location, "Helsinki");
+      });
+
+      assert.strictEqual(firstView.items.length, 2);
+    }
+  });
+
+  test('returns empty array for valid module with no views', async () => {
+    const response = await api.get(`${viewsUrl}/inventory`);
+    assert.strictEqual(response.status, 200);
+    assert.ok(Array.isArray(response.body), "Response should be an array");
+    assert.strictEqual(response.body.length, 0);
+  });
+
+  test('fails with invalid module parameter', async () => {
+    const response = await api.get(`${viewsUrl}/invalid-module`);
+    assert.strictEqual(response.status, 400);
+    assert.ok(response.body.error, "Response should contain an error message");
   })
 })
