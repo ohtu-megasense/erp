@@ -34,4 +34,6 @@ class AndFilter implements Filter {
   }
 }
 
-export { Filter, PropertyFilter, AndFilter };
+const supportedFilterTypes = ['equals', 'and']
+
+export { Filter, PropertyFilter, AndFilter, supportedFilterTypes };
