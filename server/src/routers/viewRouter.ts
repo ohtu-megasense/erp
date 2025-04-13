@@ -28,10 +28,10 @@ router.post('/', async (req, res) => {
     const viewConfig: ViewConfig = req.body;
 
     if (!supportedFilterTypes.includes(viewConfig.filterConfig.type)) {
-      res.status(400).json({ error: 'Filter type not supported'})
-      return
+      res.status(400).json({ error: 'Filter type not supported' });
+      return;
     }
-    const module = viewConfig.module
+    const module = viewConfig.module;
     if (!isValidModule(module)) {
       res.status(400).json({ error: 'Invalid module parameter' });
       return;

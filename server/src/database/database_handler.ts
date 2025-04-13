@@ -124,7 +124,6 @@ export const renameCategory = async (
   }
 };
 
-
 export const getCategories = async (
   moduleName: string
 ): Promise<Category[]> => {
