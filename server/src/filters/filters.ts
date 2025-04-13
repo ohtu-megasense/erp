@@ -1,5 +1,7 @@
+import { Item } from "../../../shared/types";
+
 interface Filter {
-  apply(items: any[]): any[];
+  apply(items: Item[]): Item[];
   getDescription(): string;
 }
 
@@ -9,7 +11,7 @@ class PropertyFilter implements Filter {
     private value: string
   ) {}
 
-  apply(items: any[]): any[] {
+  apply(items: Item[]): Item[] {
     return items.filter(
       (item) =>
         item.item_data[this.property] &&
@@ -25,7 +27,7 @@ class PropertyFilter implements Filter {
 class AndFilter implements Filter {
   constructor(private filters: Filter[]) {}
 
-  apply(items: any[]): any[] {
+  apply(items: Item[]): Item[] {
     return this.filters.reduce((result, filter) => filter.apply(result), items);
   }
 

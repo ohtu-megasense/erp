@@ -1,9 +1,13 @@
-import { Filter } from './filters';
+import { Filter, supportedFilterTypes } from './filters';
 import { FilterFactory } from './filterFactory';
-import logger from '../utils/logger';
+import { FilterConfig } from '../../../shared/types';
 
-export const generateFilterFromConfig = (config: any): Filter | undefined => {
+export const generateFilterFromConfig = (config: FilterConfig | undefined): Filter | undefined => {
   if (!config) return undefined;
+
+  if (!supportedFilterTypes.includes(config.type)) {
+    throw new Error(`Unknown filter type: ${config.type}`)
+  }
 
   switch (config.type) {
     case 'equals':
@@ -16,7 +20,5 @@ export const generateFilterFromConfig = (config: any): Filter | undefined => {
         .filter(Boolean) as Filter[];
       return FilterFactory.and(...andFilters);
     }
-    default:
-      throw new Error(`Unknown filter type: ${config.type}`);
   }
 };

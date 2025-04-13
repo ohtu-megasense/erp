@@ -3,13 +3,12 @@ import { describe, beforeEach, test, after } from 'node:test';
 import assert from 'node:assert';
 import app from '../../src/app';
 
-import { AddCategoryRequest, Category, Item, ViewConfig } from '../../../shared/types';
+import { AddCategoryRequest, Item, ViewConfig } from '../../../shared/types';
 
 const api = supertest(app);
 const itemsUrl = '/api/items';
 const viewsUrl = '/api/views';
 const categoriesUrl = '/api/manage/categories';
-const categoriesGetUrl = '/api/manage/categories/inventory';
 
 // Helper function to add a category
 
@@ -146,7 +145,7 @@ describe('Getting views for a module ', () => {
       assert.strictEqual(firstView.name, testViewConfig.name);
       assert.ok(Array.isArray(firstView.items), "View should contain items array");
 
-      firstView.items.forEach(item => {
+      firstView.items.forEach((item: Item) => {
         assert.strictEqual(item.item_data.location, "Helsinki");
       });
 

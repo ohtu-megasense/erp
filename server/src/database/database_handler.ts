@@ -1,18 +1,18 @@
 import format from 'pg-format';
 import logger from '../utils/logger';
 import { pool } from './database';
-import { Category } from '../../../shared/types';
+import { AddCategoryRequest, Category } from '../../../shared/types';
 
 // TODO: In getCategories sql query if a category has
 // no items the items array will contain a single object
 // like { id: null, data: null }. Ideally an empty
 // array would be returned.
 
-interface AddCategoryParams {
-  name: string;
-  module: string;
-  itemShape: Record<string, string>;
-}
+// interface AddCategoryParams {
+//   name: string;
+//   module: string;
+//   itemShape: Record<string, string>;
+// }
 
 // interface renameCategoryParams {
 //   id: number;
@@ -45,7 +45,7 @@ export const getModuleIdByName = async (
 };
 
 export const addCategory = async (
-  params: AddCategoryParams
+  params: AddCategoryRequest
 ): Promise<{
   id: number;
   module_id: number;

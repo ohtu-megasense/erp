@@ -1,8 +1,9 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert';
 import { generateFilterFromConfig } from '../../src/filters/filterGenerator';
+import { FilterConfig } from '../../../shared/types';
 
-const config = {
+const config: FilterConfig = {
   type: 'and',
   filters: [
     {
@@ -21,6 +22,7 @@ const config = {
 describe('Filter generator ', () => {
   test('generates correct filter from config', () => {
     const filter = generateFilterFromConfig(config);
+    assert.ok(filter, "Filter should be defined")
     assert.strictEqual(
       filter.getDescription(),
       'customer is "Aalto University" AND status is "active"'
@@ -36,7 +38,7 @@ describe('Filter generator ', () => {
       type: 'notAFilter',
       property: 'customer',
       value: 'Puolustusvoimat'
-    };
+    } as  unknown as FilterConfig;
     assert.throws(() => generateFilterFromConfig(wrongConfig), {
       message: 'Unknown filter type: notAFilter'
     });
@@ -50,7 +52,7 @@ describe('Filter generator ', () => {
         property: 'customer',
         value: 'Aalto University'
       }
-    }
+    } as unknown as FilterConfig
 
     assert.throws(() => generateFilterFromConfig(noArrayConfig), {
       message: 'AND requires array of filters'

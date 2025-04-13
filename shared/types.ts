@@ -53,7 +53,7 @@ export interface Category {
 
 export interface Item {
 	id: number;
-	data: Record<string, string | number>;
+	item_data: Record<string, string | number>;
 }
 
 export interface AddColumnRequest {
@@ -96,7 +96,7 @@ export interface AndFilterConfig extends BaseFilterConfig {
   filters: FilterConfig[]
 }
 
-type FilterConfig = PropertyFilterConfig | AndFilterConfig
+export type FilterConfig = PropertyFilterConfig | AndFilterConfig
 
 export interface ViewConfig {
   name: string;

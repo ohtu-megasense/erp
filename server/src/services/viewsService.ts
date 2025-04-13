@@ -1,9 +1,8 @@
 import { pool } from '../database/database';
-import logger from '../utils/logger';
 import format from 'pg-format';
 import { generateFilterFromConfig } from '../filters/filterGenerator';
 import { ItemFilterService } from './itemFilterService';
-import { ViewConfig, FilterConfig } from '../../../shared/types';
+import { ViewConfig } from '../../../shared/types';
 import { getModuleIdByName } from '../database/database_handler';
 
 const filterService = new ItemFilterService();
