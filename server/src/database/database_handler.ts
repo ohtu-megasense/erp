@@ -25,14 +25,14 @@ export const getModuleIdByName = async (
   try {
     const sql_text: string = 'SELECT id FROM modules WHERE module_name=%L;';
 
-    console.log('[getModuleIdByName] printing module_name:', module_name);
+    logger.info('[getModuleIdByName] printing module_name:', module_name);
 
     const query = format(sql_text, module_name);
-    console.log('[getModuleIdByName] printing SQL text:', query);
+    logger.info('[getModuleIdByName] printing SQL text:', query);
     const result = await pool.query(query);
 
-    //console.log("printing result:", result);
-    console.log('[getModuleIdByName] printing result.rows[0]', result.rows[0]);
+    //logger.info("printing result:", result);
+    logger.info('[getModuleIdByName] printing result.rows[0]', result.rows[0]);
 
     return result.rows.length > 0 ? result.rows[0].id : null;
   } catch (error) {
@@ -53,10 +53,10 @@ export const addCategory = async (
   itemShape: Record<string, string>;
 }> => {
   const moduleName = params.module.toLowerCase();
-  console.log(params);
-  console.log('[addCategory] printing module name: ', moduleName);
+  logger.info(params);
+  logger.info('[addCategory] printing module name: ', moduleName);
   const module_id = await getModuleIdByName(moduleName);
-  console.log('[addCategory] module ID: ', module_id);
+  logger.info('[addCategory] module ID: ', module_id);
 
   const query = format(
     `
@@ -129,7 +129,7 @@ export const getCategories = async (
   moduleName: string
 ): Promise<Category[]> => {
   const module_id = await getModuleIdByName(moduleName);
-  console.log('[getCategories] module ID:', module_id);
+  logger.info('[getCategories] module ID:', module_id);
   const query = format(
     `
       SELECT 
@@ -196,7 +196,7 @@ export async function deleteCategory(category_id: string) {
 
 async function getCategoryById(category_id: string) {
   try {
-    console.log('[getCategoryById] category_id: ', category_id);
+    logger.info('[getCategoryById] category_id: ', category_id);
     const sql_text: string = 'SELECT * FROM categories WHERE id=%L';
 
     const query = format(sql_text, category_id);
@@ -220,8 +220,8 @@ async function validateAddItem(
   try {
     const category = await getCategoryById(category_id);
     const columns = category['item_shape'];
-    console.log('[validateAddItem] item_shape: ', columns);
-    console.log('[validateAddItem] item_data: ', item_data);
+    logger.info('[validateAddItem] item_shape: ', columns);
+    logger.info('[validateAddItem] item_data: ', item_data);
 
     for (const key in columns) {
       if (key in item_data) {
@@ -229,17 +229,17 @@ async function validateAddItem(
           // Convert the value to a number first
           const realType = typeof item_data[key];
           if (realType !== 'number') {
-            console.log('[validateAddItem] invalid value for Integer');
+            logger.info('[validateAddItem] invalid value for Integer');
             return false;
           }
         } else if (columns[key] === 'FLOAT') {
           const realType = typeof item_data[key];
           if (realType !== 'number') {
-            console.log('[validateAddItem] invalid value for Float');
+            logger.info('[validateAddItem] invalid value for Float');
             return false;
           }
         }
-        console.log(
+        logger.info(
           `[validateAddItem] ${key}: ${columns[key]} - ${item_data[key]}`
         );
       }
@@ -274,7 +274,7 @@ export async function AddItem(
         `[addItem] category ${category_id} with item data ${item_data}" added`
       );
     } else {
-      console.log('[addItem] invalid input');
+      logger.info('[addItem] invalid input');
     }
   } catch (error) {
     logger.error('[addItem] Error adding item:', error);

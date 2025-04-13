@@ -34,9 +34,14 @@ export class ViewsService {
   async saveView(viewConfig: ViewConfig): Promise<object> {
     const { name, module, filterConfig } = viewConfig;
     const moduleId = await getModuleIdByName(module);
-    const filterConfigJson = typeof filterConfig === 'string'
-    ? filterConfig
-    : JSON.stringify(filterConfig)
+    if (!moduleId) {
+      throw new Error(`Module "${module}" not found`);
+    }
+
+    const filterConfigJson =
+      typeof filterConfig === 'string'
+        ? filterConfig
+        : JSON.stringify(filterConfig);
 
     const query = format(
       `INSERT INTO views (name, module_id, filter_config) VALUES (%L, %L, %L) RETURNING id, name;`,

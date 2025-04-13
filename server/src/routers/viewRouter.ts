@@ -14,8 +14,8 @@ router.get('/:module', async (req, res) => {
       res.status(400).json({ error: 'Invalid module parameter' });
       return;
     }
-    const views = viewsService.getViewsForModule(module);
-    res.json(views);
+    const views = await viewsService.getViewsForModule(module);
+    res.status(200).json(views);
   } catch (error) {
     logger.error('Error when getting views:', error);
     res.status(500).json({ error: 'Internal server error' });

@@ -109,6 +109,7 @@ export const resetDatabase = async () => {
 		text: `
       DELETE FROM items;
       DELETE FROM categories;
+      DELETE FROM views;
     `,
 	};
 
