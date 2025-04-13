@@ -3,6 +3,7 @@ import logger from '../utils/logger';
 import { ViewsService } from '../services/viewsService';
 import { isValidModule } from '../utils/parsers';
 import { ViewConfig } from '../../../shared/types';
+import { supportedFilterTypes } from '../filters/filters';
 
 const router = Router();
 const viewsService = new ViewsService();
@@ -26,6 +27,15 @@ router.post('/', async (req, res) => {
   try {
     const viewConfig: ViewConfig = req.body;
 
+    if (!supportedFilterTypes.includes(viewConfig.filterConfig.type)) {
+      res.status(400).json({ error: 'Filter type not supported'})
+      return
+    }
+    const module = viewConfig.module
+    if (!isValidModule(module)) {
+      res.status(400).json({ error: 'Invalid module parameter' });
+      return;
+    }
     if (!viewConfig.name || !viewConfig.filterConfig) {
       res.status(400).json({ error: 'Missing required fields' });
       return;

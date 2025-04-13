@@ -3,7 +3,7 @@ import logger from '../utils/logger';
 import format from 'pg-format';
 import { generateFilterFromConfig } from '../filters/filterGenerator';
 import { ItemFilterService } from './itemFilterService';
-import { ViewConfig } from '../../../shared/types';
+import { ViewConfig, FilterConfig } from '../../../shared/types';
 import { getModuleIdByName } from '../database/database_handler';
 
 const filterService = new ItemFilterService();
@@ -33,6 +33,7 @@ export class ViewsService {
 
   async saveView(viewConfig: ViewConfig): Promise<object> {
     const { name, module, filterConfig } = viewConfig;
+
     const moduleId = await getModuleIdByName(module);
     if (!moduleId) {
       throw new Error(`Module "${module}" not found`);
