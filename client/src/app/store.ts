@@ -4,12 +4,14 @@ import drawerSlice from '../features/drawerSlice';
 import categoryDataSlice from '../features/categoryDataSlice';
 import notificationSlice from '../features/notificationSlice';
 import { notificationMiddleware } from '../features/middleware/notificationMiddleware';
+import createViewSlice from '../components/view/createViewSlice';
 
 export const store = configureStore({
   reducer: {
     drawer: drawerSlice,
     categoryData: categoryDataSlice,
     notification: notificationSlice,
+    createView: createViewSlice,
     [apiSlice.reducerPath]: apiSlice.reducer
   },
   middleware: (getDefaultMiddleware) => {
