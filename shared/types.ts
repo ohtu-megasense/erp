@@ -105,8 +105,13 @@ export interface ViewConfig {
   filterConfig: FilterConfig;
 }
 
+export const moduleOptions = {
+  Inventory: "inventory",
+  CRM: "crm",
+} as const;
+export type ModuleOption = (typeof moduleOptions)[keyof typeof moduleOptions];
 export type View = Omit<Category, "itemShape">;
 export type CreateViewRequest = ViewConfig;
 export type CreateViewResponse = object;
-export type GetViewsRequest = "inventory" | "crm";
+export type GetViewsRequest = ModuleOption;
 export type GetViewsResponse = View[];
