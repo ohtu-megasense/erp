@@ -58,6 +58,7 @@ const orangeColor = '#ffaa0b';
 const pinkColor = '#ff54a4';
 const blueColor = '#116fea';
 const greenColor = '#08c408';
+const debugGreyColor = '#dcdcdc';
 
 const Heading = () => {
   const module = useAppSelector((state) => state.createView.module);
@@ -585,16 +586,16 @@ export const ViewPage = () => {
           gap: 2
         }}
       >
-        <Box bgcolor="#dcdcdc">
+        <Box bgcolor={debugGreyColor}>
           <SetModuleButton />
         </Box>
-        <Box bgcolor="#dcdcdc" p={2}>
+        <Box bgcolor={debugGreyColor} p={2}>
           <Heading />
         </Box>
-        <Box bgcolor="#c9c9c9" p={2}>
+        <Box bgcolor={debugGreyColor} p={2}>
           <CreateView />
         </Box>
-        <Box bgcolor="#dfdfdf" p={2}>
+        <Box bgcolor={debugGreyColor} p={2}>
           <ViewsList />
         </Box>
       </Stack>
