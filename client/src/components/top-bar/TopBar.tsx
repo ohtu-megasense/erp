@@ -6,7 +6,6 @@ import {
   useTheme
 } from '@mui/material';
 import { OpenDrawerButton } from '../drawer/OpenDrawerButton';
-import { CompanyLinkSmall } from '../company/CompanyLinkSmall';
 
 export const TopBar = () => {
   const theme = useTheme();
@@ -24,12 +23,7 @@ export const TopBar = () => {
         }}
       >
         <Toolbar sx={{ gap: 2, color: 'text.primary' }}>
-          {!isAtleastLarge && (
-            <>
-              <OpenDrawerButton />
-              <CompanyLinkSmall />
-            </>
-          )}
+          {!isAtleastLarge && <OpenDrawerButton />}
         </Toolbar>
         <Divider />
       </AppBar>
