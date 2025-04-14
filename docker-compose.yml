@@ -23,15 +23,9 @@ services:
       - ./shared:/usr/src/shared
       - /app/node_modules
     command: sh -c "npm ci && npm run dev"
-    #Martin's addition starts
-    env_file: ./server/.env
-    #Martin's addition ends
     environment:
       NODE_ENV: development
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
-      #Martin's addition starts
-      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
-      #Martin's addition ends
     ports:
       - 3000:3000
     depends_on:
