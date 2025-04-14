@@ -41,7 +41,8 @@ export const Drawer = () => {
         <Typography
           variant="body2"
           sx={{
-            color: 'text.primary'
+            color: 'text.primary',
+            ml: 1
           }}
         >
           Megasense
