@@ -3,11 +3,10 @@ import {
   List,
   Drawer as MuiDrawer,
   Toolbar,
+  Typography,
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import { NavigationAccordion } from './NavigationAccordion';
-import { CompanyLinkFull } from '../company/CompanyLinkFull';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closedDrawer } from '../../features/drawerSlice';
 import { DrawerNavigationLink } from './DrawerNavigationLink';
@@ -39,7 +38,14 @@ export const Drawer = () => {
       onClose={onClose}
     >
       <Toolbar sx={{ gap: 2, color: 'text.primary' }}>
-        <CompanyLinkFull />
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.primary'
+          }}
+        >
+          Megasense
+        </Typography>
       </Toolbar>
       <Box
         sx={{
@@ -53,18 +59,9 @@ export const Drawer = () => {
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
-          <NavigationAccordion title="Modules" isPlaceholder={false}>
-            <NavigationAccordion title="Inventory" isPlaceholder={false}>
-              <NavigationAccordion title="Categories" isPlaceholder={false}>
-                <DrawerNavigationLink href="/categories/inventory" text="Manage" />
-              </NavigationAccordion>
-            </NavigationAccordion>
-            <NavigationAccordion title="CRM" isPlaceholder={false}>
-              <NavigationAccordion title="Categories" isPlaceholder={false}>
-                <DrawerNavigationLink href="/categories/CRM" text="Manage" />
-              </NavigationAccordion>
-            </NavigationAccordion>
-          </NavigationAccordion>
+          <DrawerNavigationLink href="/categories/inventory" text="Inventory" />
+          <DrawerNavigationLink href="/categories/CRM" text="CRM" />
+          <DrawerNavigationLink href="/view" text="Views" />
         </List>
       </Box>
     </MuiDrawer>
