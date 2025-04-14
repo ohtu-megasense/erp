@@ -9,6 +9,7 @@ import {
   ListItemText,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Stack,
   Table,
   TableBody,
@@ -22,18 +23,30 @@ import {
   AndFilterConfig,
   FilterConfig,
   Item,
+  ModuleOption,
+  moduleOptions,
   PropertyFilterConfig,
+  ViewConfig,
   type View
 } from '../../../../shared/types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   addedFilter,
   removedFilter,
+  resetState,
+  setModule,
+  setName,
   setPropertyOptions
 } from './createViewSlice';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import { MouseEventHandler, ReactNode, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  MouseEventHandler,
+  ReactNode,
+  useEffect,
+  useState
+} from 'react';
 import {
   useCreateViewMutation,
   useGetCategoriesQuery,
@@ -47,10 +60,12 @@ const blueColor = '#116fea';
 const greenColor = '#08c408';
 
 const Heading = () => {
+  const module = useAppSelector((state) => state.createView.module);
+
   return (
     <Stack>
-      <Typography sx={{ color: '#006aff', fontSize: 42, fontWeight: 500 }}>
-        Inventory
+      <Typography sx={{ color: '#006aff', fontSize: 38, fontWeight: 500 }}>
+        {module.toLocaleUpperCase()}
       </Typography>
       <Typography
         sx={{
@@ -165,24 +180,31 @@ const AddFilterButton = (props: {
 
 const LoadPropertyOptions = () => {
   const module = useAppSelector((state) => state.createView.module);
-  const { data: categories = [] } = useGetCategoriesQuery(module);
+  const { data: inventory = [] } = useGetCategoriesQuery('inventory');
+  const { data: crm = [] } = useGetCategoriesQuery('crm');
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getPropertyOptions = (): string[] => {
       const propertyOptions: string[] = [];
 
-      for (const category of categories) {
+      for (const category of inventory) {
         const properties = Object.keys(category.itemShape);
         propertyOptions.push(...properties);
       }
 
-      return propertyOptions;
+      for (const category of crm) {
+        const properties = Object.keys(category.itemShape);
+        propertyOptions.push(...properties);
+      }
+
+      const uniques = Array.from(new Set(propertyOptions));
+      return uniques.sort((a, b) => a.localeCompare(b));
     };
 
     const properties = getPropertyOptions();
     dispatch(setPropertyOptions({ properties }));
-  }, [categories, module, dispatch]);
+  }, [inventory, crm, module, dispatch]);
 
   return null;
 };
@@ -297,51 +319,82 @@ const CreateFilters = () => {
 };
 
 const FiltersList = () => {
-  const filters = useAppSelector((state) => state.createView.filters);
+  const filters = useAppSelector((state) => state.createView.root.filters);
 
   return (
     <>
-      <List
-        component={Stack}
-        sx={{
-          border: '1.5px solid',
-          borderColor: blueColor,
-          borderRadius: 4,
-          gap: 1,
-          p: 2
-        }}
-      >
-        {filters.map((filter, index) => (
-          <Filter filter={filter} key={index} />
-        ))}
-      </List>
+      {filters.length > 0 && (
+        <List
+          component={Stack}
+          sx={{
+            border: '1.5px solid',
+            borderColor: blueColor,
+            borderRadius: 4,
+            gap: 1,
+            p: 2
+          }}
+        >
+          {filters.map((filter, index) => (
+            <Filter filter={filter} key={index} />
+          ))}
+        </List>
+      )}
     </>
   );
 };
 
-const CreateViewButton = () => {
-  const view = useAppSelector((state) => state.createView.viewConfig);
+const SaveButton = () => {
+  const name = useAppSelector((state) => state.createView.name);
+  const module = useAppSelector((state) => state.createView.module);
+  const root = useAppSelector((state) => state.createView.root);
+  const dispatch = useAppDispatch();
   const [apiCreateView] = useCreateViewMutation();
 
+  const getView = (): ViewConfig | null => {
+    if (!name) {
+      console.log('Invalid name');
+      return null;
+    }
+
+    if (root.filters.length === 0) {
+      console.log('Add a filter first');
+      return null;
+    }
+
+    const view: ViewConfig = {
+      name,
+      module,
+      filterConfig: root
+    };
+
+    return view;
+  };
+
   const onClick = async () => {
+    const view = getView();
     if (view === null) return;
     try {
       const response = await apiCreateView(view).unwrap();
+      dispatch(resetState());
       console.log('Created a view', response);
     } catch (error) {
       console.log('Error creating a view', error);
     }
   };
 
+  const isEnabled = root.filters.length > 0 && Boolean(name);
+
   return (
     <Box>
       <Button
+        variant="outlined"
+        disabled={!isEnabled}
         fullWidth={false}
         onClick={onClick}
         sx={{
           color: greenColor,
-          border: '1.5px solid',
-          borderColor: greenColor,
+          outline: '1.5px solid',
+          outlineColor: isEnabled ? greenColor : undefined,
           borderRadius: 2,
           px: 2
         }}
@@ -352,35 +405,54 @@ const CreateViewButton = () => {
   );
 };
 
-const ViewsList = () => {
-  const module = useAppSelector((state) => state.createView.module);
-  const { data: views = [] } = useGetViewsQuery(module);
+const Name = () => {
+  const name = useAppSelector((state) => state.createView.name);
+  const dispatch = useAppDispatch();
+
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch(setName({ name: event.target.value }));
+  };
 
   return (
     <Box>
-      <Typography
-        sx={{
-          fontSize: 18,
-          fontWeight: 500
-        }}
-      >
-        Views
-      </Typography>
-      {views.map((view) => (
-        <View key={view.id} view={view} />
-      ))}
+      <TextField
+        fullWidth={true}
+        value={name}
+        onChange={onChange}
+        placeholder="Enter filter name..."
+      />
     </Box>
   );
 };
 
-const Row = (props: { item: Item }) => {
-  const values = Object.values(props.item.item_data);
+const ViewsList = () => {
+  const module = useAppSelector((state) => state.createView.module);
+  const { data: views = [] } = useGetViewsQuery(module);
+  const ordered = [...views].sort((a, b) => a.name.localeCompare(b.name));
+
   return (
-    <TableRow>
-      {values.map((value, index) => (
-        <TableCell key={index}>{value}</TableCell>
+    <Stack
+      sx={{
+        gap: 2
+      }}
+    >
+      <Stack>
+        <Typography
+          sx={{
+            fontSize: 18,
+            fontWeight: 500
+          }}
+        >
+          Views
+        </Typography>
+        {views.length === 0 && (
+          <Typography variant="caption">No Views Found</Typography>
+        )}
+      </Stack>
+      {ordered.map((view) => (
+        <View key={view.id} view={view} />
       ))}
-    </TableRow>
+    </Stack>
   );
 };
 
@@ -395,22 +467,108 @@ const View = (props: { view: View }) => {
   const shape = getShape();
 
   return (
-    <Box>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {shape.map((property) => (
-              <TableCell key={property}>{property}</TableCell>
+    <Stack
+      sx={{
+        border: '1.5px solid',
+        borderRadius: 2,
+        borderColor: blueColor,
+        py: 2
+      }}
+    >
+      <Stack px={2}>
+        <Typography>{view.name}</Typography>
+        <Typography variant="caption">{view.items.length} items</Typography>
+      </Stack>
+      {view.items.length > 0 && (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>id</TableCell>
+              {shape.map((property, index) => (
+                <TableCell key={index}>{property}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {view.items.map((item) => (
+              <Row key={item.id} item={item} />
             ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {view.items.map((item) => (
-            <Row key={item.id} item={item} />
+          </TableBody>
+        </Table>
+      )}
+    </Stack>
+  );
+};
+
+const Row = (props: { item: Item }) => {
+  const values = Object.values(props.item.item_data);
+  return (
+    <TableRow>
+      <TableCell>{props.item.id}</TableCell>
+      {values.map((value, index) => (
+        <TableCell key={index}>{value}</TableCell>
+      ))}
+    </TableRow>
+  );
+};
+
+const SetModuleButton = () => {
+  const module = useAppSelector((state) => state.createView.module);
+  const dispatch = useAppDispatch();
+
+  const onChange = (event: SelectChangeEvent<string>) => {
+    const selected = event.target.value as ModuleOption;
+    dispatch(setModule({ module: selected }));
+  };
+
+  return (
+    <Box
+      sx={{
+        minWidth: 180
+      }}
+    >
+      <FormControl fullWidth>
+        <InputLabel>Module</InputLabel>
+        <Select value={module} label="Module" onChange={onChange}>
+          {Object.values(moduleOptions).map((option) => (
+            <MenuItem key={option} value={option}>
+              {option.toLocaleUpperCase()}
+            </MenuItem>
           ))}
-        </TableBody>
-      </Table>
+        </Select>
+      </FormControl>
     </Box>
+  );
+};
+
+const CreateView = () => {
+  const propertyOptions = useAppSelector(
+    (state) => state.createView.propertyOptions
+  );
+
+  return (
+    <Stack gap={2}>
+      {propertyOptions.length > 0 ? (
+        <>
+          <Typography
+            sx={{
+              fontSize: 18,
+              fontWeight: 500
+            }}
+          >
+            Create New View
+          </Typography>
+          <FiltersList />
+          <CreateFilters />
+          <Name />
+          <SaveButton />
+        </>
+      ) : (
+        <>
+          <Typography>No data for view creation</Typography>
+        </>
+      )}
+    </Stack>
   );
 };
 
@@ -427,19 +585,18 @@ export const ViewPage = () => {
           gap: 2
         }}
       >
-        <Heading />
-        <Typography
-          sx={{
-            fontSize: 18,
-            fontWeight: 500
-          }}
-        >
-          Create New View
-        </Typography>
-        <FiltersList />
-        <CreateFilters />
-        <CreateViewButton />
-        <ViewsList />
+        <Box bgcolor="#dcdcdc">
+          <SetModuleButton />
+        </Box>
+        <Box bgcolor="#dcdcdc" p={2}>
+          <Heading />
+        </Box>
+        <Box bgcolor="#c9c9c9" p={2}>
+          <CreateView />
+        </Box>
+        <Box bgcolor="#dfdfdf" p={2}>
+          <ViewsList />
+        </Box>
       </Stack>
     </>
   );
