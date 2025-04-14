@@ -28,7 +28,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/api'
   }),
-  tagTypes: ['Category', 'Item'],
+  tagTypes: ['Category', 'Item', 'View'],
   endpoints: (builder) => ({
     getPing: builder.query<PingResponse, void>({
       query: () => 'ping'
@@ -197,10 +197,12 @@ export const apiSlice = createApi({
         url: 'views',
         body: view,
         method: 'POST'
-      })
+      }),
+      invalidatesTags: ['View']
     }),
     getViews: builder.query<GetViewsResponse, GetViewsRequest>({
-      query: (module) => `views/${module}`
+      query: (module) => `views/${module}`,
+      providesTags: ['View']
     })
   })
 });
