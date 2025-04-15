@@ -43,7 +43,7 @@ export const CategoryManager = ({
   const [DeleteCategoryMutation] = useDeleteCategoryMutation();
 
   const tableRef = useRef<{
-    getFormValues: () => Record<number, Record<string, string | number>>;
+    getFormValues: () => Record<number, Record<string, string>>;
   }>(null);
   // const dispatch = useAppDispatch();
   const [updateItem] = useUpdateItemMutation();
@@ -173,6 +173,7 @@ export const CategoryManager = ({
                   size="medium"
                   color="error"
                   onClick={handleClickDeleteIcon}
+                  data-testid="delete-category-button"
                 >
                   <DeleteIcon fontSize="medium"></DeleteIcon>
                 </IconButton>
