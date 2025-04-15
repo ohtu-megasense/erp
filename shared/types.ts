@@ -7,7 +7,7 @@ export interface AddCategoryRequest {
 export interface AddCategoryResponse {
 	id: number;
 	name: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 }
 
 export interface Module {
