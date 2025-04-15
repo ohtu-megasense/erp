@@ -7,8 +7,8 @@ import { VisualizeCategoriesPage } from './components/pages/categories/visualize
 import { ManageCategoriesPage } from './components/pages/categories/manage/ManageCategoriesPage';
 import { CRMpage } from './components/pages/categories/CRM/CRMpage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
-import { ViewPage } from './components/view/ViewPage';
 import { DashboardPage } from './components/pages/dashboard/DashboardPage';
+import { ViewPageV2 } from './components/view/ViewPageV2';
 
 export const App = () => {
   return (
@@ -18,7 +18,7 @@ export const App = () => {
       <Routes>
         <Route element={<DefaultPageLayout />}>
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/view" element={<ViewPage />} />
+          <Route path="/view" element={<ViewPageV2 />} />
           <Route
             path="/categories/visualize"
             element={<VisualizeCategoriesPage />}
