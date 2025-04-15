@@ -8,10 +8,10 @@ import { Category } from "../../../shared/types";
 // like { id: null, data: null }. Ideally an empty
 // array would be returned.
 
-interface AddCategoryParams {
+export interface AddCategoryParams {
 	name: string;
 	module: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 }
 
 // interface renameCategoryParams {
@@ -50,7 +50,7 @@ export const addCategory = async (
 	id: number;
 	module_id: number;
 	name: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 }> => {
 	const moduleName = params.module.toLowerCase();
 	console.log(params);
@@ -82,7 +82,7 @@ export const addCategory = async (
 		id: number;
 		module_id: number;
 		category_name: string;
-		item_shape: Record<string, string>;
+		item_shape: Record<string, string | number>;
 	}>(query);
 
 	const row = result.rows[0];
@@ -216,7 +216,7 @@ async function getCategoryById(category_id: string) {
 
 async function validateAddItem(
 	category_id: string,
-	item_data: { [key: string]: string },
+	item_data: { [key: string]: string | number },
 ) {
 	try {
 		const category = await getCategoryById(category_id);
@@ -256,7 +256,7 @@ async function validateAddItem(
 
 export async function AddItem(
 	category_id: string,
-	item_data: { [key: string]: string },
+	item_data: { [key: string]: string | number },
 ) {
 	try {
 		const isValid = await validateAddItem(category_id, item_data);
@@ -286,7 +286,7 @@ export async function AddItem(
 
 export async function UpdateItem(
 	item_id: string,
-	item_data: Record<string, string>,
+	item_data: Record<string, string | number>,
 ) {
 	try {
 		const sql_text: string = "UPDATE items SET item_data = (%L) WHERE id=%L";
