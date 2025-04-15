@@ -10,6 +10,8 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closedDrawer } from '../../features/drawerSlice';
 import { DrawerNavigationLink } from './DrawerNavigationLink';
+import { FadeMenu } from './FadeMenu';
+import { NavigationAccordion } from './NavigationAccordion';
 
 export const Drawer = () => {
   const isOpen = useAppSelector((state) => state.drawer.isOpen);
@@ -60,9 +62,20 @@ export const Drawer = () => {
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
-          <DrawerNavigationLink href="/categories/inventory" text="Inventory" />
-          <DrawerNavigationLink href="/categories/CRM" text="CRM" />
-          <DrawerNavigationLink href="/view" text="Views" />
+          <NavigationAccordion
+            title="Modules"
+            isPlaceholder={false}
+            defaultExpanded
+          >
+            <FadeMenu
+              title="Inventory"
+              items={[{ label: 'Manage', href: '/categories/inventory' }]}
+            ></FadeMenu>
+            <FadeMenu
+              title="CRM"
+              items={[{ label: 'Manage', href: '/categories/CRM' }]}
+            ></FadeMenu>
+          </NavigationAccordion>
         </List>
       </Box>
     </MuiDrawer>
