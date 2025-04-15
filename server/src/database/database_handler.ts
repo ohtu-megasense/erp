@@ -138,7 +138,7 @@ export const getCategories = async (
         ARRAY_AGG(
           json_build_object(
             'id', items.id, 
-            'data', items.item_data  
+            'item_data', items.item_data  
           )
         ) as items 
       FROM categories
