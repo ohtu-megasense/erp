@@ -109,7 +109,16 @@ export const moduleOptions = {
   Inventory: "inventory",
   CRM: "crm",
 } as const;
+export const filterOptions = {
+  Equals: "equals",
+} as const;
+export const decoratorOptions = {
+  And: "and",
+} as const;
 export type ModuleOption = (typeof moduleOptions)[keyof typeof moduleOptions];
+export type FilterOption = (typeof filterOptions)[keyof typeof filterOptions];
+export type DecoratorOption =
+  (typeof decoratorOptions)[keyof typeof decoratorOptions];
 export type View = Omit<Category, "itemShape">;
 export type CreateViewRequest = ViewConfig;
 export type CreateViewResponse = object;
