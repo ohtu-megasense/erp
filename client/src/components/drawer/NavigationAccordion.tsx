@@ -12,19 +12,16 @@ interface NavigationAccordionProps {
   title: string;
   isPlaceholder: boolean;
   children?: ReactNode;
-  defaultExpanded?: boolean;
 }
 
 export const NavigationAccordion = ({
   title,
   isPlaceholder,
-  children,
-  defaultExpanded = false
+  children
 }: NavigationAccordionProps) => {
   return (
     <Accordion
       disableGutters
-      defaultExpanded={defaultExpanded}
       sx={{
         boxShadow: 'none',
         '&.Mui-expanded': {

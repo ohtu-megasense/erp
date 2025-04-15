@@ -7,7 +7,7 @@ export interface Item {
 export interface Category {
 	id: number;
 	name: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 	items: Item[];
 }
 interface State {
