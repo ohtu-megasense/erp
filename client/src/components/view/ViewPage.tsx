@@ -2,11 +2,8 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
   InputLabel,
-  List,
-  ListItem,
-  ListItemText,
+  Menu,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -19,9 +16,14 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   AndFilterConfig,
+  DecoratorOption,
+  decoratorOptions,
   FilterConfig,
+  FilterOption,
+  filterOptions,
   Item,
   ModuleOption,
   moduleOptions,
@@ -29,30 +31,26 @@ import {
   ViewConfig,
   type View
 } from '../../../../shared/types';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  addedFilter,
-  removedFilter,
-  resetState,
-  setModule,
-  setName,
-  setPropertyOptions
-} from './createViewSlice';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
-import {
-  ChangeEvent,
-  MouseEventHandler,
-  ReactNode,
-  useEffect,
-  useState
-} from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   useCreateViewMutation,
   useGetCategoriesQuery,
   useGetViewsQuery
 } from '../../features/apiSlice';
-import { addNotification } from '../../features/notificationSlice';
+import {
+  addNode,
+  createView,
+  createNode,
+  deleteNode,
+  Id,
+  reset,
+  saveFilter,
+  setModule,
+  setName,
+  setPropertyOptions,
+  type Node
+} from './createViewSlice';
+import { store } from '../../app/store';
 
 const orangeColor = '#ffaa0b';
 const pinkColor = '#ff54a4';
@@ -74,106 +72,37 @@ const Heading = () => {
           color: orangeColor
         }}
       >
-        Manage Views
+        Views
       </Typography>
     </Stack>
   );
 };
 
-const EqualFilter = (props: { filter: PropertyFilterConfig }) => {
-  const { filter } = props;
-  const { property, value, id } = filter;
-
-  return (
-    <FilterListItem>
-      <ListItemText primary={`${property} = ${value}`} />
-      <RemoveFilterButton id={id} />
-    </FilterListItem>
-  );
-};
-
-const AndFilter = (props: { filter: AndFilterConfig }) => {
-  const { filter } = props;
-  const { id } = filter;
-
-  // What would be nice display
-  // for and filters?
-
-  return (
-    <FilterListItem>
-      <ListItemText primary={'AND FILTER'} />
-      <RemoveFilterButton id={id} />
-    </FilterListItem>
-  );
-};
-
-const Filter = (props: { filter: FilterConfig }) => {
-  const { filter } = props;
-
-  switch (filter.type) {
-    case 'equals':
-      return <EqualFilter filter={filter} />;
-    case 'and':
-      return <AndFilter filter={filter} />;
-    default:
-      throw new Error(`Unknown filter`);
-  }
-};
-
-const FilterListItem = (props: { children: ReactNode }) => {
-  return (
-    <ListItem
-      sx={{
-        border: '1.5px solid',
-        borderColor: 'divider',
-        borderRadius: 4
-      }}
-    >
-      {props.children}
-    </ListItem>
-  );
-};
-
-const RemoveFilterButton = (props: { id: string | number }) => {
+const SetModuleButton = () => {
+  const module = useAppSelector((state) => state.createView.module);
   const dispatch = useAppDispatch();
 
-  const onClick = (id: string | number) => {
-    dispatch(removedFilter({ id }));
+  const onChange = (event: SelectChangeEvent<string>) => {
+    const selected = event.target.value as ModuleOption;
+    dispatch(setModule({ module: selected }));
   };
 
   return (
-    <IconButton
+    <Box
       sx={{
-        border: '1.5px solid',
-        borderRadius: 2,
-        borderColor: pinkColor
+        minWidth: 180
       }}
-      size="small"
-      onClick={() => onClick(props.id)}
     >
-      <RemoveIcon />
-    </IconButton>
-  );
-};
-
-const AddFilterButton = (props: {
-  onClick: MouseEventHandler;
-  suffix?: string;
-}) => {
-  return (
-    <Box>
-      <IconButton
-        onClick={props.onClick}
-        sx={{
-          border: '1.5px solid',
-          borderRadius: 2,
-          borderColor: orangeColor
-        }}
-        size="small"
-      >
-        <AddIcon />
-        {props.suffix}
-      </IconButton>
+      <FormControl fullWidth>
+        <InputLabel>Active Module</InputLabel>
+        <Select value={module} label="Active Module" onChange={onChange}>
+          {Object.values(moduleOptions).map((option) => (
+            <MenuItem key={option} value={option}>
+              {option.toLocaleUpperCase()}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 };
@@ -209,57 +138,70 @@ const LoadPropertyOptions = () => {
   return null;
 };
 
-const CreateEqualFilter = () => {
-  const [notificationId] = useState(crypto.randomUUID());
-  const [property, setProperty] = useState('');
-  const [value, setValue] = useState('');
+const Decorator = (props: { filter: AndFilterConfig; parentId: Id }) => {
+  const { filter } = props;
+
+  const nodes = useAppSelector((state) => state.createView.nodes);
+  const children = nodes.filter((node) => node.parentId === filter.id);
+
+  return (
+    <Stack gap={2}>
+      <Stack
+        sx={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 2
+        }}
+      >
+        <Box
+          sx={{
+            minWidth: 180
+          }}
+        >
+          <FormControl fullWidth>
+            <InputLabel>Decorator</InputLabel>
+            <Select value={filter.type} label="Decorator" onChange={undefined}>
+              {Object.values(decoratorOptions).map((decoratorOption) => (
+                <MenuItem key={decoratorOption} value={decoratorOption}>
+                  {decoratorOption.toLocaleUpperCase()}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <AddButton parentId={filter.id} text="+ Filter" />
+        <DeleteButton id={props.filter.id} />
+      </Stack>
+      <Stack ml={4} gap={2}>
+        {children.map((child) => (
+          <Node
+            key={child.filter.id}
+            filter={child.filter}
+            parentId={filter.id}
+          />
+        ))}
+      </Stack>
+    </Stack>
+  );
+};
+
+const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
+  const { filter } = props;
   const propertyOptions = useAppSelector(
     (state) => state.createView.propertyOptions
   );
-  const dispatch = useAppDispatch();
 
-  const validateInputs = (): boolean => {
-    const id = notificationId;
+  const [property, setProperty] = useState(filter.property);
+  const [value, setValue] = useState(filter.value);
+  const [type, setType] = useState<FilterOption>(filter.type); // default
 
-    if (!propertyOptions.includes(property)) {
-      dispatch(
-        addNotification({
-          id,
-          message: 'Invalid property for equal filter',
-          severity: 'warning'
-        })
-      );
-      return false;
-    }
-
-    if (!value) {
-      dispatch(
-        addNotification({
-          id,
-          message: 'Enter a value for equal filter',
-          severity: 'warning'
-        })
-      );
-      return false;
-    }
-
-    return true;
-  };
-
-  const onClickAdd = () => {
-    const isValid = validateInputs();
-    if (!isValid) return;
-
-    const filter: PropertyFilterConfig = {
-      id: crypto.randomUUID(),
-      type: 'equals',
+  const createFilter = (): PropertyFilterConfig => {
+    return {
+      id: props.filter.id,
       property,
+      type,
       value
     };
-
-    dispatch(addedFilter({ filter }));
-    setProperty('');
-    setValue('');
   };
 
   return (
@@ -270,7 +212,6 @@ const CreateEqualFilter = () => {
         gap: 2
       }}
     >
-      <Typography>Equal Filter</Typography>
       <Stack
         sx={{
           flexDirection: 'row',
@@ -298,57 +239,207 @@ const CreateEqualFilter = () => {
             </Select>
           </FormControl>
         </Box>
-        <Typography>=</Typography>
+        <Box
+          sx={{
+            minWidth: 180
+          }}
+        >
+          <FormControl fullWidth>
+            <InputLabel>Filter</InputLabel>
+            <Select
+              value={type}
+              label="Filter"
+              onChange={({ target }) => setType(target.value as FilterOption)}
+            >
+              {Object.values(filterOptions).map((filterOption) => (
+                <MenuItem key={filterOption} value={filterOption}>
+                  {filterOption.toLocaleUpperCase()}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
         <TextField
           placeholder={'Value'}
           value={value}
           onChange={({ target }) => setValue(target.value)}
         />
-        <AddFilterButton onClick={onClickAdd} suffix="EQ" />
       </Stack>
+      <SaveButton id={props.filter.id} filter={createFilter()} />
+      <DeleteButton id={props.filter.id} />
     </Stack>
   );
 };
 
-const CreateFilters = () => {
+const SaveButton = (props: { id: Id; filter: PropertyFilterConfig }) => {
+  const { id, filter } = props;
+  const dispatch = useAppDispatch();
+
+  const onClick = () => {
+    dispatch(saveFilter({ id, filter }));
+  };
   return (
-    <>
-      <CreateEqualFilter />
-    </>
+    <Button
+      variant="outlined"
+      size="small"
+      sx={{
+        color: greenColor,
+        borderColor: greenColor
+      }}
+      onClick={onClick}
+    >
+      Save
+    </Button>
   );
 };
 
-const FiltersList = () => {
-  const filters = useAppSelector((state) => state.createView.root.filters);
+const DeleteButton = (props: { id: Id }) => {
+  const dispatch = useAppDispatch();
+
+  const onClick = () => {
+    dispatch(deleteNode({ id: props.id }));
+  };
+  return (
+    <Button
+      variant="outlined"
+      size="small"
+      sx={{
+        color: pinkColor,
+        borderColor: pinkColor
+      }}
+      onClick={onClick}
+    >
+      Delete
+    </Button>
+  );
+};
+
+const Node = (props: { filter: FilterConfig; parentId: Id }) => {
+  const { filter, parentId } = props;
+
+  switch (filter.type) {
+    case 'and':
+      return <Decorator filter={filter} parentId={parentId} />;
+    case 'equals':
+      return <Filter filter={filter} parentId={parentId} />;
+    default:
+      throw new Error('Unknown filter config');
+  }
+};
+
+const RootNode = () => {
+  const nodes = useAppSelector((state) => state.createView.nodes);
+  const root = nodes.length > 0 ? nodes[0] : null;
 
   return (
     <>
-      {filters.length > 0 && (
-        <List
-          component={Stack}
-          sx={{
-            border: '1.5px solid',
-            borderColor: blueColor,
-            borderRadius: 4,
-            gap: 1,
-            p: 2
-          }}
-        >
-          {filters.map((filter, index) => (
-            <Filter filter={filter} key={index} />
-          ))}
-        </List>
+      {root ? (
+        <>
+          <Node
+            key={root.filter.id}
+            filter={root.filter}
+            parentId={root.parentId}
+          />
+        </>
+      ) : (
+        <>
+          <AddButton parentId={-1} text="Build New View" />
+        </>
       )}
     </>
   );
 };
 
-const SaveButton = () => {
+const AddButton = (props: { parentId: Id; text?: string }) => {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const dispatch = useAppDispatch();
+  const options = [
+    ...Object.values(filterOptions),
+    ...Object.values(decoratorOptions)
+  ].sort((a, b) => a.localeCompare(b));
+
+  const onClickOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const onClose = () => {
+    setAnchorEl(null);
+  };
+
+  const onClickNode = (type: FilterOption | DecoratorOption) => {
+    const isRoot = store.getState().createView.nodes.length === 0;
+    const parentId = isRoot ? -1 : props.parentId;
+    const node = createNode(type, parentId);
+
+    dispatch(
+      addNode({
+        node
+      })
+    );
+
+    onClose();
+  };
+
+  return (
+    <Box>
+      <Button onClick={onClickOpen} variant="outlined" size="small">
+        {props.text || 'Create Filter'}
+      </Button>
+      <Menu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={onClose}>
+        {options.map((option) => (
+          <MenuItem
+            onClick={() => onClickNode(option)}
+            key={option}
+            value={option}
+          >
+            {option.toLocaleUpperCase()}
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
+  );
+};
+
+const ResetButton = () => {
+  const nodeCount = useAppSelector((state) => state.createView.nodes.length);
+  const dispatch = useAppDispatch();
+
+  const onClick = () => {
+    dispatch(reset());
+  };
+
+  return (
+    <>
+      {nodeCount > 0 && (
+        <Box>
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              color: pinkColor,
+              borderColor: pinkColor
+            }}
+            onClick={onClick}
+          >
+            Reset View
+          </Button>
+        </Box>
+      )}
+    </>
+  );
+};
+
+const SaveViewButton = () => {
   const name = useAppSelector((state) => state.createView.name);
   const module = useAppSelector((state) => state.createView.module);
-  const root = useAppSelector((state) => state.createView.root);
+  const nodes = useAppSelector((state) => state.createView.nodes);
+  const [isAccepted, setIsAccepted] = useState(false);
   const dispatch = useAppDispatch();
   const [apiCreateView] = useCreateViewMutation();
+
+  useEffect(() => {
+    setIsAccepted(false);
+  }, [nodes]);
 
   const getView = (): ViewConfig | null => {
     if (!name) {
@@ -356,18 +447,12 @@ const SaveButton = () => {
       return null;
     }
 
-    if (root.filters.length === 0) {
+    if (nodes.length === 0) {
       console.log('Add a filter first');
       return null;
     }
 
-    const view: ViewConfig = {
-      name,
-      module,
-      filterConfig: root
-    };
-
-    return view;
+    return createView(module, name, nodes);
   };
 
   const onClick = async () => {
@@ -375,37 +460,61 @@ const SaveButton = () => {
     if (view === null) return;
     try {
       const response = await apiCreateView(view).unwrap();
-      dispatch(resetState());
+      dispatch(reset());
       console.log('Created a view', response);
     } catch (error) {
       console.log('Error creating a view', error);
     }
   };
 
-  const isEnabled = root.filters.length > 0 && Boolean(name);
+  const isVisible = nodes.length > 0 && Boolean(name);
 
   return (
-    <Box>
-      <Button
-        variant="outlined"
-        disabled={!isEnabled}
-        fullWidth={false}
-        onClick={onClick}
-        sx={{
-          color: greenColor,
-          outline: '1.5px solid',
-          outlineColor: isEnabled ? greenColor : undefined,
-          borderRadius: 2,
-          px: 2
-        }}
-      >
-        Save Filter as View
-      </Button>
-    </Box>
+    <>
+      {isVisible && (
+        <Stack gap={2}>
+          <Stack
+            sx={{
+              flexDirection: 'column'
+            }}
+          >
+            <Typography variant="caption">I Have Saved the Filters?</Typography>
+            <Box>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => setIsAccepted(true)}
+                disableRipple={true}
+              >
+                Yes
+              </Button>
+            </Box>
+          </Stack>
+          <Box>
+            <Button
+              variant="outlined"
+              disabled={!isAccepted}
+              fullWidth={false}
+              onClick={onClick}
+              sx={{
+                color: greenColor,
+                outline: '1.5px solid',
+                outlineColor: isAccepted ? greenColor : undefined,
+                borderRadius: 2,
+                px: 2
+              }}
+            >
+              Build View
+            </Button>
+          </Box>
+        </Stack>
+      )}
+    </>
   );
 };
 
 const Name = () => {
+  const nodeCount = useAppSelector((state) => state.createView.nodes.length);
   const name = useAppSelector((state) => state.createView.name);
   const dispatch = useAppDispatch();
 
@@ -414,14 +523,18 @@ const Name = () => {
   };
 
   return (
-    <Box>
-      <TextField
-        fullWidth={true}
-        value={name}
-        onChange={onChange}
-        placeholder="Enter filter name..."
-      />
-    </Box>
+    <>
+      {nodeCount > 0 && (
+        <Box>
+          <TextField
+            fullWidth={true}
+            value={name}
+            onChange={onChange}
+            placeholder="Enter view name..."
+          />
+        </Box>
+      )}
+    </>
   );
 };
 
@@ -512,92 +625,48 @@ const Row = (props: { item: Item }) => {
   );
 };
 
-const SetModuleButton = () => {
-  const module = useAppSelector((state) => state.createView.module);
-  const dispatch = useAppDispatch();
-
-  const onChange = (event: SelectChangeEvent<string>) => {
-    const selected = event.target.value as ModuleOption;
-    dispatch(setModule({ module: selected }));
-  };
-
-  return (
-    <Box
-      sx={{
-        minWidth: 180
-      }}
-    >
-      <FormControl fullWidth>
-        <InputLabel>Module</InputLabel>
-        <Select value={module} label="Module" onChange={onChange}>
-          {Object.values(moduleOptions).map((option) => (
-            <MenuItem key={option} value={option}>
-              {option.toLocaleUpperCase()}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
-  );
-};
-
-const CreateView = () => {
-  const propertyOptions = useAppSelector(
-    (state) => state.createView.propertyOptions
-  );
-
-  return (
-    <Stack gap={2}>
-      {propertyOptions.length > 0 ? (
-        <>
-          <Typography
-            sx={{
-              fontSize: 18,
-              fontWeight: 500
-            }}
-          >
-            Create New View
-          </Typography>
-          <FiltersList />
-          <CreateFilters />
-          <Name />
-          <SaveButton />
-        </>
-      ) : (
-        <>
-          <Typography>No data for view creation</Typography>
-        </>
-      )}
-    </Stack>
-  );
-};
-
 export const ViewPage = () => {
   return (
     <>
       <LoadPropertyOptions />
+      <Typography
+        py={1}
+        mx={2}
+        sx={{
+          textAlign: 'end',
+          fontSize: 12
+        }}
+      >
+        View Page Version 2
+      </Typography>
       <Stack
         sx={{
-          m: 2,
-          p: 2,
-          mt: 4,
-          border: '1.5px solid',
+          mx: 2,
           borderRadius: 4,
           gap: 2
         }}
       >
-        <Box mx={1} mt={1}>
-          <SetModuleButton />
-        </Box>
-        <Box p={2}>
+        <Box bgcolor={undefined} p={0}>
           <Heading />
         </Box>
-        <Box p={2}>
-          <CreateView />
+        <Box bgcolor={undefined} pt={2}>
+          <SetModuleButton />
         </Box>
-        <Box p={2}>
-          <ViewsList />
-        </Box>
+        <ResetButton />
+        <Stack
+          sx={{
+            border: '1px solid',
+            borderColor: blueColor,
+            borderRadius: 2,
+            p: 2,
+            gap: 2
+          }}
+        >
+          <RootNode />
+          <Name />
+          <SaveViewButton />
+        </Stack>
+        <ViewsList />
       </Stack>
     </>
   );
