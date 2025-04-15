@@ -56,7 +56,6 @@ const orangeColor = '#ffaa0b';
 const pinkColor = '#ff54a4';
 const blueColor = '#116fea';
 const greenColor = '#08c408';
-const debugGreyColor = '#dcdcdc';
 
 const Heading = () => {
   const module = useAppSelector((state) => state.createView.module);
@@ -73,7 +72,7 @@ const Heading = () => {
           color: orangeColor
         }}
       >
-        Manage Views
+        Views
       </Typography>
     </Stack>
   );
@@ -95,8 +94,8 @@ const SetModuleButton = () => {
       }}
     >
       <FormControl fullWidth>
-        <InputLabel>Module</InputLabel>
-        <Select value={module} label="Module" onChange={onChange}>
+        <InputLabel>Active Module</InputLabel>
+        <Select value={module} label="Active Module" onChange={onChange}>
           {Object.values(moduleOptions).map((option) => (
             <MenuItem key={option} value={option}>
               {option.toLocaleUpperCase()}
@@ -148,19 +147,34 @@ const And = (props: { filter: AndFilterConfig; parentId: Id }) => {
   const children = nodes.filter((node) => node.parentId === filter.id);
 
   return (
-    <Box>
+    <Stack gap={2}>
       <Stack
         sx={{
           flexDirection: 'row',
           alignItems: 'center',
-          gap: 1
+          gap: 2
         }}
       >
-        <Typography>AND (Dekoraattorin valinta tähän)</Typography>
+        <Box
+          sx={{
+            minWidth: 180
+          }}
+        >
+          <FormControl fullWidth>
+            <InputLabel>Decorator</InputLabel>
+            <Select value={filter.type} label="Decorator" onChange={undefined}>
+              {Object.values(decoratorOptions).map((decoratorOption) => (
+                <MenuItem key={decoratorOption} value={decoratorOption}>
+                  {decoratorOption.toLocaleUpperCase()}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
         <AddButton parentId={filter.id} text="+ Filter" />
         <DeleteButton id={props.filter.id} />
       </Stack>
-      <Stack ml={4} mt={2} gap={2}>
+      <Stack ml={4} gap={2}>
         {children.map((child) => (
           <Node
             key={child.filter.id}
@@ -169,7 +183,7 @@ const And = (props: { filter: AndFilterConfig; parentId: Id }) => {
           />
         ))}
       </Stack>
-    </Box>
+    </Stack>
   );
 };
 
@@ -236,15 +250,15 @@ const CreateFilter = (props: {
           }}
         >
           <FormControl fullWidth>
-            <InputLabel>Type</InputLabel>
+            <InputLabel>Filter</InputLabel>
             <Select
               value={type}
-              label="Type"
-              onChange={({ target }) => setType(target.value)}
+              label="Filter"
+              onChange={({ target }) => setType(target.value as FilterOption)}
             >
               {Object.values(filterOptions).map((filterOption) => (
                 <MenuItem key={filterOption} value={filterOption}>
-                  {filterOption}
+                  {filterOption.toLocaleUpperCase()}
                 </MenuItem>
               ))}
             </Select>
@@ -325,14 +339,16 @@ const RootNode = () => {
   return (
     <>
       {root ? (
-        <Node
-          key={root.filter.id}
-          filter={root.filter}
-          parentId={root.parentId}
-        />
+        <>
+          <Node
+            key={root.filter.id}
+            filter={root.filter}
+            parentId={root.parentId}
+          />
+        </>
       ) : (
         <>
-          <AddButton parentId={-1} text="Create Filter" />
+          <AddButton parentId={-1} text="Build New View" />
         </>
       )}
     </>
@@ -390,16 +406,35 @@ const AddButton = (props: { parentId: Id; text?: string }) => {
 };
 
 const ResetButton = () => {
+  const nodeCount = useAppSelector((state) => state.createView.nodes.length);
   const dispatch = useAppDispatch();
 
   const onClick = () => {
     dispatch(reset());
   };
 
-  return <Button onClick={onClick}>Reset</Button>;
+  return (
+    <>
+      {nodeCount > 0 && (
+        <Box>
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              color: pinkColor,
+              borderColor: pinkColor
+            }}
+            onClick={onClick}
+          >
+            Reset View
+          </Button>
+        </Box>
+      )}
+    </>
+  );
 };
 
-const CreateButton = () => {
+const SaveViewButton = () => {
   const name = useAppSelector((state) => state.createView.name);
   const module = useAppSelector((state) => state.createView.module);
   const nodes = useAppSelector((state) => state.createView.nodes);
@@ -437,49 +472,56 @@ const CreateButton = () => {
     }
   };
 
-  const isEnabled = nodes.length > 0 && Boolean(name) && isAccepted;
+  const isVisible = nodes.length > 0 && Boolean(name);
 
   return (
-    <Stack gap={2}>
-      <Stack
-        sx={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 2
-        }}
-      >
-        <Typography>Tallensin Filtterit (Dekoja ei tarvi)?</Typography>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() => setIsAccepted(true)}
-          disableRipple={true}
-        >
-          Joo
-        </Button>
-      </Stack>
-      <Box>
-        <Button
-          variant="outlined"
-          disabled={!isEnabled}
-          fullWidth={false}
-          onClick={onClick}
-          sx={{
-            color: greenColor,
-            outline: '1.5px solid',
-            outlineColor: isEnabled ? greenColor : undefined,
-            borderRadius: 2,
-            px: 2
-          }}
-        >
-          Save Filter as View
-        </Button>
-      </Box>
-    </Stack>
+    <>
+      {isVisible && (
+        <Stack gap={2}>
+          <Stack
+            sx={{
+              flexDirection: 'column'
+            }}
+          >
+            <Typography variant="caption">
+              Tallensin Filtterit (dekoraattoreita ei tarvi)?
+            </Typography>
+            <Box>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => setIsAccepted(true)}
+                disableRipple={true}
+              >
+                Joo
+              </Button>
+            </Box>
+          </Stack>
+          <Box>
+            <Button
+              variant="outlined"
+              disabled={!isAccepted}
+              fullWidth={false}
+              onClick={onClick}
+              sx={{
+                color: greenColor,
+                outline: '1.5px solid',
+                outlineColor: isAccepted ? greenColor : undefined,
+                borderRadius: 2,
+                px: 2
+              }}
+            >
+              Build View
+            </Button>
+          </Box>
+        </Stack>
+      )}
+    </>
   );
 };
 
 const Name = () => {
+  const nodeCount = useAppSelector((state) => state.createView.nodes.length);
   const name = useAppSelector((state) => state.createView.name);
   const dispatch = useAppDispatch();
 
@@ -488,14 +530,18 @@ const Name = () => {
   };
 
   return (
-    <Box>
-      <TextField
-        fullWidth={true}
-        value={name}
-        onChange={onChange}
-        placeholder="Enter filter name..."
-      />
-    </Box>
+    <>
+      {nodeCount > 0 && (
+        <Box>
+          <TextField
+            fullWidth={true}
+            value={name}
+            onChange={onChange}
+            placeholder="Enter view name..."
+          />
+        </Box>
+      )}
+    </>
   );
 };
 
@@ -590,7 +636,14 @@ export const ViewPageV2 = () => {
   return (
     <>
       <LoadPropertyOptions />
-      <Typography my={4} mx={2}>
+      <Typography
+        py={1}
+        mx={2}
+        sx={{
+          textAlign: 'end',
+          fontSize: 12
+        }}
+      >
         View Page Version 2
       </Typography>
       <Stack
@@ -600,27 +653,27 @@ export const ViewPageV2 = () => {
           gap: 2
         }}
       >
-        <Box bgcolor={debugGreyColor}>
-          <SetModuleButton />
-        </Box>
-        <Box bgcolor={debugGreyColor} p={2}>
+        <Box bgcolor={undefined} p={0}>
           <Heading />
         </Box>
-        <Box bgcolor={debugGreyColor} p={2}>
+        <Box bgcolor={undefined} pt={2}>
+          <SetModuleButton />
+        </Box>
+        <ResetButton />
+        <Stack
+          sx={{
+            border: '1px solid',
+            borderColor: blueColor,
+            borderRadius: 2,
+            p: 2,
+            gap: 2
+          }}
+        >
           <RootNode />
-        </Box>
-        <Box bgcolor={debugGreyColor} p={2}>
           <Name />
-        </Box>
-        <Box bgcolor={debugGreyColor} p={2}>
-          <CreateButton />
-        </Box>
-        <Box bgcolor={debugGreyColor} p={2}>
-          <ResetButton />
-        </Box>
-        <Box bgcolor={debugGreyColor} p={2}>
-          <ViewsList />
-        </Box>
+          <SaveViewButton />
+        </Stack>
+        <ViewsList />
       </Stack>
     </>
   );
