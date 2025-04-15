@@ -87,6 +87,10 @@ const SetModuleButton = () => {
     dispatch(setModule({ module: selected }));
   };
 
+  const sortedOptions = Object.values(moduleOptions).sort((a, b) =>
+    a.localeCompare(b)
+  );
+
   return (
     <Box
       sx={{
@@ -96,7 +100,7 @@ const SetModuleButton = () => {
       <FormControl fullWidth>
         <InputLabel>Active Module</InputLabel>
         <Select value={module} label="Active Module" onChange={onChange}>
-          {Object.values(moduleOptions).map((option) => (
+          {sortedOptions.map((option) => (
             <MenuItem key={option} value={option}>
               {option.toLocaleUpperCase()}
             </MenuItem>
