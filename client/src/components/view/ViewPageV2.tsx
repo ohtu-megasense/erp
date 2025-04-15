@@ -140,6 +140,7 @@ const LoadPropertyOptions = () => {
 };
 
 // This could be "create decorator"
+// when more are added
 const And = (props: { filter: AndFilterConfig; parentId: Id }) => {
   const { filter } = props;
 
