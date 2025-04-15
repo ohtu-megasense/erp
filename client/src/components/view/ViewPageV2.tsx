@@ -177,13 +177,14 @@ const CreateFilter = (props: {
   filter: PropertyFilterConfig;
   parentId: Id;
 }) => {
+  const { filter } = props;
   const propertyOptions = useAppSelector(
     (state) => state.createView.propertyOptions
   );
 
-  const [property, setProperty] = useState('');
-  const [value, setValue] = useState('');
-  const [type, setType] = useState<FilterOption>('equals'); // default
+  const [property, setProperty] = useState(filter.property);
+  const [value, setValue] = useState(filter.value);
+  const [type, setType] = useState<FilterOption>(filter.type); // default
 
   const createFilter = (): PropertyFilterConfig => {
     return {
@@ -278,7 +279,7 @@ const SaveButton = (props: { id: Id; filter: PropertyFilterConfig }) => {
       }}
       onClick={onClick}
     >
-      +
+      Save
     </Button>
   );
 };
@@ -299,7 +300,7 @@ const DeleteButton = (props: { id: Id }) => {
       }}
       onClick={onClick}
     >
-      -
+      Delete
     </Button>
   );
 };
