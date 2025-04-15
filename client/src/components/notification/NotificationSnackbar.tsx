@@ -52,20 +52,22 @@ export const NotificationSnackbar = () => {
           onClose={handleClose}
           severity={currentNotification.severity || 'info'}
           sx={{ width: '100%' }}
-          color={currentNotification.severity === 'error' ? 'error' : 'info'}
+          color={currentNotification.severity}
         >
           {currentNotification.message}
         </Alert>
 
-        <Badge
-          badgeContent={notifications.length}
-          color="primary"
-          sx={{
-            position: 'absolute',
-            top: 5,
-            right: 0
-          }}
-        />
+        {notifications.length > 1 && (
+          <Badge
+            badgeContent={notifications.length}
+            color={currentNotification.severity}
+            sx={{
+              position: 'absolute',
+              top: 5,
+              right: 0
+            }}
+          />
+        )}
       </Box>
     </Snackbar>
   );
