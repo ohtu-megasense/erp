@@ -478,9 +478,7 @@ const SaveViewButton = () => {
               flexDirection: 'column'
             }}
           >
-            <Typography variant="caption">
-              Tallensin Filtterit (dekoraattoreita ei tarvi)?
-            </Typography>
+            <Typography variant="caption">I Have Saved the Filters?</Typography>
             <Box>
               <Button
                 variant="outlined"
@@ -488,7 +486,7 @@ const SaveViewButton = () => {
                 onClick={() => setIsAccepted(true)}
                 disableRipple={true}
               >
-                Joo
+                Yes
               </Button>
             </Box>
           </Stack>
