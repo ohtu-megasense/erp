@@ -8,7 +8,7 @@ import { ManageCategoriesPage } from './components/pages/categories/manage/Manag
 import { CRMpage } from './components/pages/categories/CRM/CRMpage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
 import { DashboardPage } from './components/pages/dashboard/DashboardPage';
-import { ViewPageV2 } from './components/view/ViewPageV2';
+import { ViewPage } from './components/view/ViewPage';
 
 export const App = () => {
   return (
@@ -18,7 +18,7 @@ export const App = () => {
       <Routes>
         <Route element={<DefaultPageLayout />}>
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/view" element={<ViewPageV2 />} />
+          <Route path="/view" element={<ViewPage />} />
           <Route
             path="/categories/visualize"
             element={<VisualizeCategoriesPage />}
