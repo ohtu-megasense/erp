@@ -580,12 +580,13 @@ export const ViewPage = () => {
         sx={{
           m: 2,
           p: 2,
+          mt: 4,
           border: '1.5px solid',
           borderRadius: 4,
           gap: 2
         }}
       >
-        <Box>
+        <Box mx={1} mt={1}>
           <SetModuleButton />
         </Box>
         <Box p={2}>
