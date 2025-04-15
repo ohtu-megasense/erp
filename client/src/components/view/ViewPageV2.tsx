@@ -138,9 +138,7 @@ const LoadPropertyOptions = () => {
   return null;
 };
 
-// This could be "create decorator"
-// when more are added
-const And = (props: { filter: AndFilterConfig; parentId: Id }) => {
+const Decorator = (props: { filter: AndFilterConfig; parentId: Id }) => {
   const { filter } = props;
 
   const nodes = useAppSelector((state) => state.createView.nodes);
@@ -187,10 +185,7 @@ const And = (props: { filter: AndFilterConfig; parentId: Id }) => {
   );
 };
 
-const CreateFilter = (props: {
-  filter: PropertyFilterConfig;
-  parentId: Id;
-}) => {
+const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
   const { filter } = props;
   const propertyOptions = useAppSelector(
     (state) => state.createView.propertyOptions
@@ -324,9 +319,9 @@ const Node = (props: { filter: FilterConfig; parentId: Id }) => {
 
   switch (filter.type) {
     case 'and':
-      return <And filter={filter} parentId={parentId} />;
+      return <Decorator filter={filter} parentId={parentId} />;
     case 'equals':
-      return <CreateFilter filter={filter} parentId={parentId} />;
+      return <Filter filter={filter} parentId={parentId} />;
     default:
       throw new Error('Unknown filter config');
   }
