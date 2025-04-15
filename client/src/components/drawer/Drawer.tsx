@@ -62,6 +62,7 @@ export const Drawer = () => {
       >
         <List>
           <DrawerNavigationLink href="/" text="Home" />
+          <DrawerNavigationLink href="/view" text="Views" />
           <NavigationAccordion
             title="Modules"
             isPlaceholder={false}
