@@ -177,6 +177,10 @@ const slice = createSlice({
         (node) =>
           !idsToRemove.has(node.filter.id) && !idsToRemove.has(node.parentId)
       );
+
+      if (state.nodes.length === 0) {
+        state.name = '';
+      }
     },
     reset: (state) => {
       state.name = '';
