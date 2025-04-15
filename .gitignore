@@ -2,5 +2,7 @@
 .env
 node_modules
 build
+*.sh
+dump.sql
 data
 playwright/tests/test-results
