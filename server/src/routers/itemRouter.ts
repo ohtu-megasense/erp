@@ -5,16 +5,16 @@ import logger from '../utils/logger';
 const router = Router();
 
 router.post('/', async (req, res) => {
-  const { id, data } = req.body;
+  const { id, item_data } = req.body;
 
-  if (!id || !data) {
+  if (!id || !item_data) {
     logger.error('Item creation failed: missing category ID or item data');
     res.status(400).json({ error: 'Category ID and item data are required' });
     return;
   }
 
   try {
-    const result = await AddItem(id, data);
+    const result = await AddItem(id, item_data);
     res.json(result);
   } catch (error) {
     logger.error('Error adding item:', error);
