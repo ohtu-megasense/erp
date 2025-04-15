@@ -2,13 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '../features/apiSlice';
 import drawerSlice from '../features/drawerSlice';
 import notificationSlice from '../features/notificationSlice';
-import createViewSlice from '../components/view/createViewSlice';
+import createViewSliceV2 from '../components/view/createViewSliceV2';
 
 export const store = configureStore({
   reducer: {
     drawer: drawerSlice,
     notification: notificationSlice,
-    createView: createViewSlice,
+    createView: createViewSliceV2,
     [apiSlice.reducerPath]: apiSlice.reducer
   },
   middleware: (getDefaultMiddleware) => {
