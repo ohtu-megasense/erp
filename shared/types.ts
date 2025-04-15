@@ -1,7 +1,7 @@
 export interface AddCategoryRequest {
 	name: string;
 	module: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 }
 
 export interface AddCategoryResponse {
@@ -16,7 +16,7 @@ export interface Module {
 
 export interface renameCategoryRequest {
 	categoryId: number;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 	categoryName: string;
 }
 
@@ -47,13 +47,13 @@ export type GetCategoriesResponse = Category[];
 export interface Category {
 	id: number;
 	name: string;
-	itemShape: Record<string, string>;
+	itemShape: Record<string, string | number>;
 	items: Item[];
 }
 
 export interface Item {
 	id: number;
-	data: Record<string, string | number>;
+	item_data: Record<string, string | number>;
 }
 
 export interface AddColumnRequest {
@@ -77,4 +77,29 @@ export interface UpdateItemResponse {
 	id: number;
 	categoryId: number;
 	data: Record<string, string | number>;
+}
+
+// For Views and Filters:
+
+export interface BaseFilterConfig {
+  type: string;
+}
+
+export interface PropertyFilterConfig extends BaseFilterConfig {
+  type: 'equals';
+  property: string;
+  value: string;
+}
+
+export interface AndFilterConfig extends BaseFilterConfig {
+  type: 'and';
+  filters: FilterConfig[]
+}
+
+export type FilterConfig = PropertyFilterConfig | AndFilterConfig
+
+export interface ViewConfig {
+  name: string;
+  module: string;
+  filterConfig: FilterConfig
 }

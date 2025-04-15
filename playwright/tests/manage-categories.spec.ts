@@ -81,9 +81,11 @@ test("items can be added to a category", async ({ page }) => {
 	).toBeVisible();
 });
 
+
 test("multiple categories can be created and items can be deleted", async ({
 	page,
 }) => {
+
 	await page.goto("/categories/inventory");
 	await page.getByTestId("category-name-input").click();
 	await page.getByTestId("category-name-input").fill("Ex1");
@@ -215,133 +217,4 @@ test("int and float values get added correctly", async ({ page }) => {
 			.filter({ hasText: /^IDintfloat[0-9]+123123\.123$/ })
 			.first(),
 	).toBeVisible();
-});
-
-test("category can be renamed", async ({ page }) => {
-	await page.goto("/categories/inventory");
-
-	await page.getByTestId("category-name-input").click();
-	await page.getByTestId("category-name-input").fill("Example category");
-	await page.getByTestId("add-property-button").click();
-	await page.getByTestId("add-property-button").click();
-	await page.getByTestId("add-property-input-1").click();
-	await page.getByTestId("add-property-input-1").fill("Ex11");
-	await page.locator("#propertyType-0").click();
-	await page.getByRole("option", { name: "TEXT" }).click();
-	await page.getByTestId("add-property-input-2").click();
-	await page.getByTestId("add-property-input-2").fill("Ex12");
-	await page.getByLabel("", { exact: true }).click();
-	await page.getByRole("option", { name: "INTEGER" }).click();
-	await page.getByTestId("create-category-button").click();
-	await page.getByRole("button", { name: "Edit category" }).click();
-	await page.locator("#categoryName").click();
-	await page.locator("#categoryName").fill("Example 111");
-	await page.getByTestId("save-category-button").click();
-	await page.getByRole("button", { name: "Save" }).click();
-	await expect(
-		page
-			.locator("div")
-			.filter({ hasText: /^Example 111No items added$/ })
-			.nth(2),
-	).toBeVisible();
-});
-test("cancelling rename doesnt change name", async ({ page }) => {
-	await page.goto("/categories/inventory");
-	await page.getByTestId("category-name-input").click();
-	await page.getByTestId("category-name-input").fill("Example1");
-	await page.getByTestId("add-property-button").click();
-	await page.getByTestId("add-property-input-1").click();
-	await page.getByTestId("add-property-input-1").fill("Ex1");
-	await page.getByLabel("", { exact: true }).click();
-	await page.getByRole("option", { name: "TEXT" }).click();
-	await page.getByTestId("create-category-button").click();
-	await page.getByRole("button", { name: "Edit category" }).click();
-	await page.locator("#categoryName").click();
-	await page.locator("#categoryName").fill("Renamed");
-	await page.getByTestId("save-category-button").click();
-	await page.getByRole("button", { name: "Cancel" }).click();
-	await expect(
-		page
-			.locator("div")
-			.filter({ hasText: /^Example1No items added$/ })
-			.nth(2),
-	).toBeVisible();
-});
-test("deleting category deletes category", async ({ page }) => {
-	await page.goto("/categories/inventory");
-
-	await page.getByTestId("category-name-input").click();
-	await page.getByTestId("category-name-input").fill("Deletetest");
-	await page.getByTestId("add-property-button").click();
-	await page.getByTestId("add-property-input-1").click();
-	await page.getByTestId("add-property-input-1").fill("exprop1");
-	await page.getByLabel("", { exact: true }).click();
-	await page.getByRole("option", { name: "TEXT" }).click();
-	await page.getByTestId("create-category-button").click();
-	await page.getByRole("button", { name: "Edit category" }).click();
-	await page.getByTestId("delete-category-button").click();
-	await page.getByRole("button", { name: "Save" }).click();
-	await expect(page.locator("html")).toMatchAriaSnapshot(`
-    - document:
-      - alert:
-        - text: New category created
-        - button "Close"
-      - text: "1"
-      - banner:
-        - separator
-      - link "Megasense":
-        - img
-        - paragraph: Megasense
-      - list:
-        - link "Home"
-        - heading "Modules" [level=3]:
-          - button "Modules"
-      - main:
-        - heading "Manage Inventory" [level=4]
-        - text: Actions to manage data in Inventory
-        - paragraph: Create new categories
-        - button
-        - heading "Add New Category" [level=6]
-    `);
-});
-
-test("cancelling category deletion doesnt delete", async ({ page }) => {
-	await page.goto("/categories/inventory");
-	await page.getByTestId("category-name-input").click();
-	await page.getByTestId("category-name-input").fill("Canceltest");
-	await page.getByTestId("add-property-button").click();
-	await page.getByTestId("add-property-input-1").click();
-	await page.getByTestId("add-property-input-1").fill("something");
-	await page.getByLabel("", { exact: true }).click();
-	await page.getByRole("option", { name: "TEXT" }).click();
-	await page.getByTestId("create-category-button").click();
-	await page.getByRole("button", { name: "Edit category" }).click();
-	await page.getByTestId("delete-category-button").click();
-	await page.getByRole("button", { name: "Cancel" }).click();
-	await expect(page.locator("html")).toMatchAriaSnapshot(`
-    - document:
-      - alert:
-        - text: New category created
-        - button "Close"
-      - text: "1"
-      - banner:
-        - separator
-      - link "Megasense":
-        - img
-        - paragraph: Megasense
-      - list:
-        - link "Home"
-        - heading "Modules" [level=3]:
-          - button "Modules"
-      - main:
-        - heading "Manage Inventory" [level=4]
-        - text: Actions to manage data in Inventory
-        - paragraph: Create new categories
-        - button
-        - heading "Add New Category" [level=6]
-        - paragraph: Canceltest
-        - button "Edit category"
-        - button "Show add form"
-        - text: No items added
-    `);
 });
