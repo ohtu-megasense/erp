@@ -45,21 +45,19 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const id = req.params.id;
-  const { categoryId, data } = req.body;
+  const { categoryId, item_data } = req.body;
 
-  console.log('data', data);
-
-  if (!data) {
+  if (!item_data) {
     logger.error('Item update failed: missing item data');
     res.status(400).json({ error: 'Item ID and updated data are required' });
     return;
   }
   try {
-    await UpdateItem(id, data);
+    await UpdateItem(id, item_data);
     res.json({
       id: Number(id),
       categoryId: Number(categoryId),
-      data
+      item_data
     });
   } catch (error) {
     logger.error('error updating item:', error);
