@@ -184,9 +184,6 @@ const CreateFilter = (props: {
   const [value, setValue] = useState('');
   const [type, setType] = useState<FilterOption>('equals'); // default
 
-  // on save -> send to redux and use
-  // addFilter (not addNode) (not implemented)
-
   const createFilter = (): PropertyFilterConfig => {
     return {
       id: props.filter.id,
