@@ -218,7 +218,12 @@ export const CategoryManager = ({
 
           {isAdding && (
             <Paper sx={{ p: 2 }}>
-              <AddCategoryItemForm category={category} />
+              <AddCategoryItemForm 
+              category={category}
+              onClose = {() => {
+                setIsAdding(false);
+                refetchCategories();
+              }} />
             </Paper>
           )}
           <Paper sx={{ p: 2 }}>
