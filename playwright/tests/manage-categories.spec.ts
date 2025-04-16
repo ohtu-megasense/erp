@@ -81,11 +81,9 @@ test("items can be added to a category", async ({ page }) => {
 	).toBeVisible();
 });
 
-
 test("multiple categories can be created and items can be deleted", async ({
 	page,
 }) => {
-
 	await page.goto("/categories/inventory");
 	await page.getByTestId("category-name-input").click();
 	await page.getByTestId("category-name-input").fill("Ex1");
@@ -124,7 +122,6 @@ test("multiple categories can be created and items can be deleted", async ({
 	await page.getByRole("textbox", { name: "test1 TEXT" }).click();
 	await page.getByRole("textbox", { name: "test1 TEXT" }).fill("example");
 	await page.getByRole("button", { name: "+ Add" }).click();
-	await page.getByRole("button", { name: "Hide add form" }).click();
 	await expect(
 		page
 			.locator("div")
@@ -135,7 +132,6 @@ test("multiple categories can be created and items can be deleted", async ({
 	await page.getByRole("textbox", { name: "example1 INTEGER" }).click();
 	await page.getByRole("textbox", { name: "example1 INTEGER" }).fill("123");
 	await page.getByRole("button", { name: "+ Add" }).click();
-	await page.getByRole("button", { name: "Hide add form" }).click();
 	await expect(
 		page
 			.locator("div")
