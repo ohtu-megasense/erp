@@ -22,20 +22,21 @@ const isStringRecord = (obj: unknown): obj is Record<string, string> => {
 
 export const isValidModule = (module: string) => {
   if (!module || typeof module !== 'string') {
-    return false
+    return false;
   }
   if (module !== 'inventory' && module !== 'crm') {
-    return false
+    return false;
   }
   return true;
-}
+};
 
-// NOTE: Currently only 'TEXT' value is allowed.
+// NOTE: Currently only 'TEXT' & 'INTEGER' & 'FLOAT' value is allowed.
 const isValidItemShape = (itemShape: Record<string, string>): boolean => {
   const values = Object.values(itemShape);
+  const validTypes = ['TEXT', 'INTEGER', 'FLOAT'];
 
   for (const value of values) {
-    if (value !== 'TEXT') {
+    if (!validTypes.includes(value)) {
       return false;
     }
   }
