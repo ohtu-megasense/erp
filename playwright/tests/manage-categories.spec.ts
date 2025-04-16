@@ -84,82 +84,82 @@ test("items can be added to a category", async ({ page }) => {
 test("multiple categories can be created and items can be deleted", async ({
   page,
 }) => {
-  await page.goto("/categories/inventory");
-  await page.getByTestId("category-name-input").click();
-  await page.getByTestId("category-name-input").fill("Ex1");
-  await page.getByTestId("add-property-button").click();
-  await page.getByLabel("", { exact: true }).click();
-  await page.getByRole("option", { name: "TEXT" }).click();
-  await page.getByTestId("add-property-input-1").click();
-  await page.getByTestId("add-property-input-1").fill("test1");
-  await page.getByTestId("create-category-button").click();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Ex1No items added$/ })
-      .nth(2)
-  ).toBeVisible();
-  await page
-    .locator("div")
-    .filter({ hasText: /^Add New Category$/ })
-    .getByRole("button")
-    .click();
-  await page.getByTestId("category-name-input").click();
-  await page.getByTestId("category-name-input").fill("Ex2");
-  await page.getByTestId("add-property-button").click();
-  await page.getByTestId("add-property-input-1").click();
-  await page.getByTestId("add-property-input-1").fill("example1");
-  await page.getByLabel("", { exact: true }).click();
-  await page.getByRole("option", { name: "INTEGER" }).click();
-  await page.getByTestId("create-category-button").click();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Ex2No items added$/ })
-      .first()
-  ).toBeVisible();
-  await page.getByTestId("add-item-button").first().click();
-  await page.getByRole("textbox", { name: "test1 TEXT" }).click();
-  await page.getByRole("textbox", { name: "test1 TEXT" }).fill("example");
-  await page.getByRole("button", { name: "+ Add" }).click();
-  await page.getByRole("button", { name: "Hide add form" }).click();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Ex1IDtest1[0-9]+example$/ })
-      .first()
-  ).toBeVisible();
-  await page.getByTestId("add-item-button").nth(1).click();
-  await page.getByRole("textbox", { name: "example1 INTEGER" }).click();
-  await page.getByRole("textbox", { name: "example1 INTEGER" }).fill("123");
-  await page.getByRole("button", { name: "+ Add" }).click();
-  await page.getByRole("button", { name: "Hide add form" }).click();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Ex2IDexample1[0-9]+123$/ })
-      .first()
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Edit category" }).nth(1).click();
-  await page.getByRole("row", { name: "123" }).getByRole("button").click();
-  await expect(
-    page.getByRole("heading", { name: "Do you want to delete this" })
-  ).toBeVisible();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^If you delete this item, it can't be undone$/ })
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Yes" }).click();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^No items added$/ })
-      .first()
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Save changes" }).click();
-  await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.locator("#root")).toMatchAriaSnapshot(`
+
+	await page.goto("/categories/inventory");
+	await page.getByTestId("category-name-input").click();
+	await page.getByTestId("category-name-input").fill("Ex1");
+	await page.getByTestId("add-property-button").click();
+	await page.getByLabel("", { exact: true }).click();
+	await page.getByRole("option", { name: "TEXT" }).click();
+	await page.getByTestId("add-property-input-1").click();
+	await page.getByTestId("add-property-input-1").fill("test1");
+	await page.getByTestId("create-category-button").click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Ex1No items added$/ })
+			.nth(2),
+	).toBeVisible();
+	await page
+		.locator("div")
+		.filter({ hasText: /^Add New Category$/ })
+		.getByRole("button")
+		.click();
+	await page.getByTestId("category-name-input").click();
+	await page.getByTestId("category-name-input").fill("Ex2");
+	await page.getByTestId("add-property-button").click();
+	await page.getByTestId("add-property-input-1").click();
+	await page.getByTestId("add-property-input-1").fill("example1");
+	await page.getByLabel("", { exact: true }).click();
+	await page.getByRole("option", { name: "INTEGER" }).click();
+	await page.getByTestId("create-category-button").click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Ex2No items added$/ })
+			.first(),
+	).toBeVisible();
+	await page.getByTestId("add-item-button").first().click();
+	await page.getByRole("textbox", { name: "test1 TEXT" }).click();
+	await page.getByRole("textbox", { name: "test1 TEXT" }).fill("example");
+	await page.getByRole("button", { name: "+ Add" }).click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Ex1IDtest1[0-9]+example$/ })
+			.first(),
+	).toBeVisible();
+	await page.getByTestId("add-item-button").nth(1).click();
+	await page.getByRole("textbox", { name: "example1 INTEGER" }).click();
+	await page.getByRole("textbox", { name: "example1 INTEGER" }).fill("123");
+	await page.getByRole("button", { name: "+ Add" }).click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^Ex2IDexample1[0-9]+123$/ })
+			.first(),
+	).toBeVisible();
+	await page.getByRole("button", { name: "Edit category" }).nth(1).click();
+	await page.getByRole("row", { name: "123" }).getByRole("button").click();
+	await expect(
+		page.getByRole("heading", { name: "Do you want to delete this" }),
+	).toBeVisible();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^If you delete this item, it can't be undone$/ }),
+	).toBeVisible();
+	await page.getByRole("button", { name: "Yes" }).click();
+	await expect(
+		page
+			.locator("div")
+			.filter({ hasText: /^No items added$/ })
+			.first(),
+	).toBeVisible();
+	await page.getByRole("button", { name: "Save changes" }).click();
+	await page.getByRole("button", { name: "Save" }).click();
+	await expect(page.locator("#root")).toMatchAriaSnapshot(`
+
     - main:
       - heading "Manage Inventory" [level=4]
       - text: Actions to manage data in Inventory

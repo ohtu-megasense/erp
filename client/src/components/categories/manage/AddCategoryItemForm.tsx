@@ -5,9 +5,10 @@ import { Category } from '../../../../../shared/types';
 
 interface AddCategoryItemFormProps {
   category: Category;
+  onClose?: () => void;
 }
 
-export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
+export const AddCategoryItemForm = ({ category, onClose }: AddCategoryItemFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string | number>>(
     {}
@@ -115,6 +116,9 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
     //	);
 
     setFormValues({});
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
