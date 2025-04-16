@@ -8,32 +8,102 @@ interface AddCategoryItemFormProps {
 }
 
 export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
-  const [formValues, setFormValues] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
+  const [formValues, setFormValues] = useState<Record<string, string | number>>(
+    {}
+  );
   const [addItem] = useAddItemMutation();
   const shapeKeys = Object.keys(category.itemShape);
 
-  const handleInputChange = (key: string, value: string) => {
+  const handleInputChange = (key: string, value: string): void => {
+    const type = category.itemShape[key];
+
+    if (type === 'FLOAT') {
+      // Salli vain numerot, piste ja pilkku
+      const valid = /^[0-9]*[.,]?[0-9]*$/.test(value);
+      if (!valid) return; // älä päivitä tilaa
+
+      setFormValues((prev) => ({
+        ...prev,
+        [key]: value
+      }));
+      return;
+    }
+
+    if (type === 'INTEGER') {
+      // Salli vain kokonaisluvut
+      const valid = /^[0-9]*$/.test(value);
+      if (!valid) return;
+
+      setFormValues((prev) => ({
+        ...prev,
+        [key]: value
+      }));
+      return;
+    }
+
+    // TEXT tai muu
     setFormValues((prev) => ({
       ...prev,
       [key]: value
     }));
   };
 
+  /* BROKEN
+  * const validateInputs = (key: string | number): boolean => {
+		const type = category.itemShape[key]; // "TEXT", "INTEGER", "FLOAT"
+		const value = formValues[key] ?? "";
+
+		const actualType = typeof value;
+
+		console.log(type, actualType, value);
+		if (
+			(type === "TEXT" && actualType !== "string") ||
+			(type === "INTEGER" && actualType !== "number") ||
+			(type === "FLOAT" && actualType !== "number")
+		) {
+			setError("Please enter value with valid type");
+			return false;
+		}
+
+		return true;
+	};
+*/
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     const newItem = shapeKeys.reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: formValues[key] || ''
-      }),
-      {} as Record<string, string>
+      (acc, key) => {
+        /*if (!validateInputs(key)) {
+					return;
+				}*/
+        const raw = formValues[key] ?? '';
+        const type = category.itemShape[key];
+
+        switch (type) {
+          case 'INTEGER':
+            acc[key] = parseInt(String(raw), 10);
+            break;
+          case 'FLOAT':
+            acc[key] = parseFloat(String(raw).replace(',', '.'));
+            break;
+          case 'TEXT':
+          default:
+            acc[key] = raw;
+            break;
+        }
+        return acc;
+      },
+      {} as Record<string, string | number>
     );
     try {
+      console.log('item', newItem);
       await addItem({
         id: category.id,
-        data: newItem
+        item_data: newItem
       }).unwrap();
+
+      setError(null);
     } catch (error) {
       console.log('error: ', error);
     }
@@ -66,7 +136,9 @@ export const AddCategoryItemForm = ({ category }: AddCategoryItemFormProps) => {
             {shapeKeys.map((key) => (
               <TextField
                 key={key}
-                label={key}
+                label={key + ' ' + category.itemShape[key]}
+                error={!!error}
+                helperText={error || ''}
                 value={formValues[key] || ''}
                 onChange={(e) => handleInputChange(key, e.target.value)}
                 variant="outlined"

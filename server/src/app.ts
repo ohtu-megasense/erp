@@ -4,6 +4,7 @@ import pingRouter from './routers/pingRouter';
 import categoryRouter from './routers/categoryRouter';
 import itemRouter from './routers/itemRouter';
 import chatRouter from './routers/chatRouter';
+import viewRouter from './routers/viewRouter';
 import { requestLogger } from './utils/middleware';
 import path from 'path';
 
@@ -19,6 +20,7 @@ app.use('/api/ping', pingRouter);
 app.use('/api/manage/categories', categoryRouter);
 app.use('/api/items', itemRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/views', viewRouter);
 
 const env = process.env.NODE_ENV;
 

@@ -5,16 +5,16 @@ import logger from '../utils/logger';
 const router = Router();
 
 router.post('/', async (req, res) => {
-  const { id, data } = req.body;
+  const { id, item_data } = req.body;
 
-  if (!id || !data) {
+  if (!id || !item_data) {
     logger.error('Item creation failed: missing category ID or item data');
     res.status(400).json({ error: 'Category ID and item data are required' });
     return;
   }
 
   try {
-    const result = await AddItem(id, data);
+    const result = await AddItem(id, item_data);
     res.json(result);
   } catch (error) {
     logger.error('Error adding item:', error);
@@ -45,21 +45,19 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const id = req.params.id;
-  const { categoryId, data } = req.body;
+  const { categoryId, item_data } = req.body;
 
-  console.log('data', data);
-
-  if (!data) {
+  if (!item_data) {
     logger.error('Item update failed: missing item data');
     res.status(400).json({ error: 'Item ID and updated data are required' });
     return;
   }
   try {
-    await UpdateItem(id, data);
+    await UpdateItem(id, item_data);
     res.json({
       id: Number(id),
       categoryId: Number(categoryId),
-      data
+      item_data
     });
   } catch (error) {
     logger.error('error updating item:', error);

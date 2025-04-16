@@ -4,6 +4,10 @@ import {
 	Button,
 	Collapse,
 	IconButton,
+	InputLabel,
+	MenuItem,
+	FormControl,
+	Select,
 	Stack,
 	TextField,
 	Typography,
@@ -55,15 +59,19 @@ export const AddCategoryForm = ({ module }: Module) => {
 
 		const propertyNames = Array.from(
 			{ length: propertyCount },
-			(_, i) => formValues[`property-${i}`] || "",
-		).filter((name) => name.trim() !== "");
+			(_, i) => formValues[`property-${i}`]?.trim() || "",
+		).filter((name) => name !== "");
 
 		const itemShape: Record<string, string> = propertyNames.reduce(
-			(acc, propertyName) => {
-				acc[propertyName] = "TEXT";
+			(acc: Record<string, string>, _, i) => {
+				const key = formValues[`property-${i}`]?.trim();
+				const type = formValues[`propertyType-${i}`];
+				if (key && type) {
+					acc[key] = type;
+				}
 				return acc;
 			},
-			{} as Record<string, string>,
+			{},
 		);
 
 		try {
@@ -174,6 +182,24 @@ export const AddCategoryForm = ({ module }: Module) => {
 											},
 										}}
 									/>
+									<FormControl fullWidth size="small">
+										<InputLabel id={`property-type-label-${i}`}>
+											Type
+										</InputLabel>
+										<Select
+											labelId={`propertyType-${i}`}
+											id={`propertyType-${i}`}
+											value={formValues[`propertyType-${i}`] || ""}
+											label="Type"
+											onChange={(e) =>
+												handleInputChange(`propertyType-${i}`, e.target.value)
+											}
+										>
+											<MenuItem value="TEXT">TEXT</MenuItem>
+											<MenuItem value="INTEGER">INTEGER</MenuItem>
+											<MenuItem value="FLOAT">FLOAT</MenuItem>
+										</Select>
+									</FormControl>
 									<IconButton
 										onClick={() => onClickRemoveProperty(i)}
 										size="small"
