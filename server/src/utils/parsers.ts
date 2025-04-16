@@ -30,7 +30,7 @@ export const isValidModule = (module: string) => {
   return true;
 };
 
-// NOTE: Currently only 'TEXT' value is allowed.
+// NOTE: Currently only 'TEXT' & 'INTEGER' & 'FLOAT' value is allowed.
 const isValidItemShape = (itemShape: Record<string, string>): boolean => {
   const values = Object.values(itemShape);
   const validTypes = ['TEXT', 'INTEGER', 'FLOAT'];

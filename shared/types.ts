@@ -1,7 +1,7 @@
 export interface AddCategoryRequest {
   name: string;
   module: string;
-  itemShape: Record<string, string | number>;
+  itemShape: Record<string, string>;
 }
 
 export interface AddCategoryResponse {
@@ -16,7 +16,7 @@ export interface Module {
 
 export interface renameCategoryRequest {
   categoryId: number;
-  itemShape: Record<string, string | number>;
+  itemShape: Record<string, string>;
   categoryName: string;
 }
 
@@ -47,7 +47,7 @@ export type GetCategoriesResponse = Category[];
 export interface Category {
   id: number;
   name: string;
-  itemShape: Record<string, string | number>;
+  itemShape: Record<string, string>;
   items: Item[];
 }
 
@@ -109,7 +109,16 @@ export const moduleOptions = {
   Inventory: "inventory",
   CRM: "crm",
 } as const;
+export const filterOptions = {
+  Equals: "equals",
+} as const;
+export const decoratorOptions = {
+  And: "and",
+} as const;
 export type ModuleOption = (typeof moduleOptions)[keyof typeof moduleOptions];
+export type FilterOption = (typeof filterOptions)[keyof typeof filterOptions];
+export type DecoratorOption =
+  (typeof decoratorOptions)[keyof typeof decoratorOptions];
 export type View = Omit<Category, "itemShape">;
 export type CreateViewRequest = ViewConfig;
 export type CreateViewResponse = object;

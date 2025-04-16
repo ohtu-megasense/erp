@@ -7,8 +7,8 @@ import { VisualizeCategoriesPage } from './components/pages/categories/visualize
 import { ManageCategoriesPage } from './components/pages/categories/manage/ManageCategoriesPage';
 import { CRMpage } from './components/pages/categories/CRM/CRMpage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
-import { ViewPage } from './components/view/ViewPage';
 import { DashboardPage } from './components/pages/dashboard/DashboardPage';
+import { ViewPage } from './components/view/ViewPage';
 
 export const App = () => {
   return (
