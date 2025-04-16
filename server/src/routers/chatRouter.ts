@@ -1,6 +1,9 @@
 import { Router, Request, Response } from "express";
 import { pool } from "../database/database";
 import logger from "../utils/logger";
+import dotenv from 'dotenv';
+
+dotenv.config({ silent: true });
 
 const router: Router = Router();
 
