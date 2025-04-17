@@ -1,7 +1,7 @@
 .DS_Store
 .env
 node_modules
-*.sh
+data-transfer.sh
 dump.sql
 build
 data
