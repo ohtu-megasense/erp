@@ -1,4 +1,4 @@
-import { Item } from "../../../shared/types";
+import { Item } from '../../../shared/types';
 
 interface Filter {
   apply(items: Item[]): Item[];
