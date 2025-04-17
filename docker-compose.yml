@@ -22,9 +22,8 @@ services:
       - ./server:/usr/src/app
       - ./shared:/usr/src/shared
       - /app/node_modules
+      - ./server/.env:/usr/src/app/.env
     command: sh -c "npm ci && npm run dev"
-    env_file:
-    - ./server/.env
     environment:
       NODE_ENV: development
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres

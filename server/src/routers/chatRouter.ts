@@ -1,16 +1,17 @@
 import { Router, Request, Response } from "express";
 import { pool } from "../database/database";
 import logger from "../utils/logger";
+import { deepseek_api_key } from "../config";
 
 const router: Router = Router();
 
 const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
 
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+//const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
-if (!DEEPSEEK_API_KEY) {
-  throw new Error("DeepSeek API key is missing. Set DEEPSEEK_API_KEY in environment variables.");
-}
+//if (!DEEPSEEK_API_KEY) {
+  //throw new Error("DeepSeek API key is missing. Set DEEPSEEK_API_KEY in environment variables.");
+//}
 
 router.post("/", async (req: Request, res: Response): Promise<void> => {
   try {
@@ -42,7 +43,7 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     const response = await fetch(DEEPSEEK_API_URL, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
+        Authorization: `Bearer ${deepseek_api_key}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
