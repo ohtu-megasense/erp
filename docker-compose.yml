@@ -22,6 +22,7 @@ services:
       - ./server:/usr/src/app
       - ./shared:/usr/src/shared
       - /app/node_modules
+      - ./server/.env:/usr/src/app/.env
     command: sh -c "npm ci && npm run dev"
     environment:
       NODE_ENV: development
