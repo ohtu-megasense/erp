@@ -7,12 +7,6 @@ const router: Router = Router();
 
 const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
 
-//const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
-
-//if (!DEEPSEEK_API_KEY) {
-  //throw new Error("DeepSeek API key is missing. Set DEEPSEEK_API_KEY in environment variables.");
-//}
-
 router.post("/", async (req: Request, res: Response): Promise<void> => {
   try {
     const { messages } = req.body;
