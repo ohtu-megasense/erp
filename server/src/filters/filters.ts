@@ -1,4 +1,4 @@
-import { Item } from "../../../shared/types";
+import { Item } from '../../../shared/types';
 
 interface Filter {
   apply(items: Item[]): Item[];
@@ -36,6 +36,24 @@ class AndFilter implements Filter {
   }
 }
 
+class OrFilter implements Filter {
+  constructor(private filters: Filter[]) {}
+
+  apply(items: Item[]): Item[] {
+    return items.filter((item) => {
+      this.filters.some((filter) => {
+        if (filter.apply([item]).length !== 0) {
+          return true;
+        }
+      });
+    });
+  }
+
+  getDescription(): string {
+    return `${this.filters.map((filter) => filter.getDescription()).join(' OR ')}`;
+  }
+}
+
 const supportedFilterTypes = ['equals', 'and'];
 
-export { Filter, PropertyFilter, AndFilter, supportedFilterTypes };
+export { Filter, PropertyFilter, AndFilter, OrFilter, supportedFilterTypes };
