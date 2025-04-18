@@ -20,5 +20,13 @@ export const generateFilterFromConfig = (config: FilterConfig | undefined): Filt
         .filter(Boolean) as Filter[];
       return FilterFactory.and(...andFilters);
     }
+    case 'or': {
+      if (!Array.isArray(config.filters))
+        throw new Error('OR requires array of filters');
+      const orFilters = config.filters
+        .map((filterConfig) => generateFilterFromConfig(filterConfig))
+        .filter(Boolean) as Filter[];
+      return FilterFactory.or(...orFilters);
+    }
   }
 };
