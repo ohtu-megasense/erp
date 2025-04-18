@@ -54,6 +54,6 @@ class OrFilter implements Filter {
   }
 }
 
-const supportedFilterTypes = ['equals', 'and'];
+const supportedFilterTypes = ['equals', 'and', 'or'];
 
 export { Filter, PropertyFilter, AndFilter, OrFilter, supportedFilterTypes };
