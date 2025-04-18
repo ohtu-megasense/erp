@@ -64,7 +64,6 @@ describe('Property filter ', () => {
 });
 
 describe('AND filter ', () => {
-
   test('returns correct list with proper filters', () => {
     const activeFilter = new PropertyFilter('status', 'active')
     const customerFilter = new PropertyFilter('customer', 'Aalto University')
