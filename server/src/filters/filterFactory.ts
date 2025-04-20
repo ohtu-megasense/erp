@@ -1,4 +1,4 @@
-import { Filter, PropertyFilter, AndFilter, OrFilter } from './filters';
+import { Filter, PropertyFilter, AndFilter, OrFilter, NotFilter } from './filters';
 
 export class FilterFactory {
   static equals(property: string, value: string): Filter {
@@ -9,5 +9,8 @@ export class FilterFactory {
   }
   static or(...filters: Filter[]): Filter {
     return new OrFilter(filters);
+  }
+  static not(filter: Filter): Filter {
+    return new NotFilter(filter);
   }
 }

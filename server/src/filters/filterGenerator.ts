@@ -28,5 +28,11 @@ export const generateFilterFromConfig = (config: FilterConfig | undefined): Filt
         .filter(Boolean) as Filter[];
       return FilterFactory.or(...orFilters);
     }
+    case 'not': {
+      const childFilter = generateFilterFromConfig(config.filter)
+      if (!childFilter)
+        throw new Error('NOT requires a filter')
+      return FilterFactory.not(childFilter)
+    }
   }
 };

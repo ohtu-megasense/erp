@@ -102,8 +102,13 @@ export interface OrFilterConfig extends BaseFilterConfig {
   filters: FilterConfig[];
 }
 
+export interface NotFilterConfig extends BaseFilterConfig {
+  type: "not";
+  filter: FilterConfig;
+}
 
-export type FilterConfig = PropertyFilterConfig | AndFilterConfig | OrFilterConfig;
+
+export type FilterConfig = PropertyFilterConfig | AndFilterConfig | OrFilterConfig | NotFilterConfig;
 
 export interface ViewConfig {
   name: string;

@@ -54,6 +54,18 @@ class OrFilter implements Filter {
   }
 }
 
-const supportedFilterTypes = ['equals', 'and', 'or'];
+class NotFilter implements Filter {
+  constructor(private filter: Filter) {}
 
-export { Filter, PropertyFilter, AndFilter, OrFilter, supportedFilterTypes };
+  apply(items: Item[]): Item[] {
+    return items.filter((item) => this.filter.apply([item]).length === 0)
+  }
+
+  getDescription(): string {
+    return `NOT ${this.filter.getDescription()}`
+  }
+}
+
+const supportedFilterTypes = ['equals', 'and', 'or', 'not'];
+
+export { Filter, PropertyFilter, AndFilter, OrFilter, NotFilter, supportedFilterTypes };
