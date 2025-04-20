@@ -2,11 +2,13 @@ import { Filter, supportedFilterTypes } from './filters';
 import { FilterFactory } from './filterFactory';
 import { FilterConfig } from '../../../shared/types';
 
-export const generateFilterFromConfig = (config: FilterConfig | undefined): Filter | undefined => {
+export const generateFilterFromConfig = (
+  config: FilterConfig | undefined
+): Filter | undefined => {
   if (!config) return undefined;
 
   if (!supportedFilterTypes.includes(config.type)) {
-    throw new Error(`Unknown filter type: ${config.type}`)
+    throw new Error(`Unknown filter type: ${config.type}`);
   }
 
   switch (config.type) {

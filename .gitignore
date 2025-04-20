@@ -1,6 +1,8 @@
 .DS_Store
 .env
 node_modules
+data-transfer.sh
+dump.sql
 build
 data
 playwright/tests/test-results
