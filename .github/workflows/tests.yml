@@ -1,7 +1,7 @@
 name: Run Tests
 on:
   push:
-    branches: ["ci/fix-tests"]
+    branches: ["ci/add-ts-checks"]
   pull_request:
     branches: ["main", "dev"]
 jobs:
@@ -23,7 +23,7 @@ jobs:
         run: docker compose down
 
   client-lint:
-    name: Client Lint Check
+    name: Client Lint and Build Check
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -41,3 +41,39 @@ jobs:
         run: npm run lint
       - name: Run Vite build
         run: npm run build
+
+  client-typecheck:
+    name: Client TypeScript Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: ./client/package-lock.json
+      - run: npm ci
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+  server-typecheck:
+    name: Server TypeScript Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: ./server/package-lock.json
+      - run: npm ci
+      - name: TypeScript type check
+        run: npx tsc --noEmit
