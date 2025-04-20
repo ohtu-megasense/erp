@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert';
-import { PropertyFilter, AndFilter, OrFilter } from "../../src/filters/filters"
+import { PropertyFilter, AndFilter, OrFilter, NotFilter } from "../../src/filters/filters"
 import { Item } from '../../../shared/types';
 
 const items: Item[] = [
@@ -84,7 +84,31 @@ describe('OR filter ', () => {
 
     const activeAaltoOrIisalmiSensorsFilter = new OrFilter([activeAndCustomerFilter, locationFilter])
     const activeAaltoOrIisalmiSensors = activeAaltoOrIisalmiSensorsFilter.apply(items)
-    console.log('activeAaltoOrIisalmiSensors: ', activeAaltoOrIisalmiSensors)
 
+    assert.strictEqual(activeAaltoOrIisalmiSensors.length, 3)
+  })
+
+  test('does not show duplicates', () => {
+    const activeFilter = new PropertyFilter('status', 'active')
+    const locationFilter = new PropertyFilter('location', 'Helsinki')
+
+    const activeOrHelsinkiFilter = new OrFilter([activeFilter, locationFilter])
+
+    const activeOrHelsinkiSensors = activeOrHelsinkiFilter.apply(items)
+
+    assert.strictEqual(activeOrHelsinkiSensors.length, 3)
+
+})
+
+describe('NOT filter', () => {
+  test('returns correct list with proper filters', () => {
+    const activeFilter = new PropertyFilter('status', 'active')
+
+    const notActiveFilter = new NotFilter(activeFilter)
+    const notActiveSensors = notActiveFilter.apply(items)
+
+    assert.strictEqual(notActiveSensors.length, 1)
+
+  })
   })
 })
