@@ -9,7 +9,9 @@
     "build": "tsc",
     "lint": "eslint .",
     "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "import-excel": "cross-env NODE_ENV=development ts-node src/database/excel_to_database.ts"
+    "import-excel": "cross-env NODE_ENV=development ts-node src/database/excel_to_database.ts",
+    "typecheck": "tsc --noEmit",
+    "healthcheck": "npm run prettier && npm run lint && npm run typecheck"
   },
   "author": "",
   "license": "ISC",
