@@ -26,10 +26,14 @@ const config: FilterConfig = {
       ]
     },
     {
-      id: 4,
-      type: 'equals',
-      property: 'location',
-      value: 'Hyrule'
+      id: 5,
+      type: 'not',
+      filter: {
+        id: 4,
+        type: 'equals',
+        property: 'location',
+        value: 'Hyrule'
+      }
     }
   ]
 };
@@ -40,7 +44,7 @@ describe('Filter generator ', () => {
     assert.ok(filter, 'Filter should be defined');
     assert.strictEqual(
       filter.getDescription(),
-      'customer is "Aalto University" AND status is "active" OR location is "Hyrule"'
+      'customer is "Aalto University" AND status is "active" OR NOT location is "Hyrule"'
     );
   });
 
