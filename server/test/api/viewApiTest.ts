@@ -3,7 +3,7 @@ import { describe, beforeEach, test, after } from 'node:test';
 import assert from 'node:assert';
 import app from '../../src/app';
 
-import { AddCategoryRequest, Item, ViewConfig } from '../../../shared/types';
+import { AddCategoryRequest, FilterConfig, Item, ViewConfig } from '../../../shared/types';
 
 const api = supertest(app);
 const itemsUrl = '/api/items';
@@ -73,7 +73,7 @@ describe('Saving a view ', () => {
         type: 'equals',
         property: 'location',
         value: 'Helsinki'
-      }
+      } as unknown as FilterConfig
     };
     const response = await api.post(viewsUrl).send(testViewConfig);
     assert.strictEqual(response.status, 201);
@@ -126,7 +126,7 @@ describe('Getting views for a module ', () => {
         type: 'equals',
         property: 'location',
         value: 'Helsinki'
-      }
+      } as unknown as FilterConfig
     };
 
     await api.post(viewsUrl).send(testViewConfig);

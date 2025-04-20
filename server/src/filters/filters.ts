@@ -36,6 +36,39 @@ class AndFilter implements Filter {
   }
 }
 
-const supportedFilterTypes = ['equals', 'and'];
+class OrFilter implements Filter {
+  constructor(private filters: Filter[]) {}
 
-export { Filter, PropertyFilter, AndFilter, supportedFilterTypes };
+  apply(items: Item[]): Item[] {
+    return items.filter((item) =>
+      this.filters.some((filter) => filter.apply([item]).length !== 0)
+    );
+  }
+
+  getDescription(): string {
+    return `${this.filters.map((filter) => filter.getDescription()).join(' OR ')}`;
+  }
+}
+
+class NotFilter implements Filter {
+  constructor(private filter: Filter) {}
+
+  apply(items: Item[]): Item[] {
+    return items.filter((item) => this.filter.apply([item]).length === 0);
+  }
+
+  getDescription(): string {
+    return `NOT ${this.filter.getDescription()}`;
+  }
+}
+
+const supportedFilterTypes = ['equals', 'and', 'or', 'not'];
+
+export {
+  Filter,
+  PropertyFilter,
+  AndFilter,
+  OrFilter,
+  NotFilter,
+  supportedFilterTypes
+};

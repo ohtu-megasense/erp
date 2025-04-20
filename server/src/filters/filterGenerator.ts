@@ -22,5 +22,19 @@ export const generateFilterFromConfig = (
         .filter(Boolean) as Filter[];
       return FilterFactory.and(...andFilters);
     }
+    case 'or': {
+      if (!Array.isArray(config.filters))
+        throw new Error('OR requires array of filters');
+      const orFilters = config.filters
+        .map((filterConfig) => generateFilterFromConfig(filterConfig))
+        .filter(Boolean) as Filter[];
+      return FilterFactory.or(...orFilters);
+    }
+    case 'not': {
+      const childFilter = generateFilterFromConfig(config.filter)
+      if (!childFilter)
+        throw new Error('NOT requires a filter')
+      return FilterFactory.not(childFilter)
+    }
   }
 };

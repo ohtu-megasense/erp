@@ -1,9 +1,11 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert';
-import { PropertyFilter, AndFilter } from "../../src/filters/filters"
+import { PropertyFilter, AndFilter, OrFilter, NotFilter } from "../../src/filters/filters"
+import { Item } from '../../../shared/types';
 
-const items = [
+const items: Item[] = [
   {
+    id: 5,
     item_data: {
       name: 'Sensor 1',
       customer: 'Aalto University',
@@ -12,6 +14,7 @@ const items = [
     }
   },
   {
+    id: 6,
     item_data: {
       name: 'Sensor 2',
       customer: 'Aalto University',
@@ -20,6 +23,7 @@ const items = [
     }
   },
   {
+    id: 7,
     item_data: {
       name: 'Sensor 3',
       customer: 'University of Helsinki',
@@ -28,6 +32,7 @@ const items = [
     }
   },
   {
+    id: 9,
     item_data: {
       name: 'Sensor 4',
       customer: 'Aalto University',
@@ -42,7 +47,6 @@ describe('Property filter ', () => {
     const activeFilter = new PropertyFilter('status', 'active')
     const activeSensors = activeFilter.apply(items)
     assert.strictEqual(activeSensors.length, 3)
-    assert.notStrictEqual(activeSensors[2].status, 'not active')
   })
 
   test('with no matching values returns empty list', () => {
@@ -60,7 +64,6 @@ describe('Property filter ', () => {
 });
 
 describe('AND filter ', () => {
-
   test('returns correct list with proper filters', () => {
     const activeFilter = new PropertyFilter('status', 'active')
     const customerFilter = new PropertyFilter('customer', 'Aalto University')
@@ -69,5 +72,43 @@ describe('AND filter ', () => {
     const activeAaltoSensors = activeAndCustomerFilter.apply(items)
 
     assert.strictEqual(activeAaltoSensors.length, 2)
+  })
+})
+
+describe('OR filter ', () => {
+  test('returns correct list with proper filters', () => {
+    const activeFilter = new PropertyFilter('status', 'active')
+    const customerFilter = new PropertyFilter('customer', 'Aalto University')
+    const activeAndCustomerFilter = new AndFilter([activeFilter, customerFilter])
+    const locationFilter = new PropertyFilter('location', 'Iisalmi')
+
+    const activeAaltoOrIisalmiSensorsFilter = new OrFilter([activeAndCustomerFilter, locationFilter])
+    const activeAaltoOrIisalmiSensors = activeAaltoOrIisalmiSensorsFilter.apply(items)
+
+    assert.strictEqual(activeAaltoOrIisalmiSensors.length, 3)
+  })
+
+  test('does not show duplicates', () => {
+    const activeFilter = new PropertyFilter('status', 'active')
+    const locationFilter = new PropertyFilter('location', 'Helsinki')
+
+    const activeOrHelsinkiFilter = new OrFilter([activeFilter, locationFilter])
+
+    const activeOrHelsinkiSensors = activeOrHelsinkiFilter.apply(items)
+
+    assert.strictEqual(activeOrHelsinkiSensors.length, 3)
+
+})
+
+describe('NOT filter', () => {
+  test('returns correct list with proper filters', () => {
+    const activeFilter = new PropertyFilter('status', 'active')
+
+    const notActiveFilter = new NotFilter(activeFilter)
+    const notActiveSensors = notActiveFilter.apply(items)
+
+    assert.strictEqual(notActiveSensors.length, 1)
+
+  })
   })
 })
