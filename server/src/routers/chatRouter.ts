@@ -1,24 +1,24 @@
-import { Router, Request, Response } from "express";
-import { pool } from "../database/database";
-import logger from "../utils/logger";
-import { deepseek_api_key } from "../config";
+import { Router, Request, Response } from 'express';
+import { pool } from '../database/database';
+import logger from '../utils/logger';
+import { deepseek_api_key } from '../config';
 
 const router: Router = Router();
 
-const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
 
 //const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
 //if (!DEEPSEEK_API_KEY) {
-  //throw new Error("DeepSeek API key is missing. Set DEEPSEEK_API_KEY in environment variables.");
+//throw new Error("DeepSeek API key is missing. Set DEEPSEEK_API_KEY in environment variables.");
 //}
 
-router.post("/", async (req: Request, res: Response): Promise<void> => {
+router.post('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const { messages } = req.body;
 
     if (!Array.isArray(messages)) {
-      res.status(400).json({ error: "Messages array is required" });
+      res.status(400).json({ error: 'Messages array is required' });
       return;
     }
 
@@ -32,30 +32,30 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
       LIMIT 5;
     `);
 
-    const rides = result.rows.map(row => row.item_data);
+    const rides = result.rows.map((row) => row.item_data);
     const rideSnippet = JSON.stringify(rides, null, 2);
 
     const systemPrompt = {
-      role: "system",
-      content: `You are a helpful assistant for ride-sharing analytics. Here is sample ride data from our ERP system:\n\n${rideSnippet}`,
+      role: 'system',
+      content: `You are a helpful assistant for ride-sharing analytics. Here is sample ride data from our ERP system:\n\n${rideSnippet}`
     };
 
     const response = await fetch(DEEPSEEK_API_URL, {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${deepseek_api_key}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
-        messages: [systemPrompt, ...messages],
-      }),
+        model: 'deepseek-chat',
+        messages: [systemPrompt, ...messages]
+      })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      logger.error("Deepseek API error:", errorText);
-      res.status(502).json({ error: "Failed to contact Deepseek API" });
+      logger.error('Deepseek API error:', errorText);
+      res.status(502).json({ error: 'Failed to contact Deepseek API' });
       return;
     }
 
@@ -65,11 +65,13 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     res.json({ reply });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      logger.error("Chat error:", error.message);
+      logger.error('Chat error:', error.message);
     } else {
-      logger.error("Chat error:", error);
+      logger.error('Chat error:', error);
     }
-    res.status(500).json({ error: "Something went wrong with the chat request." });
+    res
+      .status(500)
+      .json({ error: 'Something went wrong with the chat request.' });
   }
 });
 

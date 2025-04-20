@@ -30,7 +30,8 @@ if (!database_URL) {
   );
 }
 
-const DEFAULT_DEEPSEEK_API_KEY = "default API KEY";
-const deepseek_api_key = process.env.DEEPSEEK_API_KEY || DEFAULT_DEEPSEEK_API_KEY;
+const DEFAULT_DEEPSEEK_API_KEY = 'default API KEY';
+const deepseek_api_key =
+  process.env.DEEPSEEK_API_KEY || DEFAULT_DEEPSEEK_API_KEY;
 
 export { database_URL, deepseek_api_key, port };

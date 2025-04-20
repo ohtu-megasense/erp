@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS modules;
-DROP TABLE IF EXISTS views;
+DROP TABLE IF EXISTS items CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS modules CASCADE;
+DROP TABLE IF EXISTS views CASCADE;
 
 CREATE TABLE IF NOT EXISTS modules (
     id SERIAL PRIMARY KEY,
@@ -30,3 +30,4 @@ CREATE TABLE IF NOT EXISTS items (
 
 INSERT INTO modules (module_name) VALUES ('crm');
 INSERT INTO modules (module_name) VALUES ('inventory');
+INSERT INTO modules (module_name) VALUES ('ride_sharing');
