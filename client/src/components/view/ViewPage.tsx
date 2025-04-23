@@ -277,7 +277,7 @@ const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
         </Box>
         <Box
           sx={{
-            minWidth: 120
+            minWidth: 100
           }}
         >
           <FormControl fullWidth>
