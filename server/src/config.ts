@@ -30,7 +30,7 @@ if (!database_URL) {
   );
 }
 
-const DEFAULT_DEEPSEEK_API_KEY = 'default API KEY';
+const DEFAULT_DEEPSEEK_API_KEY = ${{secrets.DEEPSEEK_API_KEY }};
 const deepseek_api_key =
   process.env.DEEPSEEK_API_KEY || DEFAULT_DEEPSEEK_API_KEY;
 
