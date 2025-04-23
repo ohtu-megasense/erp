@@ -9,6 +9,7 @@ import { CRMpage } from './components/pages/categories/CRM/CRMpage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
 import { DashboardPage } from './components/pages/dashboard/DashboardPage';
 import { ViewPage } from './components/view/ViewPage';
+import { AiErpPage } from './components/ai-erp/AiErpPage';
 
 export const App = () => {
   return (
@@ -28,6 +29,7 @@ export const App = () => {
             element={<ManageCategoriesPage />}
           />
           <Route path="/categories/CRM" element={<CRMpage />} />
+          <Route path="/ai-erp" element={<AiErpPage />} />
         </Route>
         <Route path="*" element={<Redirect to="/" />} />
       </Routes>

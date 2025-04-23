@@ -77,6 +77,8 @@ export const Drawer = () => {
               items={[{ label: 'Manage', href: '/categories/CRM' }]}
             ></FadeMenu>
           </NavigationAccordion>
+
+          <DrawerNavigationLink href="/ai-erp" text="AI ERP" />
         </List>
       </Box>
     </MuiDrawer>
