@@ -1,4 +1,10 @@
-import { Filter, PropertyFilter, AndFilter, OrFilter, NotFilter } from './filters';
+import {
+  Filter,
+  PropertyFilter,
+  AndFilter,
+  OrFilter,
+  NotFilter
+} from './filters';
 
 export class FilterFactory {
   static equals(property: string, value: string): Filter {

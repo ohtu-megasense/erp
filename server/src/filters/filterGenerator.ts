@@ -31,10 +31,9 @@ export const generateFilterFromConfig = (
       return FilterFactory.or(...orFilters);
     }
     case 'not': {
-      const childFilter = generateFilterFromConfig(config.filter)
-      if (!childFilter)
-        throw new Error('NOT requires a filter')
-      return FilterFactory.not(childFilter)
+      const childFilter = generateFilterFromConfig(config.filter);
+      if (!childFilter) throw new Error('NOT requires a filter');
+      return FilterFactory.not(childFilter);
     }
   }
 };
