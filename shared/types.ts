@@ -107,8 +107,11 @@ export interface NotFilterConfig extends BaseFilterConfig {
   filter: FilterConfig;
 }
 
-
-export type FilterConfig = PropertyFilterConfig | AndFilterConfig | OrFilterConfig | NotFilterConfig;
+export type FilterConfig =
+  | PropertyFilterConfig
+  | AndFilterConfig
+  | OrFilterConfig
+  | NotFilterConfig;
 
 export interface ViewConfig {
   name: string;
@@ -125,6 +128,7 @@ export const filterOptions = {
 } as const;
 export const decoratorOptions = {
   And: "and",
+  Or: "or",
 } as const;
 export type ModuleOption = (typeof moduleOptions)[keyof typeof moduleOptions];
 export type FilterOption = (typeof filterOptions)[keyof typeof filterOptions];
