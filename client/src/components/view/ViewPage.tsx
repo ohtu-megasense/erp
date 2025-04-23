@@ -226,18 +226,35 @@ const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
 
   const dispatch = useAppDispatch();
 
+  const onChangeProperty = (newProperty: string) => {
+    setProperty(newProperty);
+    saveFilterChanges({ property: newProperty });
+  };
+
+  const onChangeType = (newType: FilterOption) => {
+    setType(newType);
+    saveFilterChanges({ type: newType });
+  };
+
+  const onChangeValue = (newValue: string) => {
+    setValue(newValue);
+    saveFilterChanges({ value: newValue });
+  };
+
   const onChangeInvert = (invert: Invert) => {
     setInvertState(invert);
     dispatch(setInvert({ id: filter.id, invert }));
   };
 
-  const createFilter = (): PropertyFilterConfig => {
-    return {
+  const saveFilterChanges = (updatedFilter: Partial<PropertyFilterConfig>) => {
+    const filter: PropertyFilterConfig = {
       id: props.filter.id,
       property,
       type,
-      value
+      value,
+      ...updatedFilter
     };
+    dispatch(saveFilter({ id: filter.id, filter }));
   };
 
   return (
@@ -265,7 +282,7 @@ const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
             <Select
               value={property}
               label="Property"
-              onChange={({ target }) => setProperty(target.value)}
+              onChange={({ target }) => onChangeProperty(target.value)}
             >
               {propertyOptions.map((propertyOption) => (
                 <MenuItem key={propertyOption} value={propertyOption}>
@@ -305,7 +322,9 @@ const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
             <Select
               value={type}
               label="Filter"
-              onChange={({ target }) => setType(target.value as FilterOption)}
+              onChange={({ target }) =>
+                onChangeType(target.value as FilterOption)
+              }
             >
               {Object.values(filterOptions).map((filterOption) => (
                 <MenuItem key={filterOption} value={filterOption}>
@@ -318,35 +337,11 @@ const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
         <TextField
           placeholder={'Value'}
           value={value}
-          onChange={({ target }) => setValue(target.value)}
+          onChange={({ target }) => onChangeValue(target.value)}
         />
       </Stack>
-      <SaveButton id={props.filter.id} filter={createFilter()} />
       <DeleteButton id={props.filter.id} />
     </Stack>
-  );
-};
-
-const SaveButton = (props: { id: Id; filter: PropertyFilterConfig }) => {
-  const { id, filter } = props;
-  const dispatch = useAppDispatch();
-
-  const onClick = () => {
-    dispatch(saveFilter({ id, filter }));
-  };
-
-  return (
-    <Button
-      variant="outlined"
-      size="small"
-      sx={{
-        color: greenColor,
-        borderColor: greenColor
-      }}
-      onClick={onClick}
-    >
-      Save
-    </Button>
   );
 };
 
@@ -492,13 +487,8 @@ const SaveViewButton = () => {
   const name = useAppSelector((state) => state.createView.name);
   const module = useAppSelector((state) => state.createView.module);
   const nodes = useAppSelector((state) => state.createView.nodes);
-  const [isAccepted, setIsAccepted] = useState(false);
   const dispatch = useAppDispatch();
   const [apiCreateView] = useCreateViewMutation();
-
-  useEffect(() => {
-    setIsAccepted(false);
-  }, [nodes]);
 
   const getView = (): ViewConfig | null => {
     if (!name) {
@@ -532,33 +522,15 @@ const SaveViewButton = () => {
     <>
       {isVisible && (
         <Stack gap={2}>
-          <Stack
-            sx={{
-              flexDirection: 'column'
-            }}
-          >
-            <Typography variant="caption">I Have Saved the Filters?</Typography>
-            <Box>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={() => setIsAccepted(true)}
-                disableRipple={true}
-              >
-                Yes
-              </Button>
-            </Box>
-          </Stack>
           <Box>
             <Button
               variant="outlined"
-              disabled={!isAccepted}
               fullWidth={false}
               onClick={onClick}
               sx={{
                 color: greenColor,
                 outline: '1.5px solid',
-                outlineColor: isAccepted ? greenColor : undefined,
+                outlineColor: greenColor,
                 borderRadius: 2,
                 px: 2
               }}
