@@ -8,6 +8,8 @@ jobs:
   server-tests:
     name: Server Tests
     runs-on: ubuntu-latest
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - name: Start backend and postgres docker containers
