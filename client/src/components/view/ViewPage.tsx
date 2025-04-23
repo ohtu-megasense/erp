@@ -27,6 +27,7 @@ import {
   Item,
   ModuleOption,
   moduleOptions,
+  OrFilterConfig,
   PropertyFilterConfig,
   ViewConfig,
   type View
@@ -48,7 +49,10 @@ import {
   setModule,
   setName,
   setPropertyOptions,
-  type Node
+  type Node,
+  setDecoratorType,
+  setInvert,
+  Invert
 } from './createViewSlice';
 import { store } from '../../app/store';
 
@@ -142,11 +146,19 @@ const LoadPropertyOptions = () => {
   return null;
 };
 
-const Decorator = (props: { filter: AndFilterConfig; parentId: Id }) => {
+const Decorator = (props: {
+  filter: AndFilterConfig | OrFilterConfig;
+  parentId: Id;
+}) => {
   const { filter } = props;
+  const dispatch = useAppDispatch();
 
   const nodes = useAppSelector((state) => state.createView.nodes);
   const children = nodes.filter((node) => node.parentId === filter.id);
+
+  const onChange = (type: DecoratorOption) => {
+    dispatch(setDecoratorType({ id: filter.id, type }));
+  };
 
   return (
     <Stack gap={2}>
@@ -164,7 +176,13 @@ const Decorator = (props: { filter: AndFilterConfig; parentId: Id }) => {
         >
           <FormControl fullWidth>
             <InputLabel>Decorator</InputLabel>
-            <Select value={filter.type} label="Decorator" onChange={undefined}>
+            <Select
+              value={filter.type}
+              label="Decorator"
+              onChange={({ target }) =>
+                onChange(target.value as DecoratorOption)
+              }
+            >
               {Object.values(decoratorOptions).map((decoratorOption) => (
                 <MenuItem key={decoratorOption} value={decoratorOption}>
                   {decoratorOption.toLocaleUpperCase()}
@@ -196,8 +214,22 @@ const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
   );
 
   const [property, setProperty] = useState(filter.property);
+  const [invert, setInvertState] = useState<Invert>(
+    store
+      .getState()
+      .createView.nodes.find((node) => node.filter.id === filter.id)?.invert ||
+      'is'
+  );
+
   const [value, setValue] = useState(filter.value);
   const [type, setType] = useState<FilterOption>(filter.type); // default
+
+  const dispatch = useAppDispatch();
+
+  const onChangeInvert = (invert: Invert) => {
+    setInvertState(invert);
+    dispatch(setInvert({ id: filter.id, invert }));
+  };
 
   const createFilter = (): PropertyFilterConfig => {
     return {
@@ -245,6 +277,26 @@ const Filter = (props: { filter: PropertyFilterConfig; parentId: Id }) => {
         </Box>
         <Box
           sx={{
+            minWidth: 100
+          }}
+        >
+          <FormControl fullWidth>
+            <Select
+              value={invert}
+              onChange={({ target }) =>
+                onChangeInvert(target.value as 'is' | 'not')
+              }
+            >
+              {['is', 'not'].map((inversion) => (
+                <MenuItem key={inversion} value={inversion}>
+                  {inversion.toLocaleUpperCase()}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box
+          sx={{
             minWidth: 180
           }}
         >
@@ -282,6 +334,7 @@ const SaveButton = (props: { id: Id; filter: PropertyFilterConfig }) => {
   const onClick = () => {
     dispatch(saveFilter({ id, filter }));
   };
+
   return (
     <Button
       variant="outlined"
@@ -323,6 +376,8 @@ const Node = (props: { filter: FilterConfig; parentId: Id }) => {
 
   switch (filter.type) {
     case 'and':
+      return <Decorator filter={filter} parentId={parentId} />;
+    case 'or':
       return <Decorator filter={filter} parentId={parentId} />;
     case 'equals':
       return <Filter filter={filter} parentId={parentId} />;
@@ -633,19 +688,10 @@ export const ViewPage = () => {
   return (
     <>
       <LoadPropertyOptions />
-      <Typography
-        py={1}
-        mx={2}
-        sx={{
-          textAlign: 'end',
-          fontSize: 12
-        }}
-      >
-        View Page Version 2
-      </Typography>
       <Stack
         sx={{
           mx: 2,
+          mt: 1,
           borderRadius: 4,
           gap: 2
         }}
