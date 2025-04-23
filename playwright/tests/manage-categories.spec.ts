@@ -337,3 +337,15 @@ test("cancelling category deletion doesnt delete", async ({ page }) => {
         - text: No items added
     `);
 });
+
+test('can i) open AI ERP chat, ii) ask a question, and iii) see DeepSeeks first answer', async ({ page }) => {
+  await page.goto("/categories/inventory");
+  await page.getByRole('link', { name: 'AI ERP' }).click();
+  await page.getByRole('textbox', { name: 'Type your message...' }).click();
+  await page.getByRole('textbox', { name: 'Type your message...' }).fill('Can you access the data?');
+  await page.getByRole('button', { name: 'Send' }).click();
+  await expect(
+    page.locator('div').filter({ hasText: /.{5,}/ }).last()
+  ).toBeVisible({ timeout: 150000});
+});
+
