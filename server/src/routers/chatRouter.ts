@@ -7,8 +7,7 @@ const router: Router = Router();
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
 
-router.post("/", async (req: Request, res: Response): Promise<void> => {
-
+router.post('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const { messages } = req.body;
 
