@@ -1,18 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
+  AndFilterConfig,
   DecoratorOption,
   FilterConfig,
   FilterOption,
   ModuleOption,
+  OrFilterConfig,
   PropertyFilterConfig,
   ViewConfig
 } from '../../../../shared/types';
 
 export type Id = string | number;
 
+export type Invert = 'is' | 'not';
+
 export interface Node {
   parentId: Id;
   filter: FilterConfig;
+  invert: Invert;
 }
 
 interface CreateViewSlice {
@@ -39,15 +44,27 @@ export const createNode = (
     case 'and':
       return {
         parentId,
+        invert: 'is',
         filter: {
           id,
           type: 'and',
           filters: []
         }
       };
+    case 'or':
+      return {
+        parentId,
+        invert: 'is',
+        filter: {
+          id,
+          type: 'or',
+          filters: []
+        }
+      };
     case 'equals':
       return {
         parentId,
+        invert: 'is',
         filter: {
           id,
           type: 'equals',
@@ -85,27 +102,38 @@ export const createView = (
   return view;
 };
 
-const createFilterConfig = (rootId: Id, nodes: Node[]): FilterConfig | null => {
-  const rootNode = nodes.find((node) => node.filter.id === rootId);
-  if (!rootNode) {
+const createFilterConfig = (id: Id, nodes: Node[]): FilterConfig | null => {
+  const node = nodes.find((node) => node.filter.id === id);
+
+  if (!node) {
     return null;
   }
 
-  const filter = rootNode.filter;
+  const filter = node.filter;
 
   if (filter.type === 'equals') {
-    return {
+    const eqFilter: PropertyFilterConfig = {
       id: filter.id,
       type: 'equals',
       property: filter.property,
       value: filter.value
     };
+
+    if (node.invert === 'not') {
+      return {
+        id: filter.id,
+        type: 'not',
+        filter: eqFilter
+      };
+    }
+
+    return eqFilter;
   }
 
-  if (filter.type === 'and') {
+  if (filter.type === 'and' || filter.type === 'or') {
     const childFilters: FilterConfig[] = [];
 
-    const childNodes = nodes.filter((node) => node.parentId === rootId);
+    const childNodes = nodes.filter((node) => node.parentId === id);
 
     for (const childNode of childNodes) {
       const childFilter = createFilterConfig(childNode.filter.id, nodes);
@@ -114,11 +142,21 @@ const createFilterConfig = (rootId: Id, nodes: Node[]): FilterConfig | null => {
       }
     }
 
-    return {
+    const decorator: AndFilterConfig | OrFilterConfig = {
       id: filter.id,
-      type: 'and',
+      type: filter.type,
       filters: childFilters
     };
+
+    if (node.invert === 'not') {
+      return {
+        id: filter.id,
+        type: 'not',
+        filter: decorator
+      };
+    }
+
+    return decorator;
   }
 
   return null;
@@ -140,6 +178,16 @@ const slice = createSlice({
     setName: (state, action: PayloadAction<{ name: string }>) => {
       state.name = action.payload.name;
     },
+    setInvert: (state, action: PayloadAction<{ id: Id; invert: Invert }>) => {
+      const id = action.payload.id;
+      const node = state.nodes.find((node) => node.filter.id === id);
+
+      if (!node) {
+        return;
+      }
+
+      node.invert = action.payload.invert;
+    },
     addNode: (state, action: PayloadAction<{ node: Node }>) => {
       state.nodes.push(action.payload.node);
     },
@@ -155,6 +203,19 @@ const slice = createSlice({
       }
 
       node.filter = action.payload.filter;
+    },
+    setDecoratorType: (
+      state,
+      action: PayloadAction<{ id: Id; type: DecoratorOption }>
+    ) => {
+      const id = action.payload.id;
+      const node = state.nodes.find((node) => node.filter.id === id);
+
+      if (!node) {
+        return;
+      }
+
+      node.filter.type = action.payload.type;
     },
     deleteNode: (state, action: PayloadAction<{ id: Id }>) => {
       const id = action.payload.id;
@@ -194,6 +255,8 @@ export const {
   setPropertyOptions,
   setModule,
   setName,
+  setInvert,
+  setDecoratorType,
   addNode,
   saveFilter,
   deleteNode,
