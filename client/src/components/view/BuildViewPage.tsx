@@ -564,6 +564,10 @@ export const BuildViewPage = (props: { module: ModuleOption }) => {
     dispatch(setModule({ module: props.module }));
   }, [dispatch, props.module]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <LoadPropertyOptions />
