@@ -4,6 +4,7 @@ import { generateFilterFromConfig } from '../filters/filterGenerator';
 import { ItemFilterService } from './itemFilterService';
 import { ViewConfig } from '../../../shared/types';
 import { getModuleIdByName } from '../database/database_handler';
+import logger from '../utils/logger';
 
 const filterService = new ItemFilterService();
 
@@ -51,5 +52,33 @@ export class ViewsService {
     );
     const result = await pool.query(query);
     return result.rows[0];
+  }
+
+  async updateView(viewId: number, viewConfig: ViewConfig): Promise<object> {
+    const { name, filterConfig } = viewConfig
+
+    const checkViewExists = format('SELECT id FROM views WHERE id = %L', viewId)
+    const checkResult = await pool.query(checkViewExists)
+
+    if (checkResult.rows.length === 0) {
+      throw new Error(`View with ID ${viewId} not found`)
+    }
+
+    const filterConfigJson =
+      typeof filterConfig === 'string'
+        ? filterConfig
+        : JSON.stringify(filterConfig);
+
+    const query = format(
+      `UPDATE views SET name = %L, filter_config = %L WHERE id = %L RETURNING id, name`,
+      name,
+      filterConfigJson,
+      viewId
+    )
+
+    const result = pool.query(query)
+    logger.info(`"${name}" with ID ${viewId} updated `)
+
+    return result.rows[0]
   }
 }
