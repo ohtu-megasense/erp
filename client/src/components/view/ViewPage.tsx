@@ -1,18 +1,11 @@
-import {
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
-} from '@mui/material';
-import { useAppSelector } from '../../app/hooks';
-import { Item, type View } from '../../../../shared/types';
+import { Link, Stack, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { ModuleOption } from '../../../../shared/types';
+import { useLayoutEffect as useEffect, useState } from 'react';
+import { setModule } from './createViewSlice';
+import { ViewsList } from './ViewsList';
+import { blueColor, orangeColor } from './colors';
 import { useGetViewsQuery } from '../../features/apiSlice';
-
-const orangeColor = '#ffaa0b';
-const blueColor = '#006aff';
 
 const Heading = () => {
   const module = useAppSelector((state) => state.createView.module);
@@ -35,103 +28,77 @@ const Heading = () => {
   );
 };
 
-const ViewsList = () => {
-  const module = useAppSelector((state) => state.createView.module);
-  const { data: views = [] } = useGetViewsQuery(module);
-  const ordered = [...views].sort((a, b) => a.name.localeCompare(b.name));
+const NoViewsMessage = (props: { module: ModuleOption }) => {
+  const { data: views = [] } = useGetViewsQuery(props.module);
+
+  if (views.length > 0) {
+    return null;
+  }
 
   return (
     <Stack
       sx={{
-        gap: 4
+        py: 4,
+        px: 2,
+        border: `1px solid ${blueColor}`,
+        borderRadius: 2,
+        gap: 2,
+        textAlign: 'center',
+        my: 4
       }}
     >
-      {views.length === 0 && (
-        <Typography variant="caption">No Views Found</Typography>
-      )}
-      {ordered.map((view) => (
-        <View key={view.id} view={view} />
-      ))}
-    </Stack>
-  );
-};
-
-const View = (props: { view: View }) => {
-  const { view } = props;
-
-  const getShape = (): string[] => {
-    if (view.items.length === 0) return [];
-    return Object.keys(view.items[0].item_data);
-  };
-
-  const shape = getShape();
-
-  return (
-    <Stack gap={2}>
-      <Stack>
-        <Typography
-          sx={{
-            fontSize: 16
-          }}
-        >
-          {view.name}
-        </Typography>
-      </Stack>
-
-      <Stack
+      <Typography
         sx={{
-          border: '1.5px solid',
-          borderRadius: 2,
-          borderColor: blueColor,
-          p: 2
+          fontSize: 18,
+          fontWeight: 400,
+          color: blueColor
         }}
       >
-        {view.items.length === 0 && (
-          <Typography variant="caption">No items found</Typography>
-        )}
-        {view.items.length > 0 && (
-          <Table>
-            <TableHead>
-              <TableRow>
-                {shape.map((property, index) => (
-                  <TableCell key={index}>{property}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {view.items.map((item) => (
-                <Row key={item.id} item={item} />
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </Stack>
+        No views found for this module.
+      </Typography>
+      <Link
+        href="build"
+        sx={{
+          fontSize: 16,
+          fontWeight: 500,
+          color: orangeColor,
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          '&:hover': {
+            color: blueColor
+          }
+        }}
+      >
+        Create a new view
+      </Link>
     </Stack>
   );
 };
 
-const Row = (props: { item: Item }) => {
-  const values = Object.values(props.item.item_data);
-  return (
-    <TableRow>
-      {values.map((value, index) => (
-        <TableCell key={index}>{value}</TableCell>
-      ))}
-    </TableRow>
-  );
-};
+export const ViewPage = (props: { module: ModuleOption }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const dispatch = useAppDispatch();
 
-export const ViewPage = () => {
+  useEffect(() => {
+    dispatch(setModule({ module: props.module }));
+    setIsLoaded(true);
+  }, [dispatch, props.module]);
+
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <Stack
       sx={{
         mx: 2,
-        mt: 1,
+        mt: 2,
         borderRadius: 4,
         gap: 2
       }}
     >
       <Heading />
+      <NoViewsMessage module={props.module} />
       <ViewsList />
     </Stack>
   );
