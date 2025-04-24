@@ -3,8 +3,7 @@ import { ThemeProvider } from './components/theme-provider/ThemeProvider';
 import { Route, Routes } from 'react-router';
 import { DefaultPageLayout } from './components/pages/layout/DefaultPageLayout';
 import { Redirect } from './components/redirect/Redirect';
-import { ManageCategoriesPage } from './components/pages/categories/manage/ManageCategoriesPage';
-import { CRMpage } from './components/pages/categories/CRM/CRMpage';
+import { DataPage } from './components/pages/categories/manage/ManageCategoriesPage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
 import { DashboardPage } from './components/pages/dashboard/DashboardPage';
 import { ViewPage } from './components/view/ViewPage';
@@ -25,7 +24,10 @@ export const App = () => {
           <Route path="/ai-chat" element={<AiErpPage />} />
 
           {/** Inventory pages */}
-          <Route path="/inventory/data" element={<ManageCategoriesPage />} />
+          <Route
+            path="/inventory/data"
+            element={<DataPage module="inventory" />}
+          />
           <Route
             path="/inventory/views"
             element={<ViewPage module="inventory" />}
@@ -36,7 +38,7 @@ export const App = () => {
           />
 
           {/** CRM pages */}
-          <Route path="/crm/data" element={<CRMpage />} />
+          <Route path="/crm/data" element={<DataPage module="crm" />} />
           <Route path="/crm/views" element={<ViewPage module="crm" />} />
           <Route
             path="/crm/views/build"
