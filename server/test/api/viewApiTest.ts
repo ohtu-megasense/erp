@@ -7,6 +7,7 @@ import {
   AddCategoryRequest,
   FilterConfig,
   Item,
+  View,
   ViewConfig
 } from '../../../shared/types';
 
@@ -216,7 +217,7 @@ describe('Updating a view ', () => {
 
     const getResponse = await api.get(`${viewsUrl}/inventory`);
     const views = getResponse.body;
-    const updatedView = views.find((view) => view.id === viewId);
+    const updatedView = views.find((view: View) => view.id === viewId);
 
     assert.ok(updatedView, 'Updated view should exist');
     assert.strictEqual(updatedView.name, 'Updated Test View');
@@ -256,7 +257,7 @@ describe('Deleting a view ', () => {
 
     const getResponse = await api.get(`${viewsUrl}/inventory`);
     const views = getResponse.body;
-    const deletedView = views.find((v: any) => v.id === viewId);
+    const deletedView = views.find((view: View) => view.id === viewId);
 
     assert.strictEqual(deletedView, undefined, 'Deleted view should not exist');
   });
