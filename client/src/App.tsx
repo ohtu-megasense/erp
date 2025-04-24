@@ -8,6 +8,7 @@ import { CRMpage } from './components/pages/categories/CRM/CRMpage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
 import { DashboardPage } from './components/pages/dashboard/DashboardPage';
 import { ViewPage } from './components/view/ViewPage';
+import { AiErpPage } from './components/ai-erp/AiErpPage';
 import { BuildViewPage } from './components/view/BuildViewPage';
 
 export const App = () => {
@@ -21,7 +22,7 @@ export const App = () => {
           <Route path="/" element={<DashboardPage />} />
 
           {/** AI chat */}
-          <Route path="/ai-chat" element={null} />
+          <Route path="/ai-chat" element={<AiErpPage />} />
 
           {/** Inventory pages */}
           <Route path="/inventory/data" element={<ManageCategoriesPage />} />
