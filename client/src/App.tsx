@@ -1,14 +1,14 @@
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from './components/theme-provider/ThemeProvider';
 import { Route, Routes } from 'react-router';
-import { DefaultPageLayout } from './components/pages/layout/DefaultPageLayout';
 import { Redirect } from './components/redirect/Redirect';
-import { DataPage } from './components/pages/categories/manage/ManageCategoriesPage';
+import { DataPage } from './components/pages/DataPage';
 import { NotificationSnackbar } from './components/notification/NotificationSnackbar';
 import { DashboardPage } from './components/pages/dashboard/DashboardPage';
 import { ViewPage } from './components/view/ViewPage';
 import { AiErpPage } from './components/ai-erp/AiErpPage';
 import { BuildViewPage } from './components/view/BuildViewPage';
+import { DefaultPageLayout } from './components/pages/DefaultPageLayout';
 
 export const App = () => {
   return (
