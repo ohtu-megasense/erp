@@ -52,7 +52,7 @@ const PaginatedTable = (props: { shape: string[]; items: Item[] }) => {
       }}
     >
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" size="small">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
