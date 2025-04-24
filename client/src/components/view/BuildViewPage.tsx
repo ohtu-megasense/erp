@@ -49,7 +49,8 @@ import {
   type Node,
   setDecoratorType,
   setInvert,
-  Invert
+  Invert,
+  createDefaultRoot
 } from './createViewSlice';
 import { store } from '../../app/store';
 import { blueColor, greenColor, orangeColor, pinkColor } from './colors';
@@ -352,16 +353,9 @@ const RootNode = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const createDefaultRoot = () => {
-      const rootNode = createNode('and', -1);
-      dispatch(addNode({ node: rootNode }));
-      const filterNode = createNode('equals', rootNode.filter.id);
-      dispatch(addNode({ node: filterNode }));
-      isInitialized.current = true; // prevents strict mode causing 2 calls
-    };
-
     if (!root && !isInitialized.current) {
-      createDefaultRoot();
+      dispatch(createDefaultRoot());
+      isInitialized.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -489,37 +483,36 @@ const SaveViewButton = () => {
     if (view === null) return;
     try {
       const response = await apiCreateView(view).unwrap();
-      dispatch(reset());
+      dispatch(createDefaultRoot());
       console.log('Created a view', response);
     } catch (error) {
       console.log('Error creating a view', error);
     }
   };
 
-  const isVisible = nodes.length > 0 && Boolean(name);
+  const isDisabled = nodes.length === 0 || Boolean(name) === false;
 
   return (
     <>
-      {isVisible && (
-        <Stack gap={2}>
-          <Box>
-            <Button
-              variant="outlined"
-              fullWidth={false}
-              onClick={onClick}
-              sx={{
-                color: greenColor,
-                outline: '1px solid',
-                outlineColor: greenColor,
-                borderRadius: 1,
-                px: 2
-              }}
-            >
-              Save Filter as View
-            </Button>
-          </Box>
-        </Stack>
-      )}
+      <Stack gap={2}>
+        <Box>
+          <Button
+            disabled={isDisabled}
+            variant="outlined"
+            fullWidth={false}
+            onClick={onClick}
+            sx={{
+              color: isDisabled ? undefined : greenColor,
+              outlineColor: isDisabled ? undefined : greenColor,
+              outline: '1px solid',
+              borderRadius: 1,
+              px: 2
+            }}
+          >
+            Save Filter as View
+          </Button>
+        </Box>
+      </Stack>
     </>
   );
 };
