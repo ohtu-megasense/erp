@@ -1,7 +1,13 @@
 import {
   Box,
+  Divider,
+  Link,
   List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
   Drawer as MuiDrawer,
+  Stack,
   Toolbar,
   Typography,
   useMediaQuery,
@@ -9,9 +15,8 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { closedDrawer } from '../../features/drawerSlice';
-import { DrawerNavigationLink } from './DrawerNavigationLink';
-import { FadeMenu } from './FadeMenu';
-import { NavigationAccordion } from './NavigationAccordion';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 
 export const Drawer = () => {
   const isOpen = useAppSelector((state) => state.drawer.isOpen);
@@ -55,30 +60,83 @@ export const Drawer = () => {
           overflow: 'auto',
           minHeight: 'calc(100dvh - 64px)',
           px: 2,
+          py: 1,
           borderRight: 1,
           borderTop: 1,
           borderColor: 'divider'
         }}
       >
         <List>
-          <DrawerNavigationLink href="/" text="Home" />
-          <DrawerNavigationLink href="/view" text="Views" />
-          <NavigationAccordion
-            title="Modules"
-            isPlaceholder={false}
-            defaultExpanded
-          >
-            <FadeMenu
-              title="Inventory"
-              items={[{ label: 'Manage', href: '/categories/inventory' }]}
-            ></FadeMenu>
-            <FadeMenu
-              title="CRM"
-              items={[{ label: 'Manage', href: '/categories/CRM' }]}
-            ></FadeMenu>
-          </NavigationAccordion>
+          <ListItem>
+            <ListItemText sx={{ pl: 2 }} secondary="GENERAL" />
+          </ListItem>
+          <LinkButton leftPad={false} text="Home" location="/" />
+          <LinkButton leftPad={false} text="AI Insights" location="/ai-chat" />
+          <Divider sx={{ my: 2, mx: 2 }} />
+          <ListItem>
+            <ListItemText sx={{ pl: 2 }} secondary="MODULES" />
+          </ListItem>
+          <ListItem>
+            <ListItemText sx={{ pl: 2 }} primary="Inventory" />
+          </ListItem>
+          <LinkButton text="Overview" location="/inventory/views" />
+          <LinkButton text="Manage Data" location="/inventory/data" />
+          <LinkButton text="Manage Views" location="/inventory/views/build" />
+          <ListItem sx={{ mt: 1 }}>
+            <ListItemText sx={{ pl: 2 }} primary="CRM" />
+          </ListItem>
+          <LinkButton text="Overview" location="/crm/views" />
+          <LinkButton text="Manage Data" location="/crm/data" />
+          <LinkButton text="Manage Views" location="/crm/views/build" />
         </List>
       </Box>
     </MuiDrawer>
+  );
+};
+
+const LinkButton = ({
+  text,
+  location,
+  leftPad = true
+}: {
+  text: string;
+  location: string;
+  leftPad?: boolean;
+}) => {
+  const [isActive, setIsActive] = useState(false);
+  const pathname = useLocation().pathname;
+  const dispatch = useAppDispatch();
+
+  const onClick = () => {
+    dispatch(closedDrawer());
+  };
+
+  useEffect(() => {
+    if (pathname.endsWith(location)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [pathname, location]);
+
+  return (
+    <ListItemButton
+      onClick={onClick}
+      LinkComponent={Link}
+      href={location}
+      disableRipple
+    >
+      <Stack flexDirection="row" alignItems="center">
+        <Box
+          sx={{
+            width: 3,
+            height: 24,
+            bgcolor: isActive ? 'primary.main' : undefined,
+            position: 'absolute'
+          }}
+        />
+        <ListItemText sx={{ pl: leftPad ? 4 : 2 }} primary={text} />
+      </Stack>
+    </ListItemButton>
   );
 };
