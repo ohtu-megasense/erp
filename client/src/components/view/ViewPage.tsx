@@ -84,6 +84,10 @@ export const ViewPage = (props: { module: ModuleOption }) => {
     setIsLoaded(true);
   }, [dispatch, props.module]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [isLoaded]);
+
   if (!isLoaded) {
     return null;
   }
