@@ -55,14 +55,16 @@ export class ViewsService {
   }
 
   async updateView(viewId: number, viewConfig: ViewConfig): Promise<object> {
-    const { name, filterConfig } = viewConfig
+    const { name, filterConfig } = viewConfig;
 
-
-    const checkViewExists = format('SELECT id FROM views WHERE id = %L', viewId)
-    const checkResult = await pool.query(checkViewExists)
+    const checkViewExists = format(
+      'SELECT id FROM views WHERE id = %L',
+      viewId
+    );
+    const checkResult = await pool.query(checkViewExists);
 
     if (checkResult.rows.length === 0) {
-      throw new Error(`View with ID ${viewId} not found`)
+      throw new Error(`View with ID ${viewId} not found`);
     }
 
     const filterConfigJson =
@@ -75,31 +77,32 @@ export class ViewsService {
       name,
       filterConfigJson,
       viewId
-    )
+    );
 
-    const result = await pool.query(query)
-    logger.info(`"${name}" with ID ${viewId} updated `)
+    const result = await pool.query(query);
+    logger.info(`"${name}" with ID ${viewId} updated `);
 
-    return result.rows[0]
+    return result.rows[0];
   }
 
-  async deleteView(viewId: number): Promise<{ id: number, message: string }> {
-
-    const checkViewExists = format('SELECT id FROM views WHERE id = %L', viewId)
-    const checkResult = await pool.query(checkViewExists)
+  async deleteView(viewId: number): Promise<{ id: number; message: string }> {
+    const checkViewExists = format(
+      'SELECT id FROM views WHERE id = %L',
+      viewId
+    );
+    const checkResult = await pool.query(checkViewExists);
 
     if (checkResult.rows.length === 0) {
-      throw new Error(`View with ID ${viewId} not found`)
+      throw new Error(`View with ID ${viewId} not found`);
     }
 
-    const query = format('DELETE FROM views WHERE id= %L', viewId)
-    await pool.query(query)
+    const query = format('DELETE FROM views WHERE id= %L', viewId);
+    await pool.query(query);
 
-    logger.info(`Deleted view with ID ${viewId}`)
+    logger.info(`Deleted view with ID ${viewId}`);
     return {
       id: viewId,
       message: `View with ID ${viewId} deleted successfully`
-    }
-
+    };
   }
 }
