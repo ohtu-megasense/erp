@@ -57,6 +57,7 @@ export class ViewsService {
   async updateView(viewId: number, viewConfig: ViewConfig): Promise<object> {
     const { name, filterConfig } = viewConfig
 
+
     const checkViewExists = format('SELECT id FROM views WHERE id = %L', viewId)
     const checkResult = await pool.query(checkViewExists)
 
@@ -76,7 +77,7 @@ export class ViewsService {
       viewId
     )
 
-    const result = pool.query(query)
+    const result = await pool.query(query)
     logger.info(`"${name}" with ID ${viewId} updated `)
 
     return result.rows[0]
