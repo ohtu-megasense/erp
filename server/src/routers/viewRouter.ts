@@ -50,13 +50,13 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const viewId = parseInt(req.params.id)
+    const viewId = parseInt(req.params.id);
     if (isNaN(viewId)) {
-      res.status(400).json({ error: 'Filter type not supported' })
-      return
+      res.status(400).json({ error: 'Filter type not supported' });
+      return;
     }
 
-    const viewConfig: ViewConfig = req.body
+    const viewConfig: ViewConfig = req.body;
     if (!supportedFilterTypes.includes(viewConfig.filterConfig.type)) {
       res.status(400).json({ error: 'Filter type not supported' });
       return;
@@ -72,16 +72,36 @@ router.put('/:id', async (req, res) => {
       return;
     }
 
-    const updatedView = await viewsService.updateView(viewId, viewConfig)
-    res.status(200).json(updatedView)
-
+    const updatedView = await viewsService.updateView(viewId, viewConfig);
+    res.status(200).json(updatedView);
   } catch (error) {
-    logger.error('Error when updating view:', error)
+    logger.error('Error when updating view:', error);
     if (error instanceof Error && error.message.includes('not found')) {
-      res.status(404).json({ error: error.message})
-      return
+      res.status(404).json({ error: error.message });
+      return;
     }
-    res.status(500).json({ error: 'Internal server error'})
+    res.status(500).json({ error: 'Internal server error' });
   }
-})
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const viewId = parseInt(req.params.id);
+    if (isNaN(viewId)) {
+      res.status(400).json({ error: 'Filter type not supported' });
+      return;
+    }
+
+    const result = await viewsService.deleteView(viewId);
+    res.status(200).json(result);
+  } catch (error) {
+    logger.error('Error when deleting view:', error);
+    if (error instanceof Error && error.message.includes('not found')) {
+      res.status(404).json({ error: error.message });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 export default router;
