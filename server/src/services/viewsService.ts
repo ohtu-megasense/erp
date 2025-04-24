@@ -82,4 +82,24 @@ export class ViewsService {
 
     return result.rows[0]
   }
+
+  async deleteView(viewId: number): Promise<{ id: number, message: string }> {
+
+    const checkViewExists = format('SELECT id FROM views WHERE id = %L', viewId)
+    const checkResult = await pool.query(checkViewExists)
+
+    if (checkResult.rows.length === 0) {
+      throw new Error(`View with ID ${viewId} not found`)
+    }
+
+    const query = format('DELETE FROM views WHERE id= %L', viewId)
+    await pool.query(query)
+
+    logger.info(`Deleted view with ID ${viewId}`)
+    return {
+      id: viewId,
+      message: `View with ID ${viewId} deleted successfully`
+    }
+
+  }
 }
