@@ -246,6 +246,14 @@ const slice = createSlice({
     reset: (state) => {
       state.name = '';
       state.nodes = [];
+    },
+    createDefaultRoot: (state) => {
+      state.name = '';
+      state.nodes = [];
+      const rootNode = createNode('and', -1);
+      const filterNode = createNode('equals', rootNode.filter.id);
+      state.nodes.push(rootNode);
+      state.nodes.push(filterNode);
     }
   }
 });
@@ -260,5 +268,6 @@ export const {
   addNode,
   saveFilter,
   deleteNode,
-  reset
+  reset,
+  createDefaultRoot
 } = slice.actions;

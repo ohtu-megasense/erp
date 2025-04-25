@@ -1,13 +1,17 @@
 import {
+  Box,
+  Container,
   AppBar,
   Divider,
-  Toolbar,
+  useTheme,
   useMediaQuery,
-  useTheme
+  Toolbar
 } from '@mui/material';
+import { Outlet } from 'react-router';
 import { OpenDrawerButton } from '../drawer/OpenDrawerButton';
+import { Drawer } from '../drawer/Drawer';
 
-export const TopBar = () => {
+const TopBar = () => {
   const theme = useTheme();
   const isAtleastLarge = useMediaQuery(theme.breakpoints.up('lg'));
 
@@ -28,6 +32,27 @@ export const TopBar = () => {
         <Divider />
       </AppBar>
       <Toolbar />
+    </>
+  );
+};
+
+export const DefaultPageLayout = () => {
+  return (
+    <>
+      <TopBar />
+      <Box display="flex">
+        <Drawer />
+        <Container
+          maxWidth="xl"
+          sx={{
+            mb: 2
+          }}
+        >
+          <Box component="main">
+            <Outlet />
+          </Box>
+        </Container>
+      </Box>
     </>
   );
 };
