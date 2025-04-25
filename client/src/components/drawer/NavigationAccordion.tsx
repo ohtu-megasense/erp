@@ -1,28 +1,38 @@
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { List, ListItemButton } from "@mui/material";
-import { getRandomInt } from "../../utils/utils";
-import { DrawerNavigationLink } from "./DrawerNavigationLink";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { List, ListItemButton } from '@mui/material';
+import { getRandomInt } from '../../utils/utils';
+import { DrawerNavigationLink } from './DrawerNavigationLink';
+import { ReactNode } from 'react';
 
 interface NavigationAccordionProps {
   title: string;
+  isPlaceholder: boolean;
+  children?: ReactNode;
+  defaultExpanded?: boolean;
 }
 
-export const NavigationAccordion = ({ title }: NavigationAccordionProps) => {
+export const NavigationAccordion = ({
+  title,
+  isPlaceholder,
+  children,
+  defaultExpanded = false
+}: NavigationAccordionProps) => {
   return (
     <Accordion
       disableGutters
+      defaultExpanded={defaultExpanded}
       sx={{
-        boxShadow: "none",
-        "&.Mui-expanded": {
-          margin: 0,
+        boxShadow: 'none',
+        '&.Mui-expanded': {
+          margin: 0
         },
-        "&:before": {
-          display: "none",
-        },
+        '&:before': {
+          display: 'none'
+        }
       }}
     >
       <AccordionSummary
@@ -34,16 +44,18 @@ export const NavigationAccordion = ({ title }: NavigationAccordionProps) => {
       <AccordionDetails sx={{ padding: 0 }}>
         <List
           sx={{
-            py: 0,
+            py: 0
           }}
         >
-          {Array.from({ length: getRandomInt(2, 4) }).map((_, index) => (
-            <DrawerNavigationLink
-              key={index}
-              href={""}
-              text={`Item ${index + 1}`}
-            />
-          ))}
+          {isPlaceholder &&
+            Array.from({ length: getRandomInt(2, 4) }).map((_, index) => (
+              <DrawerNavigationLink
+                key={index}
+                href={''}
+                text={`Item ${index + 1}`}
+              />
+            ))}
+          {children}
         </List>
       </AccordionDetails>
     </Accordion>

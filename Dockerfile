@@ -7,6 +7,7 @@ COPY ./client/package*.json .
 RUN npm ci
 
 COPY ./client .
+COPY ./shared ../shared
 
 RUN npm run build
 
@@ -19,6 +20,7 @@ COPY ./server/package*.json .
 RUN npm ci
 
 COPY ./server .
+COPY ./shared ../shared
 
 RUN npm run build
 
@@ -32,7 +34,7 @@ COPY ./server/package*.json .
 
 RUN npm ci --production
 
-COPY --from=front-build /usr/src/app/dist ./dist
+COPY --from=front-build /usr/src/app/dist ./app/dist
 
 COPY --from=back-build /usr/src/app/build .
 
@@ -41,7 +43,9 @@ RUN chmod 755 .
 USER 1001
 
 ENV PORT=3000
+ENV NODE_ENV=production
+ENV CA_PATH=/etc/certs/ca.pem
 
 EXPOSE 3000
 
-CMD ["node", "./src/index.js"]
+CMD ["node", "./app/src/index.js"]

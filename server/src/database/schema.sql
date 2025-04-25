@@ -1,28 +1,33 @@
+DROP TABLE IF EXISTS items CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS modules CASCADE;
+DROP TABLE IF EXISTS views CASCADE;
 
-
-/*
-CREATE TABLE IF NOT EXISTS app_metrics (
+CREATE TABLE IF NOT EXISTS modules (
     id SERIAL PRIMARY KEY,
-    app_name VARCHAR(50),
-    platform VARCHAR(10), -- 'iOS' or 'Android'
-    downloads INT DEFAULT 0,
-    app_rating DECIMAL(3, 2),
-    active_subscriptions INT DEFAULT 0,
-    revenue DECIMAL(10,2),
-    last_updated TIMESTAMP DEFAULT NOW()
+    module_name TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS field_sensors (
+CREATE TABLE IF NOT EXISTS views (
     id SERIAL PRIMARY KEY,
-    sensor_name VARCHAR(50),
-    sensor_location VARCHAR(50),
-    sensor_status VARCHAR(20),
-    last_updated TIMESTAMP DEFAULT NOW()
-)
-*/
+    module_id INT REFERENCES modules (id),
+    name TEXT NOT NULL,
+    filter_config JSONB NOT NULL
+);
 
-
-CREATE TABLE inventory_module (
+CREATE TABLE IF NOT EXISTS categories (
     id SERIAL PRIMARY KEY,
-    inventory_item VARCHAR(50)
-)
+    module_id INT REFERENCES modules (id),
+    category_name TEXT NOT NULL,
+    item_shape JSONB
+);
+
+CREATE TABLE IF NOT EXISTS items (
+    id SERIAL PRIMARY KEY,
+    category_id INT REFERENCES categories (id) ON DELETE CASCADE,
+    item_data JSONB
+);
+
+INSERT INTO modules (module_name) VALUES ('crm');
+INSERT INTO modules (module_name) VALUES ('inventory');
+INSERT INTO modules (module_name) VALUES ('ride_sharing');

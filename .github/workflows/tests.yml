@@ -1,48 +1,79 @@
 name: Run Tests
 on:
   push:
-    branches: ["ci/fix-tests"]
+    branches: ["ci/add-ts-checks"]
   pull_request:
     branches: ["main", "dev"]
 jobs:
   server-tests:
     name: Server Tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js 22.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22.x'
-        cache: 'npm'
-        cache-dependency-path: ./server/package-lock.json
-    - run: npm ci
-    - name: Run ESLint
-      run: npm run lint
-    - run: npm run build --if-present
-    - run: npm install cross-env
-    - run: CI=true npm run test-unit
-    - run: CI=true npm run test-api
+      - uses: actions/checkout@v4
+      - name: Start backend and postgres docker containers
+        run: docker compose up -d backend postgres
+      - name: Wait for services to be ready
+        run: sleep 30
+      - name: Server unit tests
+        run: docker exec backend npm run test-unit
+      - name: Server api tests
+        run: docker exec backend npm run test-api
+      - name: Stop docker containers
+        if: always()
+        run: docker compose down
 
   client-lint:
-    name: Client Lint Check
+    name: Client Lint and Build Check
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./client
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js 22.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22.x'
-        cache: 'npm'
-        cache-dependency-path: ./client/package-lock.json
-    - run: npm ci
-    - name: Run ESLint
-      run: npm run lint
-    - name: Run Vite build
-      run: npm run build
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: ./client/package-lock.json
+      - run: npm ci
+      - name: Run ESLint
+        run: npm run lint
+      - name: Run Vite build
+        run: npm run build
+
+  client-typecheck:
+    name: Client TypeScript Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: ./client/package-lock.json
+      - run: npm ci
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+  server-typecheck:
+    name: Server TypeScript Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          cache-dependency-path: ./server/package-lock.json
+      - run: npm ci
+      - name: TypeScript type check
+        run: npx tsc --noEmit
