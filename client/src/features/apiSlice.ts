@@ -203,6 +203,13 @@ export const apiSlice = createApi({
     getViews: builder.query<GetViewsResponse, GetViewsRequest>({
       query: (module) => `views/${module}`,
       providesTags: ['View']
+    }),
+    deleteView: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `views/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['View']
     })
   })
 });
@@ -218,5 +225,6 @@ export const {
   useRenameCategoryMutation,
   useDeleteCategoryMutation,
   useCreateViewMutation,
-  useGetViewsQuery
+  useGetViewsQuery,
+  useDeleteViewMutation
 } = apiSlice;
