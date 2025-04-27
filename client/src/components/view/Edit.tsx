@@ -5,9 +5,9 @@ import { Stack } from '@mui/material';
 import { blueColor } from './colors';
 import { RootNode } from './RootNode';
 import { Name } from './Name';
-import { SaveAndResetButtons } from './SaveAndResetButtons';
 import { View } from './View';
 import { type View as IView } from '../../../../shared/types';
+import { UpdateAndResetButtons } from './UpdateAndResetButtons';
 
 export const Edit = (props: { view: IView }) => {
   const dispatch = useAppDispatch();
@@ -46,7 +46,7 @@ export const Edit = (props: { view: IView }) => {
           >
             <RootNode />
             <Name />
-            <SaveAndResetButtons />
+            <UpdateAndResetButtons view={props.view} />
           </Stack>
         </Stack>
         <View view={view} showDelete={false} />
