@@ -1,6 +1,6 @@
 import { useAppDispatch } from '../../app/hooks';
 import { useEffect } from 'react';
-import { populateFromView } from './createViewSlice';
+import { populateFromView } from '../../features/createViewSlice';
 import { Stack } from '@mui/material';
 import { blueColor } from './colors';
 import { RootNode } from './RootNode';

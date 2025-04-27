@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useGetCategoriesQuery } from '../../features/apiSlice';
-import { setPropertyOptions } from './createViewSlice';
+import { setPropertyOptions } from '../../features/createViewSlice';
 
 // TODO: Api endpoint to get all property options
 

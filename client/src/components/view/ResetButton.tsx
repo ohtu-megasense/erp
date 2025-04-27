@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import { useAppDispatch } from '../../app/hooks';
-import { createDefaultRoot } from './createViewSlice';
+import { createDefaultRoot } from '../../features/createViewSlice';
 import { pinkColor } from './colors';
 import { useStateKey } from './useStateKey';
 

@@ -1,4 +1,4 @@
 import { createContext } from 'react';
-import { StateKey } from './createViewSlice';
+import { StateKey } from '../../features/createViewSlice';
 
 export const StateKeyContext = createContext<StateKey>('buildState');

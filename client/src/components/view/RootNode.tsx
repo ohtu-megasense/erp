@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { createDefaultRoot } from './createViewSlice';
+import { createDefaultRoot } from '../../features/createViewSlice';
 import { Node } from './Node';
 import { AddButton } from './AddButton';
 import { ResetButton } from './ResetButton';

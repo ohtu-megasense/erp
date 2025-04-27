@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { addNode, createNode, Id } from './createViewSlice';
+import { addNode, createNode, Id } from '../../features/createViewSlice';
 import { useAppDispatch } from '../../app/hooks';
 import {
   DecoratorOption,

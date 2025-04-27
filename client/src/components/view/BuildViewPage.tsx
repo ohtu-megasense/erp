@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { ModuleOption } from '../../../../shared/types';
 import { useEffect, useLayoutEffect } from 'react';
-import { createDefaultRoot, setModule } from './createViewSlice';
+import { createDefaultRoot, setModule } from '../../features/createViewSlice';
 import { blueColor, orangeColor } from './colors';
 import { ViewsList } from './ViewsList';
 import { LoadPropertyOptions } from './LoadPropertyOptions';

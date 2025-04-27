@@ -13,7 +13,7 @@ import {
   OrFilterConfig
 } from '../../../../shared/types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Id, setDecoratorType } from './createViewSlice';
+import { Id, setDecoratorType } from '../../features/createViewSlice';
 import { AddButton } from './AddButton';
 import { DeleteButton } from './DeleteButton';
 import { Node } from './Node';

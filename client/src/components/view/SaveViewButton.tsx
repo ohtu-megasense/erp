@@ -2,7 +2,7 @@ import { Box, Button, Stack } from '@mui/material';
 import { ViewConfig } from '../../../../shared/types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useCreateViewMutation } from '../../features/apiSlice';
-import { createDefaultRoot, createView } from './createViewSlice';
+import { createDefaultRoot, createView } from '../../features/createViewSlice';
 import { greenColor } from './colors';
 import { useStateKey } from './useStateKey';
 

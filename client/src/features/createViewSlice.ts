@@ -8,7 +8,7 @@ import {
   OrFilterConfig,
   PropertyFilterConfig,
   ViewConfig
-} from '../../../../shared/types';
+} from '../../../shared/types';
 
 export type Id = string | number;
 export type Invert = 'is' | 'not';

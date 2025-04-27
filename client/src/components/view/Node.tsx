@@ -1,5 +1,5 @@
 import { FilterConfig } from '../../../../shared/types';
-import { Id } from './createViewSlice';
+import { Id } from '../../features/createViewSlice';
 import { Decorator } from './Decorator';
 import { Filter } from './Filter';
 

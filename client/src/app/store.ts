@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '../features/apiSlice';
 import drawerSlice from '../features/drawerSlice';
 import notificationSlice from '../features/notificationSlice';
-import createViewSlice from '../components/view/createViewSlice';
+import createViewSlice from '../features/createViewSlice';
 
 export const store = configureStore({
   reducer: {

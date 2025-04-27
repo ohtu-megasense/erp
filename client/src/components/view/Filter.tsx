@@ -5,7 +5,12 @@ import {
   PropertyFilterConfig
 } from '../../../../shared/types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Id, Invert, saveFilter, setInvert } from './createViewSlice';
+import {
+  Id,
+  Invert,
+  saveFilter,
+  setInvert
+} from '../../features/createViewSlice';
 import { store } from '../../app/store';
 import {
   Box,

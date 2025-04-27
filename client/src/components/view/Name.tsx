@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setName } from './createViewSlice';
+import { setName } from '../../features/createViewSlice';
 import { Box, TextField } from '@mui/material';
 import { useStateKey } from './useStateKey';
 
