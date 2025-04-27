@@ -10,6 +10,9 @@ import { AiErpPage } from './components/ai-erp/AiErpPage';
 import { BuildViewPage } from './components/view/BuildViewPage';
 import { DefaultPageLayout } from './components/pages/DefaultPageLayout';
 
+// NOTE: Consider using url params for module etc.
+// instead of passing them as props for pages.
+
 export const App = () => {
   return (
     <ThemeProvider>
