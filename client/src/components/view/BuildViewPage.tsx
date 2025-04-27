@@ -598,7 +598,7 @@ export const BuildViewPage = (props: { module: ModuleOption }) => {
             <SaveAndResetButtons />
           </Stack>
         </Stack>
-        <ViewsList />
+        <ViewsList showDelete={true} />
       </Stack>
     </>
   );
