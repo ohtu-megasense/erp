@@ -20,14 +20,14 @@ export interface Node {
   invert: Invert;
 }
 
-interface CreateViewSlice {
+interface ViewState {
   module: ModuleOption;
   name: string;
   nodes: Node[];
   propertyOptions: string[];
 }
 
-const initialState: CreateViewSlice = {
+const initialState: ViewState = {
   module: 'crm',
   name: '',
   nodes: [],
@@ -243,10 +243,6 @@ const slice = createSlice({
         state.name = '';
       }
     },
-    reset: (state) => {
-      state.name = '';
-      state.nodes = [];
-    },
     createDefaultRoot: (state) => {
       state.name = '';
       state.nodes = [];
@@ -254,6 +250,58 @@ const slice = createSlice({
       const filterNode = createNode('equals', rootNode.filter.id);
       state.nodes.push(rootNode);
       state.nodes.push(filterNode);
+    },
+    populateFromView: (
+      state,
+      action: PayloadAction<{ filterConfig: FilterConfig; name: string }>
+    ) => {
+      const { filterConfig, name } = action.payload;
+
+      const nodes: Node[] = [];
+
+      const traverseFilterConfig = (filter: FilterConfig, parentId: Id) => {
+        const id = filter.id;
+
+        if (filter.type === 'equals') {
+          nodes.push({
+            parentId,
+            invert: 'is',
+            filter: {
+              id,
+              type: 'equals',
+              property: filter.property,
+              value: filter.value
+            }
+          });
+        } else if (filter.type === 'and' || filter.type === 'or') {
+          nodes.push({
+            parentId,
+            invert: 'is',
+            filter: {
+              id,
+              type: filter.type,
+              filters: []
+            }
+          });
+
+          filter.filters.forEach((childFilter) =>
+            traverseFilterConfig(childFilter, id)
+          );
+        } else if (filter.type === 'not') {
+          nodes.push({
+            parentId,
+            invert: 'not',
+            filter: filter.filter
+          });
+
+          traverseFilterConfig(filter.filter, id);
+        }
+      };
+
+      traverseFilterConfig(filterConfig, -1);
+
+      state.name = name;
+      state.nodes = nodes;
     }
   }
 });
@@ -268,6 +316,6 @@ export const {
   addNode,
   saveFilter,
   deleteNode,
-  reset,
-  createDefaultRoot
+  createDefaultRoot,
+  populateFromView
 } = slice.actions;
