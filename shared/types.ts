@@ -145,3 +145,9 @@ export type CreateViewRequest = ViewConfig;
 export type CreateViewResponse = object;
 export type GetViewsRequest = ModuleOption;
 export type GetViewsResponse = View[];
+export type UpdateViewRequest = {
+  module: ModuleOption;
+  viewId: number;
+  filterConfig: FilterConfig;
+};
+export type UpdateViewResponse = object;
