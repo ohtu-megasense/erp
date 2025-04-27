@@ -23,7 +23,8 @@ export class ViewsService {
         return {
           id: viewRow.id,
           name: viewRow.name,
-          items: filteredItems
+          items: filteredItems,
+          filterConfig: viewRow.filter_config
         };
       })
     );
