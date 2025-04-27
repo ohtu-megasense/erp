@@ -1,32 +1,30 @@
 import { Box, Button } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { reset } from './createViewSlice';
+import { useAppDispatch } from '../../app/hooks';
+import { createDefaultRoot } from './createViewSlice';
 import { pinkColor } from './colors';
 
-export const ResetButton = () => {
-  const nodeCount = useAppSelector((state) => state.createView.nodes.length);
+export const ResetButton = ({ isSmall = false }: { isSmall?: boolean }) => {
   const dispatch = useAppDispatch();
 
   const onClick = () => {
-    dispatch(reset());
+    dispatch(createDefaultRoot());
   };
 
   return (
     <>
-      {nodeCount > 0 && (
-        <Box>
-          <Button
-            variant="outlined"
-            sx={{
-              color: pinkColor,
-              borderColor: pinkColor
-            }}
-            onClick={onClick}
-          >
-            Reset
-          </Button>
-        </Box>
-      )}
+      <Box>
+        <Button
+          variant="outlined"
+          size={isSmall ? 'small' : 'medium'}
+          sx={{
+            color: pinkColor,
+            borderColor: pinkColor
+          }}
+          onClick={onClick}
+        >
+          Reset to Default
+        </Button>
+      </Box>
     </>
   );
 };
