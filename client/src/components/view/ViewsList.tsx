@@ -15,7 +15,7 @@ export const ViewsList = ({ showDelete = false }: { showDelete?: boolean }) => {
       }}
     >
       {ordered.map((view) => (
-        <View key={view.id} view={view} showDelete={showDelete} />
+        <View key={view.id} view={view} showEditButtons={showDelete} />
       ))}
     </Stack>
   );

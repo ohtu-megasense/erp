@@ -52,7 +52,7 @@ export const Edit = (props: { view: IView }) => {
               <UpdateAndResetButtons view={props.view} />
             </Stack>
           </Stack>
-          <View view={view} showDelete={false} />
+          <View view={view} showEditButtons={false} />
         </Stack>
       </StateKeyContext.Provider>
     </>

@@ -203,7 +203,7 @@ const OpenEditModalButton = ({ view }: { view: IView }) => {
   );
 };
 
-export const View = (props: { view: IView; showDelete: boolean }) => {
+export const View = (props: { view: IView; showEditButtons: boolean }) => {
   const { view } = props;
 
   const getShapes = (): Record<string, Item[]> => {
@@ -236,8 +236,8 @@ export const View = (props: { view: IView; showDelete: boolean }) => {
           >
             {view.name}
           </Typography>
-          {props.showDelete && <DeleteViewButton view={view} />}
-          {props.showDelete && <OpenEditModalButton view={view} />}
+          {props.showEditButtons && <DeleteViewButton view={view} />}
+          {props.showEditButtons && <OpenEditModalButton view={view} />}
         </Stack>
         {view.items.length === 0 && (
           <Typography variant="caption">No items found</Typography>
