@@ -243,9 +243,12 @@ export const View = (props: { view: IView; showDelete: boolean }) => {
           <Typography variant="caption">No items found</Typography>
         )}
         {shapeCount > 0 && (
-          <Typography variant="caption">
-            {shapeCount} different row types
-          </Typography>
+          <>
+            <Typography variant="caption">
+              {shapeCount} different row types
+            </Typography>
+            <Typography variant="caption">{view.items.length} items</Typography>
+          </>
         )}
       </Stack>
       <Stack gap={4}>
