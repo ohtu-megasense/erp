@@ -306,8 +306,18 @@ const slice = createSlice({
 
       const nodes: Node[] = [];
 
-      const traverseFilterConfig = (filter: FilterConfig, parentId: Id) => {
+      const traverseFilterConfig = (
+        filter: FilterConfig,
+        parentId: Id,
+        visited = new Set<Id>()
+      ) => {
         const id = filter.id;
+
+        if (visited.has(id)) {
+          return; // bug fix: prevents not filters causing infinite loops
+        }
+
+        visited.add(id);
 
         if (filter.type === 'equals') {
           nodes.push({
@@ -332,7 +342,7 @@ const slice = createSlice({
           });
 
           filter.filters.forEach((childFilter) =>
-            traverseFilterConfig(childFilter, id)
+            traverseFilterConfig(childFilter, id, visited)
           );
         } else if (filter.type === 'not') {
           nodes.push({
@@ -341,7 +351,7 @@ const slice = createSlice({
             filter: filter.filter
           });
 
-          traverseFilterConfig(filter.filter, id);
+          traverseFilterConfig(filter.filter, id, visited);
         }
       };
 
