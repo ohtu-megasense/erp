@@ -5,16 +5,18 @@ import { Node } from './Node';
 import { AddButton } from './AddButton';
 import { ResetButton } from './ResetButton';
 import { Stack } from '@mui/material';
+import { useStateKey } from './useStateKey';
 
 export const RootNode = () => {
-  const nodes = useAppSelector((state) => state.createView.nodes);
+  const stateKey = useStateKey();
+  const nodes = useAppSelector((state) => state.createView[stateKey].nodes);
   const root = nodes.length > 0 ? nodes[0] : null;
   const isInitialized = useRef(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!root && !isInitialized.current) {
-      dispatch(createDefaultRoot());
+      dispatch(createDefaultRoot({ stateKey }));
       isInitialized.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

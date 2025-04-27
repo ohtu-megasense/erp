@@ -4,11 +4,13 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useCreateViewMutation } from '../../features/apiSlice';
 import { createDefaultRoot, createView } from './createViewSlice';
 import { greenColor } from './colors';
+import { useStateKey } from './useStateKey';
 
 export const SaveViewButton = () => {
-  const name = useAppSelector((state) => state.createView.name);
+  const stateKey = useStateKey();
+  const name = useAppSelector((state) => state.createView[stateKey].name);
   const module = useAppSelector((state) => state.createView.module);
-  const nodes = useAppSelector((state) => state.createView.nodes);
+  const nodes = useAppSelector((state) => state.createView[stateKey].nodes);
   const dispatch = useAppDispatch();
   const [apiCreateView] = useCreateViewMutation();
 
@@ -31,7 +33,7 @@ export const SaveViewButton = () => {
     if (view === null) return;
     try {
       const response = await apiCreateView(view).unwrap();
-      dispatch(createDefaultRoot());
+      dispatch(createDefaultRoot({ stateKey }));
       console.log('Created a view', response);
     } catch (error) {
       console.log('Error creating a view', error);

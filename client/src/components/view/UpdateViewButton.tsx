@@ -4,11 +4,13 @@ import { useAppSelector } from '../../app/hooks';
 import { useUpdateViewMutation } from '../../features/apiSlice';
 import { createView } from './createViewSlice';
 import { greenColor } from './colors';
+import { useStateKey } from './useStateKey';
 
 export const UpdateViewButton = (props: { view: View }) => {
-  const name = useAppSelector((state) => state.createView.name);
+  const stateKey = useStateKey();
+  const name = useAppSelector((state) => state.createView[stateKey].name);
   const module = useAppSelector((state) => state.createView.module);
-  const nodes = useAppSelector((state) => state.createView.nodes);
+  const nodes = useAppSelector((state) => state.createView[stateKey].nodes);
   const [apiUpdateView] = useUpdateViewMutation();
 
   const getView = (): ViewConfig | null => {

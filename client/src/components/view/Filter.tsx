@@ -17,6 +17,7 @@ import {
   TextField
 } from '@mui/material';
 import { DeleteButton } from './DeleteButton';
+import { useStateKey } from './useStateKey';
 
 export const Filter = (props: {
   filter: PropertyFilterConfig;
@@ -26,13 +27,14 @@ export const Filter = (props: {
   const propertyOptions = useAppSelector(
     (state) => state.createView.propertyOptions
   );
+  const stateKey = useStateKey();
 
   const [property, setProperty] = useState(filter.property);
   const [invert, setInvertState] = useState<Invert>(
     store
       .getState()
-      .createView.nodes.find((node) => node.filter.id === filter.id)?.invert ||
-      'is'
+      .createView[stateKey].nodes.find((node) => node.filter.id === filter.id)
+      ?.invert || 'is'
   );
 
   const [value, setValue] = useState(filter.value);
@@ -57,7 +59,7 @@ export const Filter = (props: {
 
   const onChangeInvert = (invert: Invert) => {
     setInvertState(invert);
-    dispatch(setInvert({ id: filter.id, invert }));
+    dispatch(setInvert({ id: filter.id, invert, stateKey }));
   };
 
   const saveFilterChanges = (updatedFilter: Partial<PropertyFilterConfig>) => {
@@ -68,7 +70,7 @@ export const Filter = (props: {
       value,
       ...updatedFilter
     };
-    dispatch(saveFilter({ id: filter.id, filter }));
+    dispatch(saveFilter({ id: filter.id, filter, stateKey }));
   };
 
   return (

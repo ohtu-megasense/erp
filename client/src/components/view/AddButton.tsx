@@ -9,10 +9,12 @@ import {
 } from '../../../../shared/types';
 import { store } from '../../app/store';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { useStateKey } from './useStateKey';
 
 export const AddButton = (props: { parentId: Id; text?: string }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const dispatch = useAppDispatch();
+  const stateKey = useStateKey();
   const options = [
     ...Object.values(filterOptions),
     ...Object.values(decoratorOptions)
@@ -27,13 +29,14 @@ export const AddButton = (props: { parentId: Id; text?: string }) => {
   };
 
   const onClickNode = (type: FilterOption | DecoratorOption) => {
-    const isRoot = store.getState().createView.nodes.length === 0;
+    const isRoot = store.getState().createView[stateKey].nodes.length === 0;
     const parentId = isRoot ? -1 : props.parentId;
     const node = createNode(type, parentId);
 
     dispatch(
       addNode({
-        node
+        node,
+        stateKey
       })
     );
 

@@ -17,6 +17,7 @@ import { Id, setDecoratorType } from './createViewSlice';
 import { AddButton } from './AddButton';
 import { DeleteButton } from './DeleteButton';
 import { Node } from './Node';
+import { useStateKey } from './useStateKey';
 
 export const Decorator = (props: {
   filter: AndFilterConfig | OrFilterConfig;
@@ -24,12 +25,13 @@ export const Decorator = (props: {
 }) => {
   const { filter } = props;
   const dispatch = useAppDispatch();
+  const stateKey = useStateKey();
 
-  const nodes = useAppSelector((state) => state.createView.nodes);
+  const nodes = useAppSelector((state) => state.createView[stateKey].nodes);
   const children = nodes.filter((node) => node.parentId === filter.id);
 
   const onChange = (type: DecoratorOption) => {
-    dispatch(setDecoratorType({ id: filter.id, type }));
+    dispatch(setDecoratorType({ id: filter.id, type, stateKey }));
   };
 
   return (

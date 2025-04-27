@@ -3,9 +3,13 @@ import { useAppSelector } from '../../app/hooks';
 import { ResetButton } from './ResetButton';
 import { UpdateViewButton } from './UpdateViewButton';
 import { View } from '../../../../shared/types';
+import { useStateKey } from './useStateKey';
 
 export const UpdateAndResetButtons = (props: { view: View }) => {
-  const nodeCount = useAppSelector((state) => state.createView.nodes.length);
+  const stateKey = useStateKey();
+  const nodeCount = useAppSelector(
+    (state) => state.createView[stateKey].nodes.length
+  );
 
   return (
     <>

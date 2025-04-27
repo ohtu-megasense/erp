@@ -9,6 +9,7 @@ import { LoadPropertyOptions } from './LoadPropertyOptions';
 import { RootNode } from './RootNode';
 import { Name } from './Name';
 import { SaveAndResetButtons } from './SaveAndResetButtons';
+import { StateKeyContext } from './StateKeyContext';
 
 const Heading = () => {
   const module = useAppSelector((state) => state.createView.module);
@@ -43,41 +44,43 @@ export const BuildViewPage = (props: { module: ModuleOption }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(createDefaultRoot());
+    dispatch(createDefaultRoot({ stateKey: 'buildState' }));
   }, [dispatch]);
 
   return (
     <>
-      <LoadPropertyOptions />
-      <Stack
-        sx={{
-          mx: 2,
-          mt: 2,
-          borderRadius: 4,
-          gap: 2
-        }}
-      >
-        <Box bgcolor={undefined} p={0}>
-          <Heading />
-        </Box>
-        <Stack gap={2} mb={2}>
-          <Typography fontSize={18}>Create New View</Typography>
-          <Stack
-            sx={{
-              border: '1px solid',
-              borderColor: blueColor,
-              borderRadius: 2,
-              p: 2,
-              gap: 2
-            }}
-          >
-            <RootNode />
-            <Name />
-            <SaveAndResetButtons />
+      <StateKeyContext.Provider value="buildState">
+        <LoadPropertyOptions />
+        <Stack
+          sx={{
+            mx: 2,
+            mt: 2,
+            borderRadius: 4,
+            gap: 2
+          }}
+        >
+          <Box bgcolor={undefined} p={0}>
+            <Heading />
+          </Box>
+          <Stack gap={2} mb={2}>
+            <Typography fontSize={18}>Create New View</Typography>
+            <Stack
+              sx={{
+                border: '1px solid',
+                borderColor: blueColor,
+                borderRadius: 2,
+                p: 2,
+                gap: 2
+              }}
+            >
+              <RootNode />
+              <Name />
+              <SaveAndResetButtons />
+            </Stack>
           </Stack>
+          <ViewsList showDelete={true} />
         </Stack>
-        <ViewsList showDelete={true} />
-      </Stack>
+      </StateKeyContext.Provider>
     </>
   );
 };
