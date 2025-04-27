@@ -66,7 +66,7 @@ export const BuildViewPage = (props: { module: ModuleOption }) => {
             <Typography fontSize={18}>Create New View</Typography>
             <Stack
               sx={{
-                border: '1px solid',
+                border: '1.5px solid',
                 borderColor: blueColor,
                 borderRadius: 2,
                 p: 2,

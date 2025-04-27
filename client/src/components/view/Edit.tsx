@@ -40,7 +40,7 @@ export const Edit = (props: { view: IView }) => {
           <Stack gap={2} mb={2}>
             <Stack
               sx={{
-                border: '1px solid',
+                border: '1.5px solid',
                 borderColor: blueColor,
                 borderRadius: 2,
                 p: 2,
