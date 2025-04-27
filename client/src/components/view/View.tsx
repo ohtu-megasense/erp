@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { Item, type View as IView } from '../../../../shared/types';
 import { useDeleteViewMutation } from '../../features/apiSlice';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { blueColor, pinkColor } from './colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -53,6 +53,10 @@ const PaginatedTable = (props: { shape: string[]; items: Item[] }) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  useEffect(() => {
+    setPage(0);
+  }, [props.items, props.shape]);
 
   return (
     <Box
