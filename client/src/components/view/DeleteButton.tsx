@@ -3,12 +3,14 @@ import { useAppDispatch } from '../../app/hooks';
 import { deleteNode, Id } from './createViewSlice';
 import { pinkColor } from './colors';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useStateKey } from './useStateKey';
 
 export const DeleteButton = (props: { id: Id }) => {
+  const stateKey = useStateKey();
   const dispatch = useAppDispatch();
 
   const onClick = () => {
-    dispatch(deleteNode({ id: props.id }));
+    dispatch(deleteNode({ id: props.id, stateKey }));
   };
 
   return (
