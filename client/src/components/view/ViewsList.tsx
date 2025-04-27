@@ -5,12 +5,27 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Stack, Typography, Box } from '@mui/material';
+import {
+  Stack,
+  Typography,
+  Box,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button
+} from '@mui/material';
 import { useAppSelector } from '../../app/hooks';
 import { Item, type View } from '../../../../shared/types';
-import { useGetViewsQuery } from '../../features/apiSlice';
+import {
+  useDeleteViewMutation,
+  useGetViewsQuery
+} from '../../features/apiSlice';
 import { ChangeEvent, useState } from 'react';
-import { blueColor } from './colors';
+import { blueColor, pinkColor } from './colors';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Column {
   id: string | number;
@@ -101,7 +116,55 @@ const PaginatedTable = (props: { shape: string[]; items: Item[] }) => {
   );
 };
 
-const View = (props: { view: View }) => {
+const DeleteViewButton = ({ view }: { view: View }) => {
+  const [open, setOpen] = useState(false);
+  const [apiDeleteView] = useDeleteViewMutation();
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleConfirm = async () => {
+    try {
+      await apiDeleteView(view.id).unwrap();
+    } catch (error) {
+      console.log('Error deleting view:', error);
+    } finally {
+      handleClose();
+    }
+  };
+
+  return (
+    <>
+      <IconButton
+        size="small"
+        sx={{
+          color: pinkColor
+        }}
+        onClick={handleOpen}
+      >
+        <DeleteIcon sx={{ fontSize: 22 }} />
+      </IconButton>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete the view{' '}
+            <strong>{view.name}</strong>? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+const View = (props: { view: View; showDelete: boolean }) => {
   const { view } = props;
 
   const getShapes = (): Record<string, Item[]> => {
@@ -126,13 +189,16 @@ const View = (props: { view: View }) => {
   return (
     <Stack gap={2}>
       <Stack>
-        <Typography
-          sx={{
-            fontSize: 18
-          }}
-        >
-          {view.name}
-        </Typography>
+        <Stack sx={{ flexDirection: 'row', alignItems: 'center' }} gap={1}>
+          <Typography
+            sx={{
+              fontSize: 18
+            }}
+          >
+            {view.name}
+          </Typography>
+          {props.showDelete && <DeleteViewButton view={view} />}
+        </Stack>
         {view.items.length === 0 && (
           <Typography variant="caption">No items found</Typography>
         )}
@@ -157,7 +223,7 @@ const View = (props: { view: View }) => {
   );
 };
 
-export const ViewsList = () => {
+export const ViewsList = ({ showDelete = false }: { showDelete?: boolean }) => {
   const module = useAppSelector((state) => state.createView.module);
   const { data: views = [] } = useGetViewsQuery(module);
   const ordered = [...views].sort((a, b) => a.name.localeCompare(b.name));
@@ -169,7 +235,7 @@ export const ViewsList = () => {
       }}
     >
       {ordered.map((view) => (
-        <View key={view.id} view={view} />
+        <View key={view.id} view={view} showDelete={showDelete} />
       ))}
     </Stack>
   );
