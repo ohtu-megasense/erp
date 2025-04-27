@@ -2,7 +2,7 @@ import { Link, Stack, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { ModuleOption } from '../../../../shared/types';
 import { useLayoutEffect as useEffect, useState } from 'react';
-import { setModule } from './createViewSlice';
+import { setModule } from '../../features/createViewSlice';
 import { ViewsList } from './ViewsList';
 import { blueColor, orangeColor } from './colors';
 import { useGetViewsQuery } from '../../features/apiSlice';
