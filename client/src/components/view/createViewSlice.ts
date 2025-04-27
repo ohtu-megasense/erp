@@ -11,8 +11,8 @@ import {
 } from '../../../../shared/types';
 
 export type Id = string | number;
-
 export type Invert = 'is' | 'not';
+export type StateKey = 'buildState' | 'editState';
 
 export interface Node {
   parentId: Id;
@@ -21,17 +21,28 @@ export interface Node {
 }
 
 interface ViewState {
-  module: ModuleOption;
   name: string;
   nodes: Node[];
+}
+
+interface State {
+  buildState: ViewState;
+  editState: ViewState;
+  module: ModuleOption;
   propertyOptions: string[];
 }
 
-const initialState: ViewState = {
+const initialState: State = {
   module: 'crm',
-  name: '',
-  nodes: [],
-  propertyOptions: []
+  propertyOptions: [],
+  buildState: {
+    name: '',
+    nodes: []
+  },
+  editState: {
+    name: '',
+    nodes: []
+  }
 };
 
 export const createNode = (
@@ -175,12 +186,20 @@ const slice = createSlice({
     setModule: (state, action: PayloadAction<{ module: ModuleOption }>) => {
       state.module = action.payload.module;
     },
-    setName: (state, action: PayloadAction<{ name: string }>) => {
-      state.name = action.payload.name;
+    setName: (
+      state,
+      action: PayloadAction<{ name: string; stateKey: StateKey }>
+    ) => {
+      const activeState = state[action.payload.stateKey];
+      activeState.name = action.payload.name;
     },
-    setInvert: (state, action: PayloadAction<{ id: Id; invert: Invert }>) => {
+    setInvert: (
+      state,
+      action: PayloadAction<{ id: Id; invert: Invert; stateKey: StateKey }>
+    ) => {
       const id = action.payload.id;
-      const node = state.nodes.find((node) => node.filter.id === id);
+      const activeState = state[action.payload.stateKey];
+      const node = activeState.nodes.find((node) => node.filter.id === id);
 
       if (!node) {
         return;
@@ -188,15 +207,24 @@ const slice = createSlice({
 
       node.invert = action.payload.invert;
     },
-    addNode: (state, action: PayloadAction<{ node: Node }>) => {
-      state.nodes.push(action.payload.node);
+    addNode: (
+      state,
+      action: PayloadAction<{ node: Node; stateKey: StateKey }>
+    ) => {
+      const activeState = state[action.payload.stateKey];
+      activeState.nodes.push(action.payload.node);
     },
     saveFilter: (
       state,
-      action: PayloadAction<{ id: Id; filter: PropertyFilterConfig }>
+      action: PayloadAction<{
+        id: Id;
+        filter: PropertyFilterConfig;
+        stateKey: StateKey;
+      }>
     ) => {
       const id = action.payload.id;
-      const node = state.nodes.find((node) => node.filter.id === id);
+      const activeState = state[action.payload.stateKey];
+      const node = activeState.nodes.find((node) => node.filter.id === id);
 
       if (!node) {
         return;
@@ -206,10 +234,15 @@ const slice = createSlice({
     },
     setDecoratorType: (
       state,
-      action: PayloadAction<{ id: Id; type: DecoratorOption }>
+      action: PayloadAction<{
+        id: Id;
+        type: DecoratorOption;
+        stateKey: StateKey;
+      }>
     ) => {
       const id = action.payload.id;
-      const node = state.nodes.find((node) => node.filter.id === id);
+      const activeState = state[action.payload.stateKey];
+      const node = activeState.nodes.find((node) => node.filter.id === id);
 
       if (!node) {
         return;
@@ -217,14 +250,19 @@ const slice = createSlice({
 
       node.filter.type = action.payload.type;
     },
-    deleteNode: (state, action: PayloadAction<{ id: Id }>) => {
+    deleteNode: (
+      state,
+      action: PayloadAction<{ id: Id; stateKey: StateKey }>
+    ) => {
       const id = action.payload.id;
 
       const idsToRemove = new Set<Id>();
       idsToRemove.add(id);
 
+      const activeState = state[action.payload.stateKey];
+
       const collectDescendantIds = (parentId: Id) => {
-        state.nodes.forEach((node) => {
+        activeState.nodes.forEach((node) => {
           if (node.parentId === parentId) {
             idsToRemove.add(node.filter.id);
             collectDescendantIds(node.filter.id);
@@ -234,28 +272,37 @@ const slice = createSlice({
 
       collectDescendantIds(id);
 
-      state.nodes = state.nodes.filter(
+      activeState.nodes = activeState.nodes.filter(
         (node) =>
           !idsToRemove.has(node.filter.id) && !idsToRemove.has(node.parentId)
       );
 
-      if (state.nodes.length === 0) {
-        state.name = '';
+      if (activeState.nodes.length === 0) {
+        activeState.name = '';
       }
     },
-    createDefaultRoot: (state) => {
-      state.name = '';
-      state.nodes = [];
+    createDefaultRoot: (
+      state,
+      action: PayloadAction<{ stateKey: StateKey }>
+    ) => {
+      const activeState = state[action.payload.stateKey];
+      activeState.name = '';
+      activeState.nodes = [];
       const rootNode = createNode('and', -1);
       const filterNode = createNode('equals', rootNode.filter.id);
-      state.nodes.push(rootNode);
-      state.nodes.push(filterNode);
+      activeState.nodes.push(rootNode);
+      activeState.nodes.push(filterNode);
     },
     populateFromView: (
       state,
-      action: PayloadAction<{ filterConfig: FilterConfig; name: string }>
+      action: PayloadAction<{
+        filterConfig: FilterConfig;
+        name: string;
+        stateKey: StateKey;
+      }>
     ) => {
       const { filterConfig, name } = action.payload;
+      const activeState = state[action.payload.stateKey];
 
       const nodes: Node[] = [];
 
@@ -300,8 +347,8 @@ const slice = createSlice({
 
       traverseFilterConfig(filterConfig, -1);
 
-      state.name = name;
-      state.nodes = nodes;
+      activeState.name = name;
+      activeState.nodes = nodes;
     }
   }
 });
