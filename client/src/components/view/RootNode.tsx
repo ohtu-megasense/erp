@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { createDefaultRoot } from './createViewSlice';
 import { Node } from './Node';
 import { AddButton } from './AddButton';
+import { ResetButton } from './ResetButton';
+import { Stack } from '@mui/material';
 
 export const RootNode = () => {
   const nodes = useAppSelector((state) => state.createView.nodes);
@@ -29,9 +31,10 @@ export const RootNode = () => {
           />
         </>
       ) : (
-        <>
+        <Stack gap={2} flexDirection="row">
           <AddButton parentId={-1} text="+ Filter" />
-        </>
+          <ResetButton isSmall={true} />
+        </Stack>
       )}
     </>
   );
