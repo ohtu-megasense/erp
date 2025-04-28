@@ -134,8 +134,19 @@ export type ModuleOption = (typeof moduleOptions)[keyof typeof moduleOptions];
 export type FilterOption = (typeof filterOptions)[keyof typeof filterOptions];
 export type DecoratorOption =
   (typeof decoratorOptions)[keyof typeof decoratorOptions];
-export type View = Omit<Category, "itemShape">;
+export interface View {
+  id: number;
+  name: string;
+  module: ModuleOption;
+  filterConfig: FilterConfig;
+  items: Item[];
+}
 export type CreateViewRequest = ViewConfig;
 export type CreateViewResponse = object;
 export type GetViewsRequest = ModuleOption;
 export type GetViewsResponse = View[];
+export type UpdateViewRequest = {
+  id: number;
+  viewConfig: ViewConfig;
+};
+export type UpdateViewResponse = object;

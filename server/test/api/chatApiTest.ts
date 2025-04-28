@@ -17,21 +17,6 @@ after(async () => {
 });
 
 describe("Chat API endpoint", () => {
-	/*test('responds with a message when given valid input', async () => {
-    const response = await api.post(chatUrl).send({
-      messages: [
-        {
-          role: 'user',
-          content: 'I will ask the hard questions from Martin'
-        }
-      ]
-    });
-
-    assert.strictEqual(response.status, 200);
-    assert.ok(response.body.reply, 'Expected a reply from the assistant');
-    assert.strictEqual(typeof response.body.reply, 'string');
-  });*/
-
 	test("fails when messages array is missing", async () => {
 		const response = await api.post(chatUrl).send({});
 

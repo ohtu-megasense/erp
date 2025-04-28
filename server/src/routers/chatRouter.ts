@@ -23,7 +23,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
       JOIN modules ON categories.module_id = modules.id
       WHERE modules.module_name = 'ride_sharing'
       ORDER BY items.id
-      LIMIT 5;
+      LIMIT 100;
     `);
 
     const rides = result.rows.map((row) => row.item_data);

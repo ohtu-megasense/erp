@@ -19,7 +19,9 @@ import {
   CreateViewResponse,
   CreateViewRequest,
   GetViewsResponse,
-  GetViewsRequest
+  GetViewsRequest,
+  UpdateViewResponse,
+  UpdateViewRequest
 } from '../../../shared/types';
 import { addNotification } from './notificationSlice';
 
@@ -203,6 +205,22 @@ export const apiSlice = createApi({
     getViews: builder.query<GetViewsResponse, GetViewsRequest>({
       query: (module) => `views/${module}`,
       providesTags: ['View']
+    }),
+    updateView: builder.mutation<UpdateViewResponse, UpdateViewRequest>({
+      query: ({ id, viewConfig }) => ({
+        url: `views/${id}`,
+        method: 'PUT',
+        body: viewConfig
+      }),
+      invalidatesTags: ['View']
+    }),
+
+    deleteView: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `views/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['View']
     })
   })
 });
@@ -218,5 +236,7 @@ export const {
   useRenameCategoryMutation,
   useDeleteCategoryMutation,
   useCreateViewMutation,
-  useGetViewsQuery
+  useGetViewsQuery,
+  useDeleteViewMutation,
+  useUpdateViewMutation
 } = apiSlice;
