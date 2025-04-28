@@ -21,7 +21,6 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
       FROM items
       JOIN categories ON items.category_id = categories.id
       JOIN modules ON categories.module_id = modules.id
-      WHERE modules.module_name = 'ride_sharing'
       ORDER BY items.id
       LIMIT 100;
     `);
@@ -31,7 +30,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
 
     const systemPrompt = {
       role: 'system',
-      content: `You are a helpful assistant for ride-sharing analytics. Here is sample ride data from our ERP system:\n\n${rideSnippet}`
+      content: `You are a helpful assistant for analytics. Here is sample data from our ERP system:\n\n${rideSnippet}`
     };
 
     const response = await fetch(DEEPSEEK_API_URL, {
@@ -68,5 +67,6 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
       .json({ error: 'Something went wrong with the chat request.' });
   }
 });
+
 
 export default router;
