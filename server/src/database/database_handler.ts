@@ -124,6 +124,14 @@ export const renameCategory = async (
   }
 };
 
+export const getCategoryNameAndItemShape = async() => {
+  const query = format(`SELECT category_name, item_shape FROM categories;`);
+  const result = await pool.query(query);
+
+  return result.rows;
+}
+
+
 export const getCategories = async (
   moduleName: string
 ): Promise<Category[]> => {
@@ -380,5 +388,5 @@ export async function AlterCategory(category_id: string, item_shape: JSON) {
 }
 
 if (require.main == module) {
-  //
+  
 }
