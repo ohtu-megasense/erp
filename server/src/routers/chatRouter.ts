@@ -51,6 +51,7 @@ async function userQueryToSQL(userQuery: string) {
        ${JSON.stringify(categories, null, 2)}
        
        Please strictly send back ONLY the SQL do NOT add "sql" to the query and limit it to 100!
+       You must absolutely NOT use "DROP TABLE" or "DELETE" or "UPDATE" commands in the SQL!!
        `
     };
 
@@ -98,10 +99,6 @@ async function userQueryToSQL(userQuery: string) {
 router.post('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const { messages } = req.body;
-    console.log("----req.body-----");
-    console.log(req.body.messages.at(-1)["content"]);
-    console.log("----req.body-----");
-
 
     if (!Array.isArray(messages)) {
       res.status(400).json({ error: 'Messages array is required' });
@@ -119,7 +116,10 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
 
     const systemPrompt = {
       role: 'system',
-      content: `You are a helpful assistant for analytics. Here is sample data from our ERP system:\n\n${queryResults}`
+      content: `You are a helpful assistant for analytics. Here is sample data from our ERP system:\n\n${queryResults}
+
+      In the case the the sample data is empty it means SQL query written might not have worked. Please let the user know about this and answer the user query.
+      You MUST make it VERY clear when you are using any data that was not provided in the sample data!! `
     };
 
     const response = await fetch(DEEPSEEK_API_URL, {
@@ -153,7 +153,10 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
         try {
           const systemPrompt = {
             role: 'system',
-            content: `${req.body.messages.at(-1)["content"]}`
+            content: `You are a helpful assistant for analytics. However the most recent SQL query you wrote failed.
+
+            Let the user know that the SQL query failed AND answer the user query down below:
+            ${req.body.messages.at(-1)["content"]}`
           };
   
           const response = await fetch(DEEPSEEK_API_URL, {
